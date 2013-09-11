@@ -1,0 +1,134 @@
+#include "SoundHandler.h"
+
+SoundHandler::SoundHandler()
+{
+	//empty 'cause initialize functions is the way to go
+}
+SoundHandler::~SoundHandler()
+{
+	for(int i = 0; i < NUMBER_OF_GAMESOUNDS; i++)
+	{
+		if(m_gameSound[i] != NULL)
+			m_gameSound[i]->release();
+	}
+	m_backGroundStream->release();
+	m_system->release();
+	
+}
+
+void SoundHandler::Initialize()
+{
+	m_result = FMOD::System_Create(&m_system);
+	ErrorCheck(m_result);
+
+	m_result = m_system->getVersion(&m_version);
+	ErrorCheck(m_result);
+
+	if(m_version < FMOD_VERSION)
+		printf("Error you are using a old version of FMOD %08x. This program requires %08x\n", m_version, FMOD_VERSION);
+	m_result = m_system->getNumDrivers(&m_numDrivers);
+	ErrorCheck(m_result);
+
+	if( m_numDrivers == 0)
+	{
+		m_result = m_system->setOutput(FMOD_OUTPUTTYPE_NOSOUND);
+		ErrorCheck(m_result);
+	}
+	else
+	{
+		m_result = m_system->getDriverCaps(0,&m_caps,0,&m_speakerMode);
+		ErrorCheck(m_result);
+	}
+
+	m_result =  m_system->setSpeakerMode(m_speakerMode);
+	ErrorCheck(m_result);
+
+	if(m_caps & FMOD_CAPS_HARDWARE_EMULATED)
+	{
+		/*
+		The user has the 'Acceleration' slider set to off! This is really bad
+		for latency! You might want to warn the user about this.
+		*/
+		m_result = m_system->setDSPBufferSize(1024,10);
+		ErrorCheck(m_result);
+	}
+	m_result = m_system->getDriverInfo(0, m_name, 256, 0);
+	ErrorCheck(m_result);
+
+	if( strstr(m_name, "SigmaTel"))
+	{
+		/*
+		"Sigmatel" sound devices crackle for some reason if the format is PCM 16bit.
+		PCM floating point output seems to solve it.
+		*/
+		m_result = m_system->setSoftwareFormat(4800, FMOD_SOUND_FORMAT_PCMFLOAT, 0, 0, FMOD_DSP_RESAMPLER_LINEAR);
+		ErrorCheck(m_result);
+	}
+	m_result = m_system->init(100, FMOD_INIT_NORMAL, 0);
+	if(m_result == FMOD_ERR_OUTPUT_CREATEBUFFER)
+	{
+		/*
+		Ok, the speaker mode selected isn't supported by this soundcard. Switch it
+		back to stereo...
+		*/
+		m_result = m_system->setSpeakerMode(FMOD_SPEAKERMODE_STEREO);
+		ErrorCheck(m_result);
+
+		/*
+		... and re-init.
+		*/
+		m_result = m_system->init(100, FMOD_INIT_NORMAL, 0);
+	}
+	ErrorCheck(m_result);
+
+	//Load all audio ADD AUDIO HERE
+	AudioLoader("Audio/bounce.wav", SOUNDTYPE::ballBounce);
+	AudioLoader("Audio/Enemyfire.mp3", SOUNDTYPE::enemyFire);
+	AudioLoader("Audio/Enemydeath.wav", SOUNDTYPE::enemyDeath);
+	
+}
+
+void SoundHandler::AudioLoader(std::string p_name, SOUNDTYPE p_soundType)
+{
+	//remember to increase the NUMBER_OF_GAMESOUNDS define in SoundHandler.h if you add new sounds
+	const char* l_temp = p_name.c_str();
+	m_system->createSound(l_temp, FMOD_DEFAULT, 0, &m_gameSound[p_soundType]);
+
+}
+//Call this each time a sound should be played
+void SoundHandler::PlaySound(SOUNDTYPE p_soundType)
+{
+	m_system->playSound(FMOD_CHANNEL_FREE, m_gameSound[p_soundType], true, &m_gameSoundChannel[p_soundType]);
+	//detta känns weird att behöva göra men fulhax ftw...... eller nåt
+	m_gameSoundChannel[p_soundType]->setVolume(1.0f);
+	if(p_soundType != enemyFire)
+		m_gameSoundChannel[p_soundType]->setVolume(0.05f);
+	else
+		m_gameSoundChannel[p_soundType]->setVolume(0.01f);
+	m_gameSoundChannel[p_soundType]->setLoopCount(0);
+	m_gameSoundChannel[p_soundType]->setPaused(false);
+}
+//Call this once to start the background sound
+void SoundHandler::PlayBackGroundSound(std::string p_name)
+{
+	m_BackGroundChannel->stop();
+	const char* l_temp = p_name.c_str();
+	m_system->createStream(l_temp,FMOD_DEFAULT, 0, &m_backGroundStream);
+	m_system->playSound(FMOD_CHANNEL_FREE, m_backGroundStream, false, &m_BackGroundChannel);
+	m_BackGroundChannel->setMode(FMOD_LOOP_NORMAL);
+	m_BackGroundChannel->setLoopCount(-1);
+	m_BackGroundChannel->setVolume(0.1f);
+}
+//Updates the FMODSystem
+void SoundHandler::Update()
+{
+	m_system->update();
+
+}
+//the worlds best errorchecker
+void SoundHandler::ErrorCheck(FMOD_RESULT p_result)
+{
+	if(p_result !=  FMOD_OK)
+		perror("Error yao" + p_result);
+	//add check here later
+}
