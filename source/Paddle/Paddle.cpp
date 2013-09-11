@@ -1,42 +1,44 @@
 #include "Paddle.h"
 
 
-Paddle::Paddle(POINT p_pos, int p_width, int p_height)
+Paddle::Paddle(int p_posX, int p_posY, int p_width, int p_height, int p_screenWidth)
 {
-	m_pos = p_pos;
+	m_posX = p_posX;
+	m_posY = p_posY;
 	m_width = p_width;
 	m_height = p_height;
+	m_screenWidth = p_screenWidth;
 }
 
 Paddle::~Paddle(void)
 {
 }
 
-void Paddle::Update()
+void Paddle::Update(int p_mousePosX)
 {
-	POINT l_mousePos;
-	int l_screenWidth = 800; //Test variable
+	m_posX = p_mousePosX;
 
-	GetCursorPos(&l_mousePos); //Use relative to window instead
-	//ScreenToClient(hwnd, &l_mousePos); 
-	m_pos.x = l_mousePos.x;
-
-	if(m_pos.x > l_screenWidth - m_width)
-		m_pos.x = l_screenWidth - m_width;
-	else if (m_pos.x < 0)
-		m_pos.x = 0;
+	if(m_posX > m_screenWidth - m_width)
+		m_posX = m_screenWidth - m_width;
+	else if (m_posX < 0)
+		m_posX = 0;
 	
 
 }
 
 void Paddle::Render()
 {
-	//Render the paddle
+	//m_renderComp->RenderObject(m_bBox, PADDLE)
 }
 
-POINT Paddle::GetPos()
+int Paddle::GetPosX()
 {
-	return m_pos;
+	return m_posX;
+}
+
+int Paddle::GetPosY()
+{
+	return m_posY;
 }
 
 BoundingBox Paddle::GetBoundingBox()
@@ -44,10 +46,17 @@ BoundingBox Paddle::GetBoundingBox()
 	BoundingBox l_bBox;
 	l_bBox.Width = m_width;
 	l_bBox.Height = m_height;
-	l_bBox.Position = m_pos;
+	l_bBox.posX = m_posX;
+	l_bBox.posY = m_posY;
 
 	return l_bBox;
 }
+/*
+void Paddle::SetGraphicalInterface(RenderComponentInterface* p_renderComp)
+{
+	m_renderComp = p_renderComp;
+}
+*/
 
 void Paddle::SetWidth( int p_width )
 {
