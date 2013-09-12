@@ -15,7 +15,7 @@ SoundHandler::~SoundHandler()
 	m_system->release();
 	
 }
-
+/*Starts the fmod systems and loads the gamesounds*/
 void SoundHandler::Initialize()
 {
 	m_result = FMOD::System_Create(&m_system);
@@ -64,7 +64,7 @@ void SoundHandler::Initialize()
 		m_result = m_system->setSoftwareFormat(4800, FMOD_SOUND_FORMAT_PCMFLOAT, 0, 0, FMOD_DSP_RESAMPLER_LINEAR);
 		ErrorCheck(m_result);
 	}
-	m_result = m_system->init(100, FMOD_INIT_NORMAL, 0);
+	m_result = m_system->init(1024, FMOD_INIT_NORMAL, 0);
 	if(m_result == FMOD_ERR_OUTPUT_CREATEBUFFER)
 	{
 		/*
@@ -77,7 +77,7 @@ void SoundHandler::Initialize()
 		/*
 		... and re-init.
 		*/
-		m_result = m_system->init(100, FMOD_INIT_NORMAL, 0);
+		m_result = m_system->init(1024, FMOD_INIT_NORMAL, 0);
 	}
 	ErrorCheck(m_result);
 
@@ -92,24 +92,23 @@ void SoundHandler::AudioLoader(std::string p_name, SOUNDTYPE p_soundType)
 {
 	//remember to increase the NUMBER_OF_GAMESOUNDS define in SoundHandler.h if you add new sounds
 	const char* l_temp = p_name.c_str();
-	m_system->createSound(l_temp, FMOD_DEFAULT, 0, &m_gameSound[p_soundType]);
+	m_system->createSound(l_temp, FMOD_LOOP_OFF, 0, &m_gameSound[p_soundType]);
 
 }
-//Call this each time a sound should be played
-void SoundHandler::PlaySound(SOUNDTYPE p_soundType)
+/*Call this each time a sound should be played*/
+void SoundHandler::PlayGameSound(SOUNDTYPE p_soundType) 
 {
-	m_system->playSound(FMOD_CHANNEL_FREE, m_gameSound[p_soundType], true, &m_gameSoundChannel[p_soundType]);
-	//detta känns weird att behöva göra men fulhax ftw...... eller nåt
-	m_gameSoundChannel[p_soundType]->setVolume(1.0f);
-	if(p_soundType != enemyFire)
-		m_gameSoundChannel[p_soundType]->setVolume(0.05f);
+	FMOD::Channel* l_channel;
+	m_system->playSound(FMOD_CHANNEL_FREE, m_gameSound[p_soundType], true, &l_channel);
+	/*if(p_soundType != enemyFire)
+	l_channel->setVolume(0.05f);
 	else
-		m_gameSoundChannel[p_soundType]->setVolume(0.01f);
-	m_gameSoundChannel[p_soundType]->setLoopCount(0);
-	m_gameSoundChannel[p_soundType]->setPaused(false);
+	l_channel->setVolume(0.01f);*/
+	
+	l_channel->setPaused(false);
 }
 //Call this once to start the background sound
-void SoundHandler::PlayBackGroundSound(std::string p_name)
+void SoundHandler::PlayBackGroundSound(std::string p_name) //Play background sound
 {
 	m_BackGroundChannel->stop();
 	const char* l_temp = p_name.c_str();
@@ -129,6 +128,6 @@ void SoundHandler::Update()
 void SoundHandler::ErrorCheck(FMOD_RESULT p_result)
 {
 	if(p_result !=  FMOD_OK)
-		perror("Error yao" + p_result);
+		perror("Error initializing SoundHandler" + p_result);
 	//add check here later
 }

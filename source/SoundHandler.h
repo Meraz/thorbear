@@ -23,7 +23,6 @@ private:
 	FMOD::Sound*		m_backGroundStream;
 	FMOD::Sound*		m_gameSound[NUMBER_OF_GAMESOUNDS];
 	FMOD::Channel*		m_BackGroundChannel;
-	FMOD::Channel*		m_gameSoundChannel[NUMBER_OF_GAMESOUNDS];
 	unsigned int		m_version;
 	int					m_numDrivers;
 	char				m_name[256];
@@ -38,6 +37,6 @@ public:
 	void Initialize();
 	void PlayBackGroundSound(std::string p_name);
 	void Update();
-	void PlaySound(SOUNDTYPE p_soundType);
+	void PlayGameSound(SOUNDTYPE p_soundType);
 };
 #endif
