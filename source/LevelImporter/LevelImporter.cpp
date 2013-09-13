@@ -10,25 +10,29 @@ LevelImporter::~LevelImporter(void)
 {
 }
 
+
 void LevelImporter::LoadLevel( string p_levelName )
 {
 	std::vector<unsigned char> l_image;
 	unsigned l_width, l_height;
 
+	//An external library which handles PNG reading and decoding
 	unsigned l_error = lodepng::decode(l_image,l_width,l_height, "levels/" + p_levelName + ".png");
 
 	if(l_error) cout << "decode error " << l_error << ": " << lodepng_error_text(l_error) << endl;
 
+	//Creating a double array
 	int** l_map = new int*[l_height]; //Send or return this somewhere?
-
 	for(int i = 0; i < l_height; i++)
 	{
 		l_map[i] = new int[l_width];
 	}
+
 	int x,y;
 	x = y = 0;
 	int l_enemyType;
 	int test; //TEST, REMOVE
+
 	for(int i = 0; i < l_image.size(); i +=4)
 	{
 		
@@ -59,10 +63,10 @@ void LevelImporter::LoadLevel( string p_levelName )
 		}
 	}
 	///////////////TESTING///////////////////
-	/*for(int i = 0; i < 4; i++)
+	for(int i = 0; i < l_height; i++)
 	{
-		for(int j = 0; j < 4; j++)
+		for(int j = 0; j < l_width; j++)
 			cout << l_map[i][j];
 		cout << endl;
-	}*/
+	}
 }
