@@ -5,6 +5,7 @@ WindowWindows::WindowWindows(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR 
 {
 	m_renderComponentInterface = new RenderComponentWin();
 	m_gameInterface->Initialize(m_renderComponentInterface);
+	Update(); // Only used for testing, remove later
 }
 
 WindowWindows::~WindowWindows()

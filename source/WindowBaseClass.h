@@ -3,6 +3,7 @@
 
 #include "RenderComponentInterface.h"
 #include "GameInterface.h"
+#include "Game.h"
 
 class WindowBaseClass
 {

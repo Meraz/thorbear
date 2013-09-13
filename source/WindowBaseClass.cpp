@@ -3,8 +3,7 @@
 
 WindowBaseClass::WindowBaseClass()
 {
-	// TODO Add scenemanager or something else that inherits GameInterface
-	//m_gameInterface = new SceneManager();
+	m_gameInterface = new Game();
 }
 
 
