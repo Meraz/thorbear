@@ -21,7 +21,7 @@ AR= ar
 CFLAGS= -g
 CXXFLAGS= -g -iquote./
 ARFLAGS= cru
-LDFLAGS= -lXrandr -lX11 -lpthread -lGLEW -lGLU -lGL
+LDFLAGS= =-lX11 -lpthread -lglfw -lGLEW -lGLU -lGL
 RESULT=spaceout
 INTERMEDIATE_DIR=../obj
 DESTINATION_DIR=../bin
@@ -38,7 +38,7 @@ HEADERS= $(wildcard *.h) $(wildcard */*.h)
 
 VPATH= $(INTERMEDIATE_DIR)
 
-OBJECTNAMES=$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(SOURCES)))
+OBJECTNAMES=$(patsubst %.c,%.o,$(patsubst %.cpp,%.o,$(SOURCEPATHS)))
 OBJECTPATHS=$(addprefix $(INTERMEDIATE_DIR)/,$(OBJECTNAMES))
 
 $(DESTINATION_DIR)/$(RESULT): $(OBJECTNAMES)
