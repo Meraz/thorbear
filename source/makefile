@@ -23,12 +23,12 @@ CXXFLAGS= -g -iquote./
 ARFLAGS= cru
 LDFLAGS= -lGLEW -lGLU -lGL
 RESULT=spaceout
-INTERMEDIATE_DIR=../tmp
+INTERMEDIATE_DIR=../obj
 DESTINATION_DIR=../bin
 
 RM= rm -f
 MKDIR= mkdir -p
-INTERMEDIATE_DIR_MK=../tmp
+INTERMEDIATE_DIR_MK=../obj
 DESTINATION_DIR_MK=../bin
 
 
