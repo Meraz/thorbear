@@ -18,7 +18,8 @@ class OGL_Graphics
     // Draw rainbows!!!111
     bool Update( );
     
-    std::string GetError;
+    // Return the error message
+    std::string GetErrorMessage( );
 };
 
 #endif

@@ -103,6 +103,11 @@ bool OGL_Graphics::Update( )
 {
 }
 
+std::string OGL_Graphics::GetErrorMessage( )
+{
+  return this->m_errorMessage;
+}
+
 // Set the error message and return false to be returned further on for the error management
 bool OGL_Graphics::SetError( std::string &p_errorMessage )
 {
