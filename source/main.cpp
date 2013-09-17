@@ -24,13 +24,17 @@ int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrevInstance, PSTR p_pScm
 
 #ifdef linux
 #include "WindowLinux.h"
-// cstdio for getchar
-#include <cstdio>
+
+#include <iostream>
+#include <limits>
 
 int main(int argc, char** argv)
 {
 	WindowLinux* m_windowLinux = new WindowLinux();
-  getchar();
+  
+  std::cout << "Press ENTER to continue... " << flush;
+  std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
+  
 	return 0;
 }
 
