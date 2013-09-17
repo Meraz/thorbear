@@ -160,13 +160,13 @@ void RenderComponentLinux::Render()
 
 }
 
-std::string OGL_Graphics::GetErrorMessage( )
+std::string RenderComponentLinux::GetErrorMessage( )
 {
   return this->m_errorMessage;
 }
 
 // Set the error message and return false to be returned further on for the error management
-bool OGL_Graphics::SetError( std::string p_errorMessage )
+bool RenderComponentLinux::SetError( std::string p_errorMessage )
 {
   this->m_errorMessage = p_errorMessage;
   
