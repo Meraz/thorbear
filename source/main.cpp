@@ -16,7 +16,9 @@ int main(int argc, char** argv)
 int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrevInstance, PSTR p_pScmdline, int p_Cmdshow)
 {
 
-	WindowWindows* m_windowWindows = new WindowWindows(p_hInstance, p_hPrevInstance, p_pScmdline, 0);
+	WindowWindows* m_windowWindows = new WindowWindows();
+	m_windowWindows->Initialize(p_hInstance, p_hPrevInstance, p_pScmdline, 0);
+
 	system("pause");
 	return 0;
 }

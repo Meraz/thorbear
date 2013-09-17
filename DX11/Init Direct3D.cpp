@@ -74,7 +74,7 @@ bool InitDirect3DApp::Init()
 	m_modelManager->CreateModel("cube.obj", "C:\\Users\\KevLaptop\\Documents\\Visual Studio 2012\\Projects\\DX11\\DX11\\CUBE");
 	m_modelManager->CreateModel("cube1.obj", "C:\\Users\\KevLaptop\\Documents\\Visual Studio 2012\\Projects\\DX11\\DX11\\ColorCUBE");
 
-	
+	/*
 	m_objManager->AddObject(0, -20, 0, "cube.obj", "object.fx" );
 	m_objManager->AddObject(0, -10, 0, "cube1.obj", "object.fx");
 
@@ -88,6 +88,7 @@ bool InitDirect3DApp::Init()
 
 	m_objManager->GetObjectAt(0)->SetScale(9.0f, 0.5f, 0.5f);
 	m_objManager->GetObjectAt(1)->SetScale(0.5f, 0.5f, 0.5f);
+	*/
 
 	m_camera->SetLens(MathHelper::Pi*0.25f, AspectRatio(), 0.5f, 1000.0f);
 
@@ -101,10 +102,12 @@ void InitDirect3DApp::OnResize()
 
 void InitDirect3DApp::UpdateScene(float p_dt)
 {
+	/*
 	if(m_objManager)
 	{
 		m_objManager->Update(p_dt);
 	}
+	*/
 
 	if(m_camera)
 	{

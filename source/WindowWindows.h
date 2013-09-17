@@ -8,12 +8,22 @@
 class WindowWindows : public WindowBaseClass
 {
 public:
-	WindowWindows(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow);
+	WindowWindows();
 	~WindowWindows();
-private:
-	void Update();
-	void Render();
+	bool Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pScmdline, int iCmdshow);
 
+	LRESULT MsgProc(HWND p_hwnd, UINT p_msg, WPARAM p_wParam, LPARAM p_lParam);
+
+private:
+	void	Update();
+	void	Render();
+	
+
+private:
+	HINSTANCE	m_hAppInst;	
+	HWND		m_hMainWnd;
+	int			m_clientWidth;
+	int			m_clientHeight;
 };
 
 #endif
