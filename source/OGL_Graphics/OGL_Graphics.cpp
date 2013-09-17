@@ -1,6 +1,8 @@
 #include "OGL_Graphics.h"
 
 #include <cstdarg>
+#include <vector>
+#include <cstdio>
 
 // Required for stringf below
 std::string vformat( const char *fmt, va_list ap )
