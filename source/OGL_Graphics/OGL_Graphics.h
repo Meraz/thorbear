@@ -2,7 +2,7 @@
 #define OGL_GRAPHICS_H
 
 #include <GL/glew.h> // always include GLEW before including freeGLUT so that you get the latest opengl headers and not the default ones
-#define GLFW_DLL // We're linking to a DLL instead of embedding all of GLFW into our program
+//#define GLFW_DLL // We're linking to a DLL instead of embedding all of GLFW into our program
 #include <GL/glfw.h>
 
 #include <string>
