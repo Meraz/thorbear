@@ -143,6 +143,7 @@ bool RenderComponentLinux::Init()
 	
 	// set-up callbacks. we can also do a keyboard and mouse input callback, and various others (see freeGLUT website)
 	//glfwSetWindowSizeCallback( ResizeCallback ); // register callback for reshape (if set earlier won't be called until an actual resize)
+  return true;
 }
 
 void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)

@@ -32,7 +32,7 @@ int main(int argc, char** argv)
 {
 	WindowLinux* m_windowLinux = new WindowLinux();
   
-  std::cout << "Press ENTER to continue... " << flush;
+  std::cout << "Press ENTER to continue... " << std::flush;
   std::cin.ignore( std::numeric_limits <std::streamsize> ::max(), '\n' );
   
 	return 0;
