@@ -31,10 +31,8 @@ MKDIR= mkdir -p
 INTERMEDIATE_DIR_MK=../obj
 DESTINATION_DIR_MK=../bin
 
-
-SOURCEPATHS= $(wildcard *.cpp) $(wildcard */*.cpp)
-SOURCEPATHS= $(filter-out %Windows.cpp, $(SOURCEPATHS))
-SOURCEPATHS= $(filter-out %Win.cpp, $(SOURCEPATHS))
+EXCLUDES= %Windows.cpp %Win.cpp
+SOURCEPATHS= $(filter-out $(EXCLUDES), $(wildcard *.cpp) $(wildcard */*.cpp))
 SOURCES= $(notdir $(SOURCEPATHS))
 HEADERS= $(wildcard *.h) $(wildcard */*.h)
 
