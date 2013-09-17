@@ -8,6 +8,6 @@ int main()
   if(! l_graphics->Init() )
     printf( l_graphics->GetErrorMessage( ).c_str( ) );
   
-  std::getch();
+  getchar();
   return 0;
 }

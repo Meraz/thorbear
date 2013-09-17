@@ -1,3 +1,5 @@
+#include "OGL_Graphics.h"
+
 // Works just as printf, only that it returns the result as a string instead of printing it
 inline std::string stringf( const char *fmt, ... )
 {
