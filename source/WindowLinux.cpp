@@ -10,7 +10,7 @@ WindowLinux::WindowLinux()
   
   if( !l_renderComponentInterface->Init() )
   {
-    printf( l_renderComponentInterface->GetErrorMessage() );
+    printf( l_renderComponentInterface->GetErrorMessage().c_str() );
     exit(1);
   }
   
