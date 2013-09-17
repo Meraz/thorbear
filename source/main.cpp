@@ -1,13 +1,34 @@
-#include "OGL_Graphics/OGL_Graphics.h"
+#ifdef _WIN32 
+#include "WindowWindows.h"
 
-#include <cstdio>
-
-int main()
+/*
+int main(int argc, char** argv)
 {
-  OGL_Graphics* l_graphics = new OGL_Graphics();
-  if(! l_graphics->Init() )
-    printf( l_graphics->GetErrorMessage( ).c_str( ) );
-  
-  getchar();
-  return 0;
+	HINSTANCE p_hInstance = 0;
+	HINSTANCE p_hPrevInstance = 0;
+	PSTR p_pScmdline = 0;
+	int p_Cmdshow = 0;
+	WindowWindows* m_windowWindows = new WindowWindows(p_hInstance, p_hPrevInstance, p_pScmdline, 0);
+	system("pause");
+	return 0;
+}*/
+
+int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrevInstance, PSTR p_pScmdline, int p_Cmdshow)
+{
+
+	WindowWindows* m_windowWindows = new WindowWindows(p_hInstance, p_hPrevInstance, p_pScmdline, 0);
+	system("pause");
+	return 0;
 }
+#endif
+
+#ifdef linux
+#include "WindowLinux.h"
+int main(int argc, char** argv)
+{
+	WindowLinux* m_windowLinux = new WindowLinux();
+
+	return 0;
+}
+
+#endif
