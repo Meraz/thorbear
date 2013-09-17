@@ -1,10 +1,12 @@
 #include "OGL_Graphics/OGL_Graphics.h"
 
+#include <cstdio>
+
 int main()
 {
-  graphics = new OGL_Graphics();
-  if(! graphics->Init() )
-    printf( graphics->GetErrorMessage( ) );
+  OGL_Graphics* l_graphics = new OGL_Graphics();
+  if(! l_graphics->Init() )
+    printf( l_graphics->GetErrorMessage( ) );
   
   getch();
   return 0;
