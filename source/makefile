@@ -21,7 +21,7 @@ AR= ar
 CFLAGS= -g
 CXXFLAGS= -g -iquote./
 ARFLAGS= cru
-LDFLAGS= =-lX11 -lpthread -lglfw -lGLEW -lGLU -lGL
+LDFLAGS= -lX11 -lpthread -lglfw -lGLEW -lGLU -lGL
 RESULT=spaceout
 INTERMEDIATE_DIR=../obj
 DESTINATION_DIR=../bin
