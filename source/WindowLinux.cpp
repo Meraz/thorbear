@@ -1,5 +1,8 @@
 #include "WindowLinux.h"
 
+#include <cstdio>
+#include <cstdlib>
+
 WindowLinux::WindowLinux()
 	: WindowBaseClass()
 {
