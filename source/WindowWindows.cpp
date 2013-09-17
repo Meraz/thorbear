@@ -1,6 +1,6 @@
 #include "WindowWindows.h"
 
-
+#include <WindowsX.h>
 namespace
 {
 	// This is just used to forward Windows messages from a global window
@@ -59,8 +59,7 @@ bool WindowWindows::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, PST
 	int l_width  = l_r.right - l_r.left;
 	int l_height = l_r.bottom - l_r.top;
 
-	//m_hMainWnd = CreateWindow("D3DWndClassName", m_mainWndCaption.c_str(), 
-	//	WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, l_width, l_height, 0, 0, m_hAppInst, 0); 
+	m_hMainWnd = CreateWindow("D3DWndClassName", "Test", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, l_width, l_height, 0, 0, m_hAppInst, 0); 
 	if( !m_hMainWnd )
 	{
 		MessageBox(0, "CreateWindow Failed.", 0, 0);

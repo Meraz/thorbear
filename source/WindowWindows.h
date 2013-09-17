@@ -2,6 +2,7 @@
 #define WINDOWWINDOWS_H
 
 #include <windows.h>
+
 #include "RenderComponentWin.h"
 #include "WindowBaseClass.h"
 
