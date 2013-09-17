@@ -33,6 +33,8 @@ DESTINATION_DIR_MK=../bin
 
 
 SOURCEPATHS= $(wildcard *.cpp) $(wildcard */*.cpp)
+SOURCEPATHS= $(filter-out %Windows.cpp, $(SOURCEPATHS))
+SOURCEPATHS= $(filter-out %Win.cpp, $(SOURCEPATHS))
 SOURCES= $(notdir $(SOURCEPATHS))
 HEADERS= $(wildcard *.h) $(wildcard */*.h)
 
