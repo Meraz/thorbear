@@ -3,7 +3,7 @@
 
 Paddle::Paddle(int p_posX, int p_posY, int p_width, int p_height, int p_screenWidth)
 {
-	m_posX = p_posX;
+	m_posX = p_posX - p_width/2;
 	m_posY = p_posY;
 	m_width = p_width;
 	m_height = p_height;

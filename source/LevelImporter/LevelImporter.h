@@ -13,7 +13,7 @@ public:
 	~LevelImporter(void);
 
 	//Enter name of level without the .png file ending
-	static void LoadLevel(string p_levelName);
+	static int** LoadLevel(string p_levelName);
 private:
 	LevelImporter(void);
 };

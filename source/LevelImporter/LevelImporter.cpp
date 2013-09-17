@@ -11,7 +11,7 @@ LevelImporter::~LevelImporter(void)
 }
 
 
-void LevelImporter::LoadLevel( string p_levelName )
+int** LevelImporter::LoadLevel( string p_levelName )
 {
 	std::vector<unsigned char> l_image;
 	unsigned l_width, l_height;
@@ -63,10 +63,13 @@ void LevelImporter::LoadLevel( string p_levelName )
 		}
 	}
 	///////////////TESTING///////////////////
+	/*
 	for(int i = 0; i < l_height; i++)
 	{
 		for(int j = 0; j < l_width; j++)
 			cout << l_map[i][j];
 		cout << endl;
 	}
+	*/
+	return l_map;
 }
