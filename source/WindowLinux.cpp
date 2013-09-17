@@ -3,13 +3,16 @@
 WindowLinux::WindowLinux()
 	: WindowBaseClass()
 {
-	m_renderComponentInterface = new RenderComponentLinux();
-  if( !((RenderComponentLinux)m_renderComponentInterface)->Init() )
+  RenderComponentLinux* l_renderComponentInterface = new RenderComponentLinux();
+  
+  if( !l_renderComponentInterface->Init() )
   {
-    printf( ((RenderComponentLinux)m_renderComponentInterface)->GetErrorMessage() );
+    printf( l_renderComponentInterface->GetErrorMessage() );
     exit(1);
   }
+  
 	m_gameInterface->Initialize(m_renderComponentInterface);
+	m_renderComponentInterface = l_renderComponentInterface;
 }
 
 WindowLinux::~WindowLinux()
