@@ -4,6 +4,11 @@ WindowLinux::WindowLinux()
 	: WindowBaseClass()
 {
 	m_renderComponentInterface = new RenderComponentLinux();
+  if( !m_renderComponentInterface->Init() )
+  {
+    printf( m_renderComponentInterface->GetErrorMessage() );
+    exit(1);
+  }
 	m_gameInterface->Initialize(m_renderComponentInterface);
 }
 
