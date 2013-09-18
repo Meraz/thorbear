@@ -101,7 +101,7 @@ void WindowLinux::Update()
   m_oldTime              = l_newTime;
   
   int l_mousePositionX, l_mousePositionY;
-  glfwGetMousePos( l_mousePositionX, l_mousePositionY );
+  glfwGetMousePos( &l_mousePositionX, &l_mousePositionY );
 
 	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY);
 }
