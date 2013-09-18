@@ -68,10 +68,10 @@ bool RenderComponentLinux::Init()
 	}
 
 	// Get version info and print it to the console
-	const GLubyte* l_renderer = glGetString( GL_RENDERER );
-	const GLubyte* l_vendor = glGetString( GL_VENDOR );
-	const GLubyte* l_version = glGetString( GL_VERSION );
-	const GLubyte* l_glslVersion = glGetString( GL_SHADING_LANGUAGE_VERSION );
+	// const GLubyte* l_renderer = glGetString( GL_RENDERER );
+	// const GLubyte* l_vendor = glGetString( GL_VENDOR );
+	// const GLubyte* l_version = glGetString( GL_VERSION );
+	// const GLubyte* l_glslVersion = glGetString( GL_SHADING_LANGUAGE_VERSION );
 
 	GLint l_major, l_minor;
 	glGetIntegerv( GL_MAJOR_VERSION, &l_major );
@@ -97,9 +97,10 @@ bool RenderComponentLinux::Init()
 	
 	glfwSetWindowTitle( "SpaceOut: OpenGL4 Test" );//l_windowTitle.c_str( ) );
 	glfwSwapInterval( 1 ); // VSync on
+    
+  m_genericShader.Init( "../resources/Shaders/genericVertex.glsl", "../resources/Shaders/genericFragment.glsl" );
+  m_genericShader.Build( );
 	
-	// set-up callbacks. we can also do a keyboard and mouse input callback, and various others (see freeGLUT website)
-	//glfwSetWindowSizeCallback( ResizeCallback ); // register callback for reshape (if set earlier won't be called until an actual resize)
   return true;
 }
 
@@ -114,17 +115,22 @@ void RenderComponentLinux::SetHints()
 
 void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)
 {
-
+  // Create an object based on p_objectType (p_textureType)
+  // Add the object to the list of objects to render
 }
 
 void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
 {
-
+  
 }
 
 void RenderComponentLinux::Render()
 {
-
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
+  
+  m_genericShader.Use( );
+  
+  glfwSwapBuffers();
 }
 
 std::string RenderComponentLinux::GetErrorMessage( )
