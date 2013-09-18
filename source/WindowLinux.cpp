@@ -79,7 +79,7 @@ bool WindowLinux::Init( RenderComponentLinux *p_renderComponentLinux )
   return true;
 }
 
-#define NOTHING_BETTER_TO_DO !glfwWindowShouldClose(window)
+#define NOTHING_BETTER_TO_DO glfwGetWindowParam(GLFW_OPENED) //3.x.x: !glfwWindowShouldClose(window)
 #define GET_CANDY glfwPollEvents()
 void WindowLinux::Run()
 {

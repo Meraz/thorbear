@@ -13,7 +13,7 @@ public:
 	WindowLinux();
 	virtual ~WindowLinux();
   
-  bool Init();
+  bool Init( RenderComponentLinux *p_renderComponentLinux );
 
   void Run(); // like a Kenyan
 	void Update();
