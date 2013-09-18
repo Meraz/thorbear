@@ -24,6 +24,7 @@ public:
   
 private:
   std::string m_errorMessage;
+  double m_oldTime;
   
   // Set the error message and return false to be returned further on for the error management
   bool SetError( std::string p_errorMessage );

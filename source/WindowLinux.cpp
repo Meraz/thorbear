@@ -76,34 +76,38 @@ bool WindowLinux::Init( RenderComponentLinux *p_renderComponentLinux )
 		return this->SetError( std::string( "ERROR: creating load window\n" ) );
 	}
   
+  m_oldTime = glfwGetTime();
+  
   return true;
 }
 
-#define NOTHING_BETTER_TO_DO glfwGetWindowParam(GLFW_OPENED) //3.x.x: !glfwWindowShouldClose(window)
-#define GET_CANDY glfwPollEvents()
 void WindowLinux::Run()
 {
-  while( NOTHING_BETTER_TO_DO )
+  while( glfwGetWindowParam(GLFW_OPENED) ) //3.x.x: !glfwWindowShouldClose(window)
   {
     m_renderComponentInterface->Render();
     
-    GET_CANDY;
+    this->Update();
+    
+    glfwPollEvents();
   }
 }
 
 void WindowLinux::Update()
 {
-	// TODO Fix update variables here
-	double l_deltaTime	   = 0.0;
-	float l_mousePositionX = 0.0f;
-	float l_mousePositionY = 0.0f;
+	// Fix update variables
+  double l_newTime       = glfwGetTime();
+	double l_deltaTime     = l_newTime - m_oldTime;
+  m_oldTime              = l_newTime;
+  
+  int l_mousePositionX, l_mousePositionY;
+  glfwGetMousePos( l_mousePositionX, l_mousePositionY );
 
 	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY);
 }
 
 void WindowLinux::Render()
 {
-
 	WindowBaseClass::Render();
 }
 
