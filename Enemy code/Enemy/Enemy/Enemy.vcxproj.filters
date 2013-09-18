@@ -39,6 +39,9 @@
     <ClCompile Include="Paddle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DefensiveEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h">
@@ -60,6 +63,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Paddle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DefensiveEnemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

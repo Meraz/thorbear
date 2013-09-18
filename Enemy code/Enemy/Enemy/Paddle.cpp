@@ -44,10 +44,10 @@ int Paddle::GetPosY()
 BoundingBox Paddle::GetBoundingBox()
 {
 	BoundingBox l_bBox;
-	l_bBox.Width = m_width;
-	l_bBox.Height = m_height;
-	l_bBox.posX = m_posX;
-	l_bBox.posY = m_posY;
+	l_bBox.width = m_width;
+	l_bBox.height = m_height;
+	l_bBox.farTopLeftX = m_posX;
+	l_bBox.farTopLeftY = m_posY;
 
 	return l_bBox;
 }

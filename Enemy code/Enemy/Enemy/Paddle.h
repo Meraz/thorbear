@@ -2,15 +2,10 @@
 #define PADDLE_H
 
 #include <Windows.h>
+#include "Enemy.h"
 //#include "GraphicalComponentInterface.h"
 using namespace std;
 
-struct BoundingBox
-{
-	int	Width;
-	int	Height;
-	int posX,posY;
-};
 
 class Paddle
 {

@@ -64,6 +64,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DefensiveEnemy.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Level.cpp" />
@@ -74,6 +75,7 @@
     <ClCompile Include="ShootingEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DefensiveEnemy.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Level.h" />
