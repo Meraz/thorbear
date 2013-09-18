@@ -58,49 +58,6 @@ RenderComponentLinux::~RenderComponentLinux()
 
 bool RenderComponentLinux::Init()
 {
-	if( !glfwInit() )
-		return this->SetError( std::string( "ERROR: GLFW init\n" ) );
-    
-	// Get a list of supported video modes
-	GLFWvidmode l_list[ 20 ];
-	int l_numModes = glfwGetVideoModes( l_list, 20 );
-
-	if( l_numModes < 1 )
-		return this->SetError( std::string( "No desktop modes available!" ) );
-
-	/*printf("Supported modes:\n");
-	for (int i = 0; i < numModes; i++)
-	{
-		printf("\t %dx%d (%d, %d, %d)\n", list[i].Width, list[i].Height, list[i].RedBits, list[i].GreenBits, list[i].BlueBits);
-	}*/
-
-	// Pick the highest mode available
-	int l_currentMode = l_numModes - 1;
-
-	glfwOpenWindowHint( GLFW_OPENGL_VERSION_MAJOR, 4 ); // set version of OpenGL to 4.0
-	glfwOpenWindowHint( GLFW_OPENGL_VERSION_MINOR, 0 );
-	glfwOpenWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // do not allow deprecated
-	//glfwOpenWindowHint( GLFW_FSAA_SAMPLES, 16 ); // Multisampling, yay!
-	//glfwOpenWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE ); // force current version of spec
-
-	if( !glfwOpenWindow(
-        l_list[ l_currentMode ].Width,
-        l_list[ l_currentMode ].Height,
-        l_list[ l_currentMode ].RedBits,
-        l_list[ l_currentMode ].GreenBits,
-        l_list[ l_currentMode ].BlueBits,
-        0,
-        0,
-        0,
-        GLFW_WINDOW
-        // GLFW_FULLSCREEN
-      )
-    )
-	{
-		glfwTerminate();
-		return this->SetError( std::string( "ERROR: creating load window\n" ) );
-	}
-	
 	// Start GLEW (that's it! - we could also use GLEW to check for driver support of all GL extensions)
 	glewExperimental = 1;
 	GLenum l_err = glewInit( );
@@ -144,6 +101,15 @@ bool RenderComponentLinux::Init()
 	// set-up callbacks. we can also do a keyboard and mouse input callback, and various others (see freeGLUT website)
 	//glfwSetWindowSizeCallback( ResizeCallback ); // register callback for reshape (if set earlier won't be called until an actual resize)
   return true;
+}
+
+void RenderComponentLinux::SetHints()
+{
+	glfwOpenWindowHint( GLFW_OPENGL_VERSION_MAJOR, 4 ); // set version of OpenGL to 4.0
+	glfwOpenWindowHint( GLFW_OPENGL_VERSION_MINOR, 0 );
+	glfwOpenWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // do not allow deprecated
+	//glfwOpenWindowHint( GLFW_FSAA_SAMPLES, 16 ); // Multisampling, yay!
+	//glfwOpenWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE ); // force current version of spec
 }
 
 void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)

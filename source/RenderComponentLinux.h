@@ -17,6 +17,8 @@ public:
   
   // Initialize the Win/Lin window and set up OpenGL 4
   bool Init();
+  // Sets the hints for window, such as required version of the OpenGL
+  void SetHints();
 
 	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType);
 	void RenderParticleSystem(ParticleSystem p_particleSystem);
