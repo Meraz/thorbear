@@ -10,7 +10,7 @@ class WindowBaseClass
 public:
 	WindowBaseClass();
 	virtual ~WindowBaseClass();
-	//virtual void Initialize(p_hInstance, p_hPrevInstance, p_pScmdline, 0) = 0;
+	virtual int Run() = 0;
 
 protected:
 	virtual void Render();

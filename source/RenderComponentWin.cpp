@@ -1,15 +1,20 @@
 #include "RenderComponentWin.h"
 
 
-RenderComponentWin::RenderComponentWin(void)
+RenderComponentWin::RenderComponentWin()
 {
 }
 
 
-RenderComponentWin::~RenderComponentWin(void)
+RenderComponentWin::~RenderComponentWin()
 {
+
 }
 
+int RenderComponentWin::Initialize()
+{
+	return 0;
+}
 
 void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)
 {
@@ -25,3 +30,5 @@ void RenderComponentWin::Render()
 {
 
 }
+
+

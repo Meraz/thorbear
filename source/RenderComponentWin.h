@@ -9,6 +9,8 @@ public:
 	RenderComponentWin();
 	~RenderComponentWin();
 
+	int Initialize();
+
 	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType);
 	void RenderParticleSystem(ParticleSystem p_particleSystem);
 

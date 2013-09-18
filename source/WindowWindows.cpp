@@ -55,15 +55,16 @@ bool WindowWindows::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, PST
 		MessageBox(0, "RegisterClass Failed.", 0, 0);
 		return false;
 	}
-	DWORD dwStyle = (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
+	DWORD l_windowStyle = (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
+
 	// Compute window rectangle dimensions based on requested client area dimensions.
 	RECT l_r = { 0, 0, m_clientWidth, m_clientHeight };
-    AdjustWindowRect(&l_r, dwStyle, false);
+    AdjustWindowRect(&l_r, l_windowStyle, false);
 	int l_width  = l_r.right - l_r.left;
 	int l_height = l_r.bottom - l_r.top;
 
 
-	m_hMainWnd = CreateWindow("D3DWndClassName", "Spaceout", dwStyle, CW_USEDEFAULT, CW_USEDEFAULT, l_width, l_height, 0, 0, m_hAppInst, 0); 
+	m_hMainWnd = CreateWindow("D3DWndClassName", "Spaceout", l_windowStyle, CW_USEDEFAULT, CW_USEDEFAULT, l_width, l_height, 0, 0, m_hAppInst, 0); 
 	if( !m_hMainWnd )
 	{
 		MessageBox(0, "CreateWindow Failed.", 0, 0);

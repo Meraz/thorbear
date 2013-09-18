@@ -12,6 +12,12 @@ WindowLinux::~WindowLinux()
 	delete m_gameInterface;
 }
 
+int WindowLinux::Run()
+{
+	return 0;
+}
+
+
 void WindowLinux::Update()
 {
 	// TODO Fix update variables here
