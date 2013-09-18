@@ -141,8 +141,6 @@ void Obj::Draw( D3DXMATRIX p_viewMatrix, D3DXMATRIX p_projMatrix, D3DXVECTOR3 p_
 	D3DXMATRIX t_worldMat	= m_scaleMat * m_rotationMatX * m_rotationMatY * m_rotationMatZ * m_translateMat;
 	D3DXMATRIX t_WVP		= t_worldMat * p_viewMatrix * p_projMatrix;
 
-	
-
 	m_model->m_vertexBuffer->Apply(0);
 	m_model->m_indexBuffer->Apply(0);
 

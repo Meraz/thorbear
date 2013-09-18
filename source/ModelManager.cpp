@@ -15,9 +15,7 @@ Model* ModelManager::GetModelByName( string p_modelName )
 		{
 			return &m_modelList[i];
 		}
-
 	}
-
 	return &m_modelList[0];
 }
 

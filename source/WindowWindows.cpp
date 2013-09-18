@@ -19,8 +19,6 @@ LRESULT CALLBACK MainWndProc(HWND p_hwnd, UINT p_msg, WPARAM p_wParam, LPARAM p_
 WindowWindows::WindowWindows()
 	: WindowBaseClass()
 {
-	m_renderComponentInterface = new RenderComponentWin();
-	m_gameInterface->Initialize(m_renderComponentInterface);
 	m_gameTimer = new GameTimer();
 	m_appPaused = false;
 }
@@ -48,11 +46,11 @@ bool WindowWindows::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, PST
 	l_wc.hCursor       = LoadCursor(0, IDC_ARROW);
 	l_wc.hbrBackground = (HBRUSH)GetStockObject(NULL_BRUSH);
 	l_wc.lpszMenuName  = 0;
-	l_wc.lpszClassName = "D3DWndClassName";
+	l_wc.lpszClassName = L"D3DWndClassName";
 
 	if( !RegisterClass(&l_wc) )
 	{
-		MessageBox(0, "RegisterClass Failed.", 0, 0);
+		MessageBox(0, L"RegisterClass Failed.", 0, 0);
 		return false;
 	}
 	DWORD l_windowStyle = (WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
@@ -64,15 +62,21 @@ bool WindowWindows::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, PST
 	int l_height = l_r.bottom - l_r.top;
 
 
-	m_hMainWnd = CreateWindow("D3DWndClassName", "Spaceout", l_windowStyle, CW_USEDEFAULT, CW_USEDEFAULT, l_width, l_height, 0, 0, m_hAppInst, 0); 
+	m_hMainWnd = CreateWindow(L"D3DWndClassName", L"Spaceout", l_windowStyle, CW_USEDEFAULT, CW_USEDEFAULT, l_width, l_height, 0, 0, m_hAppInst, 0); 
 	if( !m_hMainWnd )
 	{
-		MessageBox(0, "CreateWindow Failed.", 0, 0);
+		MessageBox(0, L"CreateWindow Failed.", 0, 0);
 		return false;
 	}
 
 	ShowWindow(m_hMainWnd, SW_SHOW);
 	UpdateWindow(m_hMainWnd);
+
+	m_renderComponentInterface = new RenderComponentWin(m_hMainWnd);
+	RenderComponentWin* l_tempCast = (RenderComponentWin*)m_renderComponentInterface;
+	l_tempCast->Initialize();
+	m_gameInterface->Initialize(m_renderComponentInterface);
+
 	return true;
 }
 

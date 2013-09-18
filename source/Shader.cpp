@@ -40,7 +40,7 @@ HRESULT Shader::Init(ID3D11Device* p_device, ID3D11DeviceContext *p_context, cha
 	if (m_compilationErrors)
 	{
 		char* temp = (char*)m_compilationErrors->GetBufferPointer();
-		//MessageBoxA(0, (char*)m_compilationErrors->GetBufferPointer(), 0, 0);
+		MessageBoxA(0, (char*)m_compilationErrors->GetBufferPointer(), 0, 0);
 		m_compilationErrors->Release();
 	}
 	
