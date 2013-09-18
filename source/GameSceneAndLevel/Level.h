@@ -12,10 +12,10 @@ public:
 
 	void Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight);
 
-	void Update(int p_mousePosX); //Not sure if int or float
-	void Render();
-	bool HasPaddleDied();
-	int GetNrOfEnemies();
+	void	Update(int p_mousePosX); //Not sure if int or float
+	void	Render();
+	bool	HasPaddleDied();
+	int		GetNrOfEnemies();
 	//void SetGraphicalInterface(RenderComponentInterface* p_renderComp)
 private:
 	BoundingBox	m_mapEdges;
