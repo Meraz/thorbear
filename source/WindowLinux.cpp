@@ -22,8 +22,8 @@ WindowLinux::WindowLinux()
     exit(1);
   }
   
-	m_gameInterface->Initialize(m_renderComponentInterface);
 	m_renderComponentInterface = l_renderComponentLinux;
+	m_gameInterface->Initialize( m_renderComponentInterface );
 }
 
 WindowLinux::~WindowLinux()
@@ -85,8 +85,6 @@ void WindowLinux::Run()
 {
   while( glfwGetWindowParam(GLFW_OPENED) ) //3.x.x: !glfwWindowShouldClose(window)
   {
-    m_renderComponentInterface->Render();
-    
     this->Update();
     
     glfwPollEvents();
