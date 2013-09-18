@@ -18,8 +18,8 @@ int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrevInstance, PSTR p_pScm
 
 	WindowWindows* m_windowWindows = new WindowWindows();
 	m_windowWindows->Initialize(p_hInstance, p_hPrevInstance, p_pScmdline, 0);
-
-	system("pause");
+	m_windowWindows->Run();
+	//system("pause");
 	return 0;
 }
 #endif
