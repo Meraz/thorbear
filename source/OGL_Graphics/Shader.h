@@ -32,11 +32,11 @@ public:
   
 	Camera* m_activeCamera;
 
+  static Shader* m_activeShader;
 private:
 	int m_handle;
 	GLuint m_subhandles[COUNT];
 	glm::mat4 m_modelMatrix;
-  static Shader* m_activeShader;
   
 	void CreateProgram( );
 	int GetUniformLocation( const char* p_name );

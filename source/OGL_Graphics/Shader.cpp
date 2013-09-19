@@ -163,7 +163,7 @@ void compileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const 
 	glShaderSource( p_shaderHandle, 1, &l_ptr, NULL );
 
 	// compile shader
-	glCompileShader( l_shaderHandle );
+	glCompileShader( p_shaderHandle );
 
 	// Check for errors
 	int l_result = 0;
