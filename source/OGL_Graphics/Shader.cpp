@@ -129,7 +129,7 @@ void Shader::CreateProgram( )
 	}
 }
 
-void compileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const int& p_type )
+void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const int& p_type )
 {
 	// load file into string
 	std::ifstream l_file;
