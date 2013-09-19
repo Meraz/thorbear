@@ -118,20 +118,31 @@ bool RenderComponentLinux::Init()
   m_genericShader.SetActiveCamera( l_cam );
   
   float vertices[] = {
-      0.f, -10.f, 100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      600.f, -10.f, -100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      -600.f, -10.f, -100.f, 0.f, 0.f, 0.f, 0.f, 1.f
+      -100.f, -10.f, 100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+      -100.f, -10.f, -100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+      100.f, -10.f, -100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+      100.f, -10.f, -100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+      -100.f, -10.f, 100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+      100.f, -10.f, 100.f, 0.f, 0.f, 0.f, 0.f, 1.f
     };
-  GLuint l_vbo, l_vao;
-  glGenVertexArrays(1, &l_vao);
-  glBindVertexArray(l_vao);
+  GLuint l_vbo;
+  glGenVertexArrays(1, &tmp_vao);
+  glBindVertexArray(tmp_vao);
+  
+  glEnableVertexAttribArray( 0 ); // position
+  glEnableVertexAttribArray( 1 ); // UV
+  glEnableVertexAttribArray( 2 ); // normals
+  
   glGenBuffers(1, &l_vbo);
   glBindBuffer(GL_ARRAY_BUFFER, l_vbo);
+  
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8, (const GLvoid *)0);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8, (const GLvoid *)(sizeof(float)*3));
-  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8, (const GLvoid *)(sizeof(float)*5));
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid *)0);
+  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid *)(sizeof(float)*3));
+  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid *)(sizeof(float)*5));
 	
+  glBindVertexArray(0);
+  
   return true;
 }
 
@@ -162,9 +173,10 @@ void RenderComponentLinux::Render()
   m_genericShader.Use( );
   
   // Render here
+  glBindVertexArray(tmp_vao);
   m_genericShader.SetUniformMatrix( "modelMatrix", glm::mat4(1.f) );
   m_genericShader.UpdateUniform( );
-  glDrawArrays( GL_TRIANGLES, 0, 3 );
+  glDrawArrays( GL_TRIANGLES, 0, 6 );
   
   glfwSwapBuffers();
 }

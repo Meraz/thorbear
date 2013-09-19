@@ -3,12 +3,9 @@
 // In-data from VShader
 in vec3 normal;
 in vec2 uv;
-
 in vec4 eyeCoords;
 in vec3 lightVec;
-
 in vec3 diffuse;
-
 
 // Uniform data
 // light and view/eye
@@ -17,44 +14,20 @@ uniform vec4 lightPos;
 // Ambient
 uniform vec3 Ka;
 uniform vec3 Ia;
-
 // Diffuse
 uniform vec3 Kd;
-
+uniform sampler2D map_Kd;
 // Specular
 uniform vec3 Ks;
 uniform float c3;
 uniform vec3 Is;
 
-uniform sampler2D map_Kd;
-
-in vec3 vShadowCoord;
-uniform sampler2DShadow shadowmap;
-
-
 out vec3 fragmentColour;
-
 
 void main()
 {
 	vec4 mKd;
 	vec3 specular;
-
-	float shadow = 0.0;
-	vec4 sc = vec4(vShadowCoord, 1.f);
-	sc.z -= 0.001;
-	shadow += textureProjOffset (shadowmap, sc, ivec2 (-1, 1));
-	shadow += textureProjOffset (shadowmap, sc, ivec2 (1, 1));
-	shadow += textureProjOffset (shadowmap, sc, ivec2 (-1, -1));
-	shadow += textureProjOffset (shadowmap, sc, ivec2 (1, -1));
-	shadow *= 0.5;
-	shadow += textureProjOffset (shadowmap, sc, ivec2 (-1, 0));
-	shadow += textureProjOffset (shadowmap, sc, ivec2 (1, 0));
-	shadow += textureProjOffset (shadowmap, sc, ivec2 (0, -1));
-	shadow += textureProjOffset (shadowmap, sc, ivec2 (0, 1));
-	shadow *= 0.5;
-	shadow += textureProjOffset (shadowmap, sc, ivec2 (0, 0));
-	shadow *= 0.25;
 	
 	if ( shadow > 0 )
 	{
@@ -71,7 +44,7 @@ void main()
 		specular = pow ( max( 0.0f, dot( r, v ) ), c3 ) * Is + Ir;
 	}
 
-	fragmentColour = vec3(Ka * Ia + shadow * ( vec3( mKd ) * diffuse + Ks * specular ) );
+	fragmentColour = vec3(0.0f, 1.0f, 0.0f);//vec3(Ka * Ia + ( vec3( mKd ) * diffuse + Ks * specular ) );
 
 	//fragmentColour = mKd;
 	//fragmentColour = vec4(Ka * Ia, 1.0f);

@@ -16,8 +16,6 @@ uniform mat4 projectionMatrix;
 
 uniform vec4 lightPosition;
 
-uniform mat4 smVPMatrix;
-
 const mat4 bias = mat4(0.5, 0.0, 0.0, 0.0,
                        0.0, 0.5, 0.0, 0.0,
                        0.0, 0.0, 0.5, 0.0,
@@ -35,8 +33,6 @@ out vec3 lightVec;
 
 out vec3 diffuse;
 
-out vec3 vShadowCoord;
-
 
 void main()
 {
@@ -47,9 +43,6 @@ void main()
 
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
 	diffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * Id;
-	
-	vec4 sc = bias * smVPMatrix * modelMatrix * vec4( vertexPosition, 1 );
-	vShadowCoord = vec3( sc / sc.w );
 
 	gl_Position = projectionMatrix * eyeCoords;
 }

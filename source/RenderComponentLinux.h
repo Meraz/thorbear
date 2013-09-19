@@ -32,6 +32,8 @@ private:
   
   Shader m_genericShader;
   
+  GLuint tmp_vao;
+  
   // Set the error message and return false to be returned further on for the error management
   bool SetError( std::string p_errorMessage );
 };
