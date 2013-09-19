@@ -7,8 +7,7 @@ ShaderManager::ShaderManager()
 
 ShaderManager::~ShaderManager()
 {
-	/*m_shaderList.clear();
-	m_shaderList.shrink_to_fit();*/
+	
 	for(int i = 0; i < m_shaderList.size(); i++)
 	{
 		delete m_shaderList.at(i);

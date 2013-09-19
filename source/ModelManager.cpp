@@ -7,6 +7,14 @@ ModelManager::ModelManager(ID3D11Device* p_d3dDevice, ID3D11DeviceContext* p_con
 	m_arraySize = 0; 
 }
 
+ModelManager::~ModelManager()
+{
+	for(int i = 0; i < m_arraySize; i++)
+	{
+		delete m_modelList[i];
+	}
+}
+
 Model* ModelManager::GetModelByName( string p_modelName )
 {
 	for (int i = 0; i < m_arraySize; i++)
@@ -27,14 +35,5 @@ void ModelManager::CreateModel( string p_modelName, string p_OBJFileName )
 	m_arraySize++;
 	delete t_modelLoader;
 }
-
-ModelManager::~ModelManager()
-{
-	for(int i = 0; i < m_arraySize; i++)
-	{
-		delete m_modelList[i];
-	}
-}
-
 
 

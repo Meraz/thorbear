@@ -20,9 +20,7 @@ RenderComponentWin::~RenderComponentWin()
 	ReleaseCOM( m_renderTargetView);
 	ReleaseCOM( m_depthStencilView);
 
-	
 	m_objVec.clear();
-	//delete m_objVec.at(0).model;
 }
 
 int RenderComponentWin::Initialize()
@@ -130,18 +128,6 @@ bool RenderComponentWin::InitializeDirect3D()
 		return false;
 	}
 
-	// Check 4X MSAA quality support for our back buffer format.
-	// All Direct3D 11 capable devices support 4X MSAA for all render 
-	// target formats, so we only need to check quality support.
-
-/*
-	HR(m_d3dDevice->CheckMultisampleQualityLevels(
-		DXGI_FORMAT_R8G8B8A8_UNORM, 4, &m_4xMsaaQuality));
-	assert( m_4xMsaaQuality > 0 );
-*/
-
-	// Fill out a DXGI_SWAP_CHAIN_DESC to describe our swap chain.
-
 	DXGI_SWAP_CHAIN_DESC l_sd;
 	l_sd.BufferDesc.Width  = m_clientWidth;//m_clientWidth;
 	l_sd.BufferDesc.Height = m_clientHeight;//m_clientHeight;
@@ -150,21 +136,6 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	l_sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	l_sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-
-	/*
-	// Use 4X MSAA? 
-	if( m_enable4xMsaa )
-	{
-		l_sd.SampleDesc.Count   = 4;
-		l_sd.SampleDesc.Quality = m_4xMsaaQuality-1;
-	}
-	// No MSAA
-	else
-	{
-		l_sd.SampleDesc.Count   = 1;
-		l_sd.SampleDesc.Quality = 0;
-	}
-	*/
 	l_sd.SampleDesc.Count   = 1;
 	l_sd.SampleDesc.Quality = 0;
 
@@ -231,14 +202,10 @@ bool RenderComponentWin::InitializeDirect3D()
 	HR(m_d3dDevice->CreateTexture2D(&l_depthStencilDesc, 0, &m_depthStencilBuffer));
 	HR(m_d3dDevice->CreateDepthStencilView(m_depthStencilBuffer, 0, &m_depthStencilView));
 
-
 	// Bind the render target GetProjMatrix and depth/stencil GetProjMatrix to the pipeline.
-
 	m_d3dImmediateContext->OMSetRenderTargets(1, &m_renderTargetView, m_depthStencilView);
 
-
 	// Set the viewport transform.
-
 	m_screenViewport.TopLeftX = 0;
 	m_screenViewport.TopLeftY = 0;
 	m_screenViewport.Width    = static_cast<float>(m_clientWidth);
@@ -258,8 +225,7 @@ void RenderComponentWin::Load()
 	m_modelManager->CreateModel("cube.obj",		"J:\\thorbear\\DX11\\CUBE");
 	m_modelManager->CreateModel("cube1.obj",	"J:\\thorbear\\DX11\\ColorCUBE");
 
-	m_shaderManager->AddShader("J:\\thorbear\\source\\object.fx", 12);
-	
+	m_shaderManager->AddShader("J:\\thorbear\\source\\object.fx", 12);	
 }
 
 void RenderComponentWin::CreateTemplates()

@@ -85,10 +85,8 @@ int WindowWindows::Run()
 	MSG l_msg = {0};
 	m_gameTimer->Reset();
 
-	int i = 0;
-	while(l_msg.message != WM_QUIT && i < 5000)
+	while(l_msg.message != WM_QUIT)
 	{
-		i ++;
 		// If there are Window messages then process them.
 		if(PeekMessage( &l_msg, 0, 0, 0, PM_REMOVE ))
 		{
@@ -116,7 +114,6 @@ int WindowWindows::Run()
 
 void WindowWindows::Update()
 {
-	// TODO Fix update variables here
 	WindowBaseClass::Update(m_gameTimer->DeltaTime(), m_mousePositionX, m_mousePositionY);	
 }
 

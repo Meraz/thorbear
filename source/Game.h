@@ -14,6 +14,7 @@ public:
 	void Render();
 
 private:
+	Game* a;
 
 private:
 	RenderComponentInterface* m_renderComponentInterface;
