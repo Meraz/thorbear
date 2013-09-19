@@ -1,5 +1,7 @@
 #include "RenderComponentLinux.h"
 
+#include "OGL_Graphics/Camera.h"
+
 #include <cstdarg>
 #include <vector>
 #include <cstdio>
@@ -97,9 +99,23 @@ bool RenderComponentLinux::Init()
 	
 	glfwSetWindowTitle( "SpaceOut: OpenGL4 Test" );//l_windowTitle.c_str( ) );
 	glfwSwapInterval( 1 ); // VSync on
+  
+  // Get window size and set the viewport to match
+  int l_windowWidth, l_windowHeight; // 800x600?
+  glfwGetWindowSize( &l_windowWidth, &l_windowHeight );
+  glViewport( 0, 0, l_windowWidth, l_windowHeight );
     
-  m_genericShader.Init( "../resources/Shaders/genericVertex.glsl", "../resources/Shaders/genericFragment.glsl" );
+  m_genericShader.Init( "../resources/OGLShaders/genericVertex.glsl", "../resources/OGLShaders/genericFragment.glsl" );
   m_genericShader.Build( );
+  
+  // Create and attach a camera
+  Camera* l_cam = new Camera();
+  l_cam.SetPosition( glm::vec3( 0.f, 0.f, 0.f ) );
+  l_cam.UpdateViewMatrix( );
+  l_cam.SetClip( 5.f, 1000.f );
+  l_cam.SetFoV( 45.f );
+  l_cam.UpdateProjectionMatrix( );
+  m_genericShader.SetActiveCamera( l_cam );
 	
   return true;
 }
@@ -129,6 +145,8 @@ void RenderComponentLinux::Render()
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
   
   m_genericShader.Use( );
+  
+  // Render here
   
   glfwSwapBuffers();
 }

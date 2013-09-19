@@ -47,8 +47,7 @@ void Shader::Build( )
 	CreateProgram( );
 }
 
-static Shader* activeShader = 0;
-static Shader* tmp = 0;
+//static Shader* tmp = 0;
 
 //void TmpUse( Shader* _shader )
 //{
@@ -61,6 +60,7 @@ static Shader* tmp = 0;
 //		tmp->Use( );*/
 //}
 
+static Shader* activeShader = 0;
 void Shader::Use( )
 {
 	if( activeShader != this )
@@ -189,10 +189,30 @@ int Shader::GetUniformLocation( const char* _name )
 	this->Use( );
 
 	int loc = glGetUniformLocation( handle, _name );
+#if DEBUG
 	if( loc < 0 )
-	{
 		printf( "Warning: Error receiving variable location '%s'\n", _name );
-		//throw stringf( "Error receiving variable location '%s'", _name );
-	}
+#endif
 	return loc;
+}
+
+void UpdateUniform( )
+{
+  s.SetUniformMatrix( "projectionMatrix", m_activeCamera->GetProjectionMatrix( ) );
+  s.SetUniformMatrix( "viewMatrix", m_activeCamera->GetViewMatrix( ) );
+  s.SetUniformMatrix( "modelViewMatrix", m_activeCamera->GetViewMatrix( ) * m_modelMatrix );
+  s.SetUniformMatrix( "normalMatrix", glm::inverseTranspose( glm::mat3( m_activeCamera->GetViewMatrix( ) * m_modelMatrix ) ) );
+  s.SetUniformVector( "lightPosition", glm::vec4( 256.0f, 200.0f, 256.0f, 1.f ) );
+}
+
+void SetActiveCamera( Camera& p_cam )
+{
+  m_activeCamera = &p_cam;
+  
+  // Get window size and adjust camera projection matrix to match
+  int l_windowWidth, l_windowHeight;
+  glfwGetWindowSize( &l_windowWidth, &l_windowHeight );
+  m_activeCamera->SetResolution( l_windowWidth, l_windowHeight );
+  
+  m_activeCamera->UpdateProjectionMatrix( );
 }

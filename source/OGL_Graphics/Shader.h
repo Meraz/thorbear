@@ -4,14 +4,13 @@
 #include <GL\glew.h>
 #include "glm\glm.hpp"
 
+#include "Camera.h"
+
 class Shader
 {
 	enum ShaderType { VertShader, TConShader, TEvalShader, GeomShader, FragShader, COUNT };
 
-
 public:
-	int handle;
-	GLuint subhandles[ShaderType::COUNT];
 	void Init( const char* _vertFileName, const char* _fragFileName, const char* _gsFileName = NULL, const char* _tessConFileName = NULL, const char* _tessEvalFileName = NULL );
 	
 	void Build( );
@@ -27,9 +26,17 @@ public:
 	void SetUniformMatrix( const char* _name, glm::mat3& _val );
 	void SetUniformMatrix( const char* _name, glm::mat4& _val );
 	
-	glm::mat4 modelMatrix;
+  
+	void UpdateUniform( Shader &s );
+	void SetActiveCamera( Camera& _cam );
 
 private:
+	int handle;
+	GLuint subhandles[ShaderType::COUNT];
+  
+	Camera* m_activeCamera;
+	glm::mat4 m_modelMatrix;
+  
 	void CreateProgram( );
 	int GetUniformLocation( const char* _name );
 };
