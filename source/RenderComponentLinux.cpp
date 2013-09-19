@@ -121,12 +121,12 @@ bool RenderComponentLinux::Init()
   m_genericShader.SetActiveCamera( l_cam );
   
   float vertices[] = {
-      -100.f, -10.f, 100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      -100.f, -10.f, -100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      100.f, -10.f, -100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      100.f, -10.f, -100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      -100.f, -10.f, 100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      100.f, -10.f, 100.f, 0.f, 0.f, 0.f, 0.f, 1.f
+      -10.f, -10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+       10.f, -10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+       10.f,  10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+      -10.f, -10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+       10.f,  10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+      -10.f,  10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f
     };
   GLuint l_vbo;
   glGenVertexArrays(1, &tmp_vao);
