@@ -6,7 +6,7 @@
 #include <vector>
 #include <cstdio>
 
-#include "glm/ext.hpp"
+#include "OGL_Graphics/glm/ext.hpp"
 
 // Required for stringf below
 std::string vformat( const char *fmt, va_list ap )
@@ -146,7 +146,7 @@ bool RenderComponentLinux::Init()
 	
   glBindVertexArray(0);
   
-  glm::vec3 fwd = glm::vec3(0, 0, -1) * m_genericShader.m_activeCamera->GetViewMatrix();
+  glm::vec3 fwd = glm::vec3(0, 0, -1) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
   printf( "Forward is: %f, %f, %f\n", fwd[0], fwd[1], fwd[2] );
   
   return true;
