@@ -218,12 +218,12 @@ bool RenderComponentWin::InitializeDirect3D()
 
 void RenderComponentWin::Load()
 {
-	m_modelManager->CreateModel("invader.obj",	"Invader");
-	m_modelManager->CreateModel("bth.obj",		"BTH");
-	m_modelManager->CreateModel("cube.obj",		"CUBE");
-	m_modelManager->CreateModel("cube1.obj",	"ColorCUBE");
+	m_modelManager->CreateModel("invader.obj",	"object\\invader");
+	m_modelManager->CreateModel("bth.obj",		"object\\bth");
+	m_modelManager->CreateModel("cube.obj",		"object\\cube");
+	m_modelManager->CreateModel("cube1.obj",	"object\\colorcube");
 
-	m_shaderManager->AddShader("object.fx", 12);	
+	m_shaderManager->AddShader("effect\\object.fx", 12);	
 }
 
 void RenderComponentWin::CreateTemplates()
