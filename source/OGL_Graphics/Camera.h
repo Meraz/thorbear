@@ -5,33 +5,33 @@
 
 class Camera
 {
-	glm::vec3 position;
-	float yaw; // Y
-	float pitch; // X
-	float roll; // Z
+	glm::vec3 m_position;
+	float m_yaw; // Y
+	float m_pitch; // X
+	float m_roll; // Z
 
-	float nearClip;
-	float farClip;
+	float m_nearClip;
+	float m_farClip;
 
-	int width;
-	int height;
+	int m_width;
+	int m_height;
 
-	float fov;
+	float m_fov;
 
 public:
 
-	glm::mat4 viewMatrix;
-	glm::mat4 projectionMatrix;
+	glm::mat4 m_viewMatrix;
+	glm::mat4 m_projectionMatrix;
   
 	Camera( );
 
-	void SetPosition( const glm::vec3 _pos);
-	void SetYawPitch( const float _y, const float _p );
-	void SetRoll( const float _r );
+	void SetPosition( const glm::vec3 p_pos);
+	void SetYawPitch( const float p_y, const float p_p );
+	void SetRoll( const float p_r );
 
-	void SetClip( const float _near, const float _far );
-	void SetResolution( const int _width, const int _height);
-	void SetFoV( const float _fov );
+	void SetClip( const float p_near, const float p_far );
+	void SetResolution( const int p_width, const int p_height);
+	void SetFoV( const float p_fov );
 
 	glm::mat4 GetViewMatrix( );
 	glm::mat4 GetProjectionMatrix( );

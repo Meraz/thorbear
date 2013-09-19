@@ -8,40 +8,40 @@
 #include <vector>
 #include "glm/ext.hpp"
 
-extern inline std::string stringf( const char *fmt, ... );
+extern inline std::string stringf( const char *p_fmt, ... );
 
-void compileShader( GLuint& _shaderHandle, const char* _shaderFileName, const int& _type );
+void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const int& p_type );
 
-void Shader::Init( const char* _vertFileName, const char* _fragFileName, const char* _gsFileName, const char* _tessConFileName, const char* _tessEvalFileName )
+void Shader::Init( const char* p_vertFileName, const char* p_fragFileName, const char* p_gsFileName, const char* p_tessConFileName, const char* p_tessEvalFileName )
 {
-	if( _vertFileName == NULL )
+	if( p_vertFileName == NULL )
 		throw "Shader error: Shader must have a vertex shader";
 	
-	compileShader( subhandles[ VertShader ], _vertFileName, GL_VERTEX_SHADER );
+	CompileShader( m_subhandles[ VertShader ], p_vertFileName, GL_VERTEX_SHADER );
 
-	if( _gsFileName != NULL )
-		compileShader( subhandles[ GeomShader ], _gsFileName, GL_GEOMETRY_SHADER );
+	if( p_gsFileName != NULL )
+		CompileShader( m_subhandles[ GeomShader ], p_gsFileName, GL_GEOMETRY_SHADER );
 
-	if( _tessConFileName != NULL )
+	if( p_tessConFileName != NULL )
 	{
 		glPatchParameteri( GL_PATCH_VERTICES, 3 );
-		compileShader( subhandles[ TConShader ], _tessConFileName, GL_TESS_CONTROL_SHADER );
+		CompileShader( m_subhandles[ TConShader ], p_tessConFileName, GL_TESS_CONTROL_SHADER );
 	}
 
-	if( _tessEvalFileName != NULL )
-		compileShader( subhandles[ TEvalShader ], _tessEvalFileName, GL_TESS_EVALUATION_SHADER );
+	if( p_tessEvalFileName != NULL )
+		CompileShader( m_subhandles[ TEvalShader ], p_tessEvalFileName, GL_TESS_EVALUATION_SHADER );
 	
-	if( _fragFileName != NULL )
-		compileShader( subhandles[ FragShader ], _fragFileName, GL_FRAGMENT_SHADER );
+	if( p_fragFileName != NULL )
+		CompileShader( m_subhandles[ FragShader ], p_fragFileName, GL_FRAGMENT_SHADER );
 
-	handle = glCreateProgram( );
+	m_handle = glCreateProgram( );
 
-	if( handle == 0 )
+	if( m_handle == 0 )
 		throw "ERROR creating shader programme\n";
 	
 	// attach shaders
 	for( unsigned i = 0; i < COUNT; i++ )
-		glAttachShader( handle, subhandles[ i ] );
+		glAttachShader( m_handle, m_subhandles[ i ] );
 }
 
 void Shader::Build( )
@@ -62,140 +62,140 @@ void Shader::Build( )
 //		tmp->Use( );*/
 //}
 
-static Shader* activeShader = 0;
+Shader::m_activeShader = 0;
 void Shader::Use( )
 {
-	if( activeShader != this )
+	if( m_activeShader != this )
 	{
-		glUseProgram(handle);
-		activeShader = this;
+		glUseProgram(m_handle);
+		m_activeShader = this;
 	}
 }
 
-void Shader::BindAttribLocation( GLuint _location, const char* _name )
+void Shader::BindAttribLocation( GLuint p_location, const char* p_name )
 {
-	glBindAttribLocation( handle, _location, _name);
+	glBindAttribLocation( m_handle, p_location, p_name);
 }
 
-void Shader::SetUniformInt( const char* _name, int _val )
+void Shader::SetUniformInt( const char* p_name, int p_val )
 {
-	glUniform1i( GetUniformLocation( _name ), _val );
+	glUniform1i( GetUniformLocation( p_name ), p_val );
 }
-void Shader::SetUniformFloat( const char* _name, float _val )
+void Shader::SetUniformFloat( const char* p_name, float p_val )
 {
-	glUniform1f( GetUniformLocation( _name ), _val );
+	glUniform1f( GetUniformLocation( p_name ), p_val );
 }
-void Shader::SetUniformVector( const char* _name, glm::vec3 _val )
+void Shader::SetUniformVector( const char* p_name, glm::vec3 p_val )
 {
-	glUniform3fv( GetUniformLocation( _name ), 1, &_val[0] );
+	glUniform3fv( GetUniformLocation( p_name ), 1, &p_val[0] );
 }
-void Shader::SetUniformVector( const char* _name, glm::vec4 _val )
+void Shader::SetUniformVector( const char* p_name, glm::vec4 p_val )
 {
-	glUniform4fv( GetUniformLocation( _name ), 1, &_val[0] );
+	glUniform4fv( GetUniformLocation( p_name ), 1, &p_val[0] );
 }
-void Shader::SetUniformMatrix( const char* _name, glm::mat3 _val )
+void Shader::SetUniformMatrix( const char* p_name, glm::mat3 p_val )
 {
-	glUniformMatrix3fv( GetUniformLocation( _name ), 1, GL_FALSE, &_val[0][0] );
+	glUniformMatrix3fv( GetUniformLocation( p_name ), 1, GL_FALSE, &p_val[0][0] );
 }
-void Shader::SetUniformMatrix( const char* _name, glm::mat4 _val )
+void Shader::SetUniformMatrix( const char* p_name, glm::mat4 p_val )
 {
-	glUniformMatrix4fv( GetUniformLocation( _name ), 1, GL_FALSE, &_val[0][0] );
+	glUniformMatrix4fv( GetUniformLocation( p_name ), 1, GL_FALSE, &p_val[0][0] );
 }
 
 void Shader::CreateProgram( )
 {
 	// link programme
-	glLinkProgram( handle );
+	glLinkProgram( m_handle );
 	
 	// verify link status
-	GLint status;
-	glGetProgramiv( handle, GL_LINK_STATUS, &status );
+	GLint l_status;
+	glGetProgramiv( m_handle, GL_LINK_STATUS, &l_status );
 
-	if( status != GL_TRUE )
+	if( l_status != GL_TRUE )
 	{
-		std::string error( "ERROR: failed to link shader programme\n" );
-		int length = 200;
+		std::string l_error( "ERROR: failed to link shader programme\n" );
+		int l_length = 200;
 		//glGetShaderiv( handle, GL_INFO_LOG_LENGTH, &length );
-		if( length > 0 )
+		if( l_length > 0 )
 		{
 			// create a log of error messages
-			char* errorLog = new char[ length ];
-			int written = 0;
-			glGetProgramInfoLog( handle, length, &written, errorLog );
-			printf( (error + stringf( "Shader error log:\n%s\n", errorLog )).c_str() );
-			delete[ ] errorLog;
+			char* l_errorLog = new char[ l_length ];
+			int l_written = 0;
+			glGetProgramInfoLog( m_handle, l_length, &l_written, l_errorLog );
+			printf( (l_error + stringf( "Shader error log:\n%s\n", l_errorLog )).c_str() );
+			delete[ ] l_errorLog;
 		}
-		printf( error.c_str() );
+		printf( l_error.c_str() );
 	}
 }
 
-void compileShader( GLuint& _shaderHandle, const char* _shaderFileName, const int& _type )
+void compileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const int& p_type )
 {
 	// load file into string
-	std::ifstream file;
+	std::ifstream l_file;
 
-	file.open( _shaderFileName );
-	if( !file.is_open( ) )
-		printf( "ERROR creating opening shader file %s\n", _shaderFileName );
+	l_file.open( p_shaderFileName );
+	if( !l_file.is_open( ) )
+		printf( "ERROR creating opening shader file %s\n", p_shaderFileName );
 
 	// Get the size of the file
-    file.seekg(0,std::ios::end);
-    std::streampos length = file.tellg();
-    file.seekg(0,std::ios::beg);
+    l_file.seekg(0,std::ios::end);
+    std::streampos l_length = l_file.tellg();
+    l_file.seekg(0,std::ios::beg);
 
 	// Use a vector as the buffer.
-    std::vector< char > buffer( length );
-    file.read( &buffer[ 0 ], length );
+    std::vector< char > l_buffer( l_length );
+    l_file.read( &l_buffer[ 0 ], l_length );
 
 	//std::stringstream ss;
-    std::string str( &buffer[ 0 ], length );
+    std::string l_str( &l_buffer[ 0 ], l_length );
 
 	// create shader object
-	_shaderHandle = glCreateShader( _type );
+	p_shaderHandle = glCreateShader( p_type );
 
 	// validate creation
-	if( _shaderHandle == 0 )
-		printf( "ERROR creating shader type %d\n", _type );
+	if( p_shaderHandle == 0 )
+		printf( "ERROR creating shader type %d\n", p_type );
 
 	// load source from a char array
-	const char* ptr = str.c_str( ); // get character pointer from string
-	int len = (int)length;
-	glShaderSource( _shaderHandle, 1, &ptr, NULL );
+	const char* l_ptr = l_str.c_str( ); // get character pointer from string
+	int l_len = (int)l_length;
+	glShaderSource( p_shaderHandle, 1, &l_ptr, NULL );
 
 	// compile shader
-	glCompileShader( _shaderHandle );
+	glCompileShader( l_shaderHandle );
 
 	// Check for errors
-	int result = 0;
-	glGetShaderiv( _shaderHandle, GL_COMPILE_STATUS, &result );
-	if( result != GL_TRUE )
+	int l_result = 0;
+	glGetShaderiv( p_shaderHandle, GL_COMPILE_STATUS, &l_result );
+	if( l_result != GL_TRUE )
 	{
-		std::string error = stringf( "ERROR compiling shader type %d\n", _type );
-		int length = 0;
-		glGetShaderiv( _shaderHandle, GL_INFO_LOG_LENGTH, &length );
-		if( length > 0 )
+		std::string l_error = stringf( "ERROR compiling shader type %d\n", p_type );
+		int l_length = 0;
+		glGetShaderiv( p_shaderHandle, GL_INFO_LOG_LENGTH, &l_length );
+		if( l_length > 0 )
 		{
 			// create a log of error messages
-			char* errorLog = new char[ length ];
-			int written = 0;
-			glGetShaderInfoLog( _shaderHandle, length, &written, errorLog );
-			printf( (error + stringf( "Shader error log;\n%s\n", errorLog )).c_str() );
-			delete[ ] errorLog;
+			char* l_errorLog = new char[ l_length ];
+			int l_written = 0;
+			glGetShaderInfoLog( p_shaderHandle, l_length, &l_written, l_errorLog );
+			printf( (l_error + stringf( "Shader error log;\n%s\n", l_errorLog )).c_str() );
+			delete[ ] l_errorLog;
 		}
-		printf( error.c_str() );
+		printf( l_error.c_str() );
 	}
 }
 
-int Shader::GetUniformLocation( const char* _name )
+int Shader::GetUniformLocation( const char* p_name )
 {
 	this->Use( );
 
-	int loc = glGetUniformLocation( handle, _name );
+	int l_loc = glGetUniformLocation( m_handle, p_name );
 #if DEBUG
-	if( loc < 0 )
-		printf( "Warning: Error receiving variable location '%s'\n", _name );
+	if( l_loc < 0 )
+		printf( "Warning: Error receiving variable location '%s'\n", p_name );
 #endif
-	return loc;
+	return l_loc;
 }
 
 void Shader::UpdateUniform( )

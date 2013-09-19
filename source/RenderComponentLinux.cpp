@@ -9,47 +9,47 @@
 #include "OGL_Graphics/glm/ext.hpp"
 
 // Required for stringf below
-std::string vformat( const char *fmt, va_list ap )
+std::string vformat( const char *p_fmt, va_list p_ap )
 {
     // Allocate a buffer on the stack that's big enough for us almost
     // all the time.  Be prepared to allocate dynamically if it doesn't fit.
-    size_t size = 1024;
-    char stackbuf[ 1024 ];
-    std::vector<char> dynamicbuf;
-    char *buf = &stackbuf[ 0 ];
+    size_t l_size = 1024;
+    char l_stackBuf[ 1024 ];
+    std::vector<char> l_dynamicBuf;
+    char *l_buf = &l_stackBuf[ 0 ];
 
     while( 1 )
 	{
         // Try to vsnprintf into our buffer.
-        int needed = vsnprintf( buf, size, fmt, ap );
+        int l_needed = vsnprintf( l_buf, l_size, p_fmt, p_ap );
         // NB. C99 (which modern Linux and OS X follow) says vsnprintf
         // failure returns the length it would have needed.  But older
         // glibc and current Windows return -1 for failure, i.e., not
         // telling us how much was needed.
 
-        if( needed <= ( int )size && needed >= 0 )
+        if( l_needed <= ( int )l_size && l_needed >= 0 )
 		{
             // It fit fine so we're done.
-            return std::string( buf, ( size_t )needed );
+            return std::string( l_buf, ( size_t )l_needed );
         }
 
         // vsnprintf reported that it wanted to write more characters
         // than we allotted.  So try again using a dynamic buffer.  This
         // doesn't happen very often if we chose our initial size well.
-        size = ( needed > 0 ) ? ( needed + 1 ) : ( size * 2 );
-        dynamicbuf.resize( size );
-        buf = &dynamicbuf[ 0 ];
+        l_size = ( l_needed > 0 ) ? ( l_needed + 1 ) : ( l_size * 2 );
+        l_dynamicBuf.resize( l_size );
+        l_buf = &l_dynamicBuf[ 0 ];
     }
 }
 
 // Works just as printf, only that it returns the result as a string instead of printing it
-inline std::string stringf( const char *fmt, ... )
+inline std::string stringf( const char *p_fmt, ... )
 {
-    va_list ap;
-    va_start( ap, fmt );
-    std::string buf = vformat( fmt, ap );
-    va_end( ap );
-    return buf;
+    va_list l_ap;
+    va_start( l_ap, p_fmt );
+    std::string l_buf = vformat( p_fmt, l_ap );
+    va_end( l_ap );
+    return l_buf;
 }
 
 RenderComponentLinux::RenderComponentLinux()
@@ -146,8 +146,8 @@ bool RenderComponentLinux::Init()
 	
   glBindVertexArray(0);
   
-  glm::vec3 fwd = glm::vec3(0.f, 0.f, -1.f) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
-  printf( "Forward is: %f, %f, %f\n", fwd[0], fwd[1], fwd[2] );
+  glm::vec3 l_fwd = glm::vec3(0.f, 0.f, -1.f) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
+  printf( "Forward is: %f, %f, %f\n", l_fwd[0], l_fwd[1], l_fwd[2] );
   
   return true;
 }

@@ -11,34 +11,35 @@ class Shader
 	enum ShaderType { VertShader, TConShader, TEvalShader, GeomShader, FragShader, COUNT };
 
 public:
-	void Init( const char* _vertFileName, const char* _fragFileName, const char* _gsFileName = NULL, const char* _tessConFileName = NULL, const char* _tessEvalFileName = NULL );
+	void Init( const char* p_vertFileName, const char* p_fragFileName, const char* p_gsFileName = NULL, const char* p_tessConFileName = NULL, const char* p_tessEvalFileName = NULL );
 	
 	void Build( );
 	void Use( );
 
-	void BindAttribLocation( GLuint location, const char* name );
-	void BindFragDataLocation( GLuint location, const char* name );
+	void BindAttribLocation( GLuint p_location, const char* p_name );
+	void BindFragDataLocation( GLuint p_location, const char* p_name );
 
-	void SetUniformInt( const char* _name, int _val );
-	void SetUniformFloat( const char* _name, float _val );
-	void SetUniformVector( const char* _name, glm::vec3 _val );
-	void SetUniformVector( const char* _name, glm::vec4 _val );
-	void SetUniformMatrix( const char* _name, glm::mat3 _val );
-	void SetUniformMatrix( const char* _name, glm::mat4 _val );
+	void SetUniformInt( const char* p_name, int p_val );
+	void SetUniformFloat( const char* p_name, float p_val );
+	void SetUniformVector( const char* p_name, glm::vec3 p_val );
+	void SetUniformVector( const char* p_name, glm::vec4 p_val );
+	void SetUniformMatrix( const char* p_name, glm::mat3 p_val );
+	void SetUniformMatrix( const char* p_name, glm::mat4 p_val );
 	
   
 	void UpdateUniform( );
-	void SetActiveCamera( Camera& _cam );
+	void SetActiveCamera( Camera& p_cam );
   
 	Camera* m_activeCamera;
 
 private:
-	int handle;
-	GLuint subhandles[COUNT];
+	int m_handle;
+	GLuint m_subhandles[COUNT];
 	glm::mat4 m_modelMatrix;
+  static Shader* m_activeShader;
   
 	void CreateProgram( );
-	int GetUniformLocation( const char* _name );
+	int GetUniformLocation( const char* p_name );
 };
 
 #endif
