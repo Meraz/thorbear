@@ -174,9 +174,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	ReleaseCOM(m_depthStencilView);
 	ReleaseCOM(m_depthStencilBuffer);
 
-
 	// Resize the swap chain and recreate the render target GetProjMatrix.
-
 	HR(m_swapChain->ResizeBuffers(1, m_clientWidth, m_clientHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
 	ID3D11Texture2D* l_backBuffer;
 	HR(m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&l_backBuffer)));
