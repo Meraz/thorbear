@@ -62,7 +62,7 @@ void Shader::Build( )
 //		tmp->Use( );*/
 //}
 
-Shader::m_activeShader = 0;
+Shader* Shader::m_activeShader = 0;
 void Shader::Use( )
 {
 	if( m_activeShader != this )
