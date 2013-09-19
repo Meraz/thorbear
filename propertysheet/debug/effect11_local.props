@@ -3,8 +3,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(ProjectDir)Effect11Lib\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Effect11Lib\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(THORBEAR)\library\Effect11Lib\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(THORBEAR)\library\Effect11Lib\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>

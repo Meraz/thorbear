@@ -3,8 +3,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(ProjectDir)Library\dx\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)Library\dx\Lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(THORBEAR)\library\Microsoft DirectX SDK (June 2010)\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(THORBEAR)\library\Microsoft DirectX SDK (June 2010)\Lib\x86;$(LibraryPath)</LibraryPath>
     <_PropertySheetDisplayName>DX11_local_lib</_PropertySheetDisplayName>
   </PropertyGroup>
   <ItemDefinitionGroup>
