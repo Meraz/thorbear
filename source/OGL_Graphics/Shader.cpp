@@ -6,6 +6,7 @@
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include "glm/ext.hpp"
 
 extern inline std::string stringf( const char *fmt, ... );
 
@@ -84,19 +85,19 @@ void Shader::SetUniformFloat( const char* _name, float _val )
 {
 	glUniform1f( GetUniformLocation( _name ), _val );
 }
-void Shader::SetUniformVector( const char* _name, glm::vec3& _val )
+void Shader::SetUniformVector( const char* _name, glm::vec3 _val )
 {
 	glUniform3fv( GetUniformLocation( _name ), 1, &_val[0] );
 }
-void Shader::SetUniformVector( const char* _name, glm::vec4& _val )
+void Shader::SetUniformVector( const char* _name, glm::vec4 _val )
 {
 	glUniform4fv( GetUniformLocation( _name ), 1, &_val[0] );
 }
-void Shader::SetUniformMatrix( const char* _name, glm::mat3& _val )
+void Shader::SetUniformMatrix( const char* _name, glm::mat3 _val )
 {
 	glUniformMatrix3fv( GetUniformLocation( _name ), 1, GL_FALSE, &_val[0][0] );
 }
-void Shader::SetUniformMatrix( const char* _name, glm::mat4& _val )
+void Shader::SetUniformMatrix( const char* _name, glm::mat4 _val )
 {
 	glUniformMatrix4fv( GetUniformLocation( _name ), 1, GL_FALSE, &_val[0][0] );
 }

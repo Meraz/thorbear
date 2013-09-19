@@ -21,13 +21,13 @@ public:
 
 	void SetUniformInt( const char* _name, int _val );
 	void SetUniformFloat( const char* _name, float _val );
-	void SetUniformVector( const char* _name, glm::vec3& _val );
-	void SetUniformVector( const char* _name, glm::vec4& _val );
-	void SetUniformMatrix( const char* _name, glm::mat3& _val );
-	void SetUniformMatrix( const char* _name, glm::mat4& _val );
+	void SetUniformVector( const char* _name, glm::vec3 _val );
+	void SetUniformVector( const char* _name, glm::vec4 _val );
+	void SetUniformMatrix( const char* _name, glm::mat3 _val );
+	void SetUniformMatrix( const char* _name, glm::mat4 _val );
 	
   
-	void UpdateUniform( Shader &s );
+	void UpdateUniform( );
 	void SetActiveCamera( Camera& _cam );
 
 private:
