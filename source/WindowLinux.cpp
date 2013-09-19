@@ -104,7 +104,7 @@ void WindowLinux::Update()
   int l_mousePositionX, l_mousePositionY;
   glfwGetMousePos( &l_mousePositionX, &l_mousePositionY );
 
-	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY
+	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY);
   
   glfwSleep( 1. / 60. - l_deltaTime - .01 ); // Limit UPS
 }

@@ -1,8 +1,8 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <GL\glew.h>
-#include "glm\glm.hpp"
+#include <GL/glew.h>
+#include "glm/glm.hpp"
 
 #include "Camera.h"
 
@@ -32,7 +32,7 @@ public:
 
 private:
 	int handle;
-	GLuint subhandles[ShaderType::COUNT];
+	GLuint subhandles[COUNT];
   
 	Camera* m_activeCamera;
 	glm::mat4 m_modelMatrix;

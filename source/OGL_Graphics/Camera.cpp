@@ -1,5 +1,7 @@
 #include "Camera.h"
 
+#include "glm/ext.hpp"
+
 Camera::Camera( )
 		: viewMatrix( 1.f ), yaw(0), pitch(0), roll(0)
 {

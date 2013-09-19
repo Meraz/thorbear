@@ -6,7 +6,6 @@
 
 #include <GL/glew.h> // always include GLEW before including freeGLUT so that you get the latest opengl headers and not the default ones
 #include <GL/glfw.h>
-
 #include <string>
 
 class RenderComponentLinux : public RenderComponentInterface

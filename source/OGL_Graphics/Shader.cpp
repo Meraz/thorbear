@@ -1,5 +1,6 @@
 #include "Shader.h"
 
+#include <GL/glfw.h>
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -15,22 +16,22 @@ void Shader::Init( const char* _vertFileName, const char* _fragFileName, const c
 	if( _vertFileName == NULL )
 		throw "Shader error: Shader must have a vertex shader";
 	
-	compileShader( subhandles[ ShaderType::VertShader ], _vertFileName, GL_VERTEX_SHADER );
+	compileShader( subhandles[ VertShader ], _vertFileName, GL_VERTEX_SHADER );
 
 	if( _gsFileName != NULL )
-		compileShader( subhandles[ ShaderType::GeomShader ], _gsFileName, GL_GEOMETRY_SHADER );
+		compileShader( subhandles[ GeomShader ], _gsFileName, GL_GEOMETRY_SHADER );
 
 	if( _tessConFileName != NULL )
 	{
 		glPatchParameteri( GL_PATCH_VERTICES, 3 );
-		compileShader( subhandles[ ShaderType::TConShader ], _tessConFileName, GL_TESS_CONTROL_SHADER );
+		compileShader( subhandles[ TConShader ], _tessConFileName, GL_TESS_CONTROL_SHADER );
 	}
 
 	if( _tessEvalFileName != NULL )
-		compileShader( subhandles[ ShaderType::TEvalShader ], _tessEvalFileName, GL_TESS_EVALUATION_SHADER );
+		compileShader( subhandles[ TEvalShader ], _tessEvalFileName, GL_TESS_EVALUATION_SHADER );
 	
 	if( _fragFileName != NULL )
-		compileShader( subhandles[ ShaderType::FragShader ], _fragFileName, GL_FRAGMENT_SHADER );
+		compileShader( subhandles[ FragShader ], _fragFileName, GL_FRAGMENT_SHADER );
 
 	handle = glCreateProgram( );
 
@@ -38,7 +39,7 @@ void Shader::Init( const char* _vertFileName, const char* _fragFileName, const c
 		throw "ERROR creating shader programme\n";
 	
 	// attach shaders
-	for( unsigned i = 0; i < ShaderType::COUNT; i++ )
+	for( unsigned i = 0; i < COUNT; i++ )
 		glAttachShader( handle, subhandles[ i ] );
 }
 
@@ -196,16 +197,16 @@ int Shader::GetUniformLocation( const char* _name )
 	return loc;
 }
 
-void UpdateUniform( )
+void Shader::UpdateUniform( )
 {
-  s.SetUniformMatrix( "projectionMatrix", m_activeCamera->GetProjectionMatrix( ) );
-  s.SetUniformMatrix( "viewMatrix", m_activeCamera->GetViewMatrix( ) );
-  s.SetUniformMatrix( "modelViewMatrix", m_activeCamera->GetViewMatrix( ) * m_modelMatrix );
-  s.SetUniformMatrix( "normalMatrix", glm::inverseTranspose( glm::mat3( m_activeCamera->GetViewMatrix( ) * m_modelMatrix ) ) );
-  s.SetUniformVector( "lightPosition", glm::vec4( 256.0f, 200.0f, 256.0f, 1.f ) );
+  SetUniformMatrix( "projectionMatrix", m_activeCamera->GetProjectionMatrix( ) );
+  SetUniformMatrix( "viewMatrix", m_activeCamera->GetViewMatrix( ) );
+  SetUniformMatrix( "modelViewMatrix", m_activeCamera->GetViewMatrix( ) * m_modelMatrix );
+  SetUniformMatrix( "normalMatrix", glm::inverseTranspose( glm::mat3( m_activeCamera->GetViewMatrix( ) * m_modelMatrix ) ) );
+  SetUniformVector( "lightPosition", glm::vec4( 256.0f, 200.0f, 256.0f, 1.f ) );
 }
 
-void SetActiveCamera( Camera& p_cam )
+void Shader::SetActiveCamera( Camera& p_cam )
 {
   m_activeCamera = &p_cam;
   

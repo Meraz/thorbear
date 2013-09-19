@@ -109,7 +109,7 @@ bool RenderComponentLinux::Init()
   m_genericShader.Build( );
   
   // Create and attach a camera
-  Camera* l_cam = new Camera();
+  Camera l_cam;
   l_cam.SetPosition( glm::vec3( 0.f, 0.f, 0.f ) );
   l_cam.UpdateViewMatrix( );
   l_cam.SetClip( 5.f, 1000.f );
