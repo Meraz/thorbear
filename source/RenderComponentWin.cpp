@@ -228,10 +228,10 @@ void RenderComponentWin::Load()
 
 void RenderComponentWin::CreateTemplates()
 {
-	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("invader.obj"), m_shaderManager->GetShaderByName("object.fx")));
-	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("bth.obj"), m_shaderManager->GetShaderByName("object.fx")));
-	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube.obj"),	 m_shaderManager->GetShaderByName("object.fx")));
-	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube1.obj"), m_shaderManager->GetShaderByName("object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("invader.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("bth.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube.obj"),	 m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube1.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 }
 
 
