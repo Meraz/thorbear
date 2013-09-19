@@ -109,18 +109,18 @@ bool RenderComponentLinux::Init()
   m_genericShader.Build( );
   
   // Create and attach a camera
-  Camera l_cam;
+  static Camera l_cam;
   l_cam.SetPosition( glm::vec3( 0.f, 0.f, 0.f ) );
   l_cam.UpdateViewMatrix( );
   l_cam.SetClip( 5.f, 1000.f );
   l_cam.SetFoV( 45.f );
-  l_cam.UpdateProjectionMatrix( );
+  //l_cam.UpdateProjectionMatrix( );
   m_genericShader.SetActiveCamera( l_cam );
   
   float vertices[] = {
-      0.f, 6.f, 10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      -6.f, -6.f, 10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      6.f, -6.f, 10.f, 0.f, 0.f, 0.f, 0.f, 1.f
+      0.f, -10.f, 100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+      600.f, -10.f, -100.f, 0.f, 0.f, 0.f, 0.f, 1.f,
+      -600.f, -10.f, -100.f, 0.f, 0.f, 0.f, 0.f, 1.f
     };
   GLuint l_vbo, l_vao;
   glGenVertexArrays(1, &l_vao);
@@ -162,6 +162,8 @@ void RenderComponentLinux::Render()
   m_genericShader.Use( );
   
   // Render here
+  m_genericShader.SetUniformMatrix( "modelMatrix", glm::mat4(1.f) );
+  m_genericShader.UpdateUniform( );
   glDrawArrays( GL_TRIANGLES, 0, 3 );
   
   glfwSwapBuffers();
