@@ -122,10 +122,10 @@ void Shader::CreateProgram( )
 			char* errorLog = new char[ length ];
 			int written = 0;
 			glGetProgramInfoLog( handle, length, &written, errorLog );
-			printf( error + stringf( "Shader error log:\n%s\n", errorLog ) );
+			printf( (error + stringf( "Shader error log:\n%s\n", errorLog )).c_str() );
 			delete[ ] errorLog;
 		}
-		printf( error );
+		printf( error.c_str() );
 	}
 }
 
@@ -179,10 +179,10 @@ void compileShader( GLuint& _shaderHandle, const char* _shaderFileName, const in
 			char* errorLog = new char[ length ];
 			int written = 0;
 			glGetShaderInfoLog( _shaderHandle, length, &written, errorLog );
-			printf( error + stringf( "Shader error log;\n%s\n", errorLog ) );
+			printf( (error + stringf( "Shader error log;\n%s\n", errorLog )).c_str() );
 			delete[ ] errorLog;
 		}
-		printf( error );
+		printf( error.c_str(); );
 	}
 }
 
