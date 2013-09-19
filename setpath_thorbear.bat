@@ -1,0 +1,2 @@
+setx THORBEAR %cd%
+pause
