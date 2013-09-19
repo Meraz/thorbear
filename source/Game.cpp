@@ -9,13 +9,11 @@ Game::Game()
 
 Game::~Game()
 {
-	delete a;
 }
 
 void Game::Initialize(RenderComponentInterface* p_renderComponentInterface)
 {
 	m_renderComponentInterface = p_renderComponentInterface;
-	a = new Game();
 }
 
 void Game::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY /* add keyboard parameters here*/)

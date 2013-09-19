@@ -35,7 +35,7 @@ int RenderComponentWin::Initialize()
 	m_shaderManager = new ShaderManager();
 	m_shaderManager->Init(m_d3dDevice, m_d3dImmediateContext);
 	m_camera = new Camera();
-	m_camera->SetLens(MathHelper::Pi * 0.25f, m_clientWidth/m_clientHeight, 0.5f, 1000.0f);
+	m_camera->SetLens(MathHelper::Pi * 0.25f, (float)m_clientWidth/m_clientHeight, 0.5f, 1000.0f);
 	m_camera->SetPos(0, 0, -80);
 
 	Load();
@@ -56,7 +56,7 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 
 	// Translation matrix
 	D3DXMATRIX l_translateMat;
-	D3DXMatrixTranslation(&l_translateMat, p_boundingBox.farTopLeftX, p_boundingBox.farTopLeftY, 0);	// Create translation matrix
+	D3DXMatrixTranslation(&l_translateMat, (float)p_boundingBox.farTopLeftX, (float)p_boundingBox.farTopLeftY, 0);	// Create translation matrix
 
 	D3DXMATRIX l_worldMat	= l_scaleMat *  l_translateMat;												// 
 	D3DXMATRIX l_WVP		= l_worldMat * m_camera->GetViewMatrix() *  m_camera->GetProjMatrix();
@@ -170,9 +170,9 @@ bool RenderComponentWin::InitializeDirect3D()
 	// Release the old views, as they hold references to the buffers we
 	// will be destroying.  Also release the old depth/stencil buffer.
 
-	ReleaseCOM(m_renderTargetView);
-	ReleaseCOM(m_depthStencilView);
-	ReleaseCOM(m_depthStencilBuffer);
+	//ReleaseCOM(m_renderTargetView);
+	//ReleaseCOM(m_depthStencilView);
+	//ReleaseCOM(m_depthStencilBuffer);
 
 	// Resize the swap chain and recreate the render target GetProjMatrix.
 	HR(m_swapChain->ResizeBuffers(1, m_clientWidth, m_clientHeight, DXGI_FORMAT_R8G8B8A8_UNORM, 0));
@@ -218,12 +218,12 @@ bool RenderComponentWin::InitializeDirect3D()
 
 void RenderComponentWin::Load()
 {
-	m_modelManager->CreateModel("invader.obj",	"J:\\thorbear\\DX11\\Invader");
-	m_modelManager->CreateModel("bth.obj",		"J:\\thorbear\\DX11\\BTH");
-	m_modelManager->CreateModel("cube.obj",		"J:\\thorbear\\DX11\\CUBE");
-	m_modelManager->CreateModel("cube1.obj",	"J:\\thorbear\\DX11\\ColorCUBE");
+	m_modelManager->CreateModel("invader.obj",	"Invader");
+	m_modelManager->CreateModel("bth.obj",		"BTH");
+	m_modelManager->CreateModel("cube.obj",		"CUBE");
+	m_modelManager->CreateModel("cube1.obj",	"ColorCUBE");
 
-	m_shaderManager->AddShader("J:\\thorbear\\source\\object.fx", 12);	
+	m_shaderManager->AddShader("object.fx", 12);	
 }
 
 void RenderComponentWin::CreateTemplates()

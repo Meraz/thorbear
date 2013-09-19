@@ -159,7 +159,7 @@ D3DXVECTOR3 Camera::GetRightVec()
 
 void Camera::SetPos( int p_x, int p_y, int p_z )
 {
-	m_position = D3DXVECTOR3(p_x, p_y, p_z);
+	m_position = D3DXVECTOR3((float)p_x, (float)p_y, (float)p_z);
 }
 
 

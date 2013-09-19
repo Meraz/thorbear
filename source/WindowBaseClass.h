@@ -16,7 +16,7 @@ protected:
 	virtual void Render();
 	
 	/* Deltatime, Mouseposition.X, Mouseposition.Y */
-	void Update(double p_deltaTime, float p_mousePositionX, float p_mousePositionY);	// Add support for use of keyboard
+	void Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY);	// Add support for use of keyboard
 
 protected:
 	GameInterface* m_gameInterface;

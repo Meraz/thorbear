@@ -22,8 +22,8 @@ void WindowLinux::Update()
 {
 	// TODO Fix update variables here
 	double l_deltaTime	   = 0.0;
-	float l_mousePositionX = 0.0f;
-	float l_mousePositionY = 0.0f;
+	int l_mousePositionX = 0;
+	int l_mousePositionY = 0;
 
 	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY);
 }

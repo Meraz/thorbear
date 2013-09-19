@@ -28,8 +28,8 @@ private:
 	int			m_clientHeight;
 	GameTimer*	m_gameTimer;
 	bool		m_appPaused;
-	float m_mousePositionX;// = GET_X_LPARAM(p_lParam); 
-	float m_mousePositionY;// = GET_Y_LPARAM(p_lParam);
+	int m_mousePositionX; 
+	int m_mousePositionY;
 	
 	RenderComponentWin* m_renderComponent;
 };
