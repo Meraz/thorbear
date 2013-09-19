@@ -7,45 +7,45 @@ Camera::Camera( )
 {
 }
 
-void Camera::SetPosition( const glm::vec3& _pos)
+void Camera::SetPosition( const glm::vec3 _pos)
 {
   position = _pos;
 }
 
-void Camera::SetYawPitch( const float& _y, const float& _p )
+void Camera::SetYawPitch( const float _y, const float _p )
 {
   yaw = _y;
   pitch = _p;
 }
 
-void Camera::SetRoll( const float& _r )
+void Camera::SetRoll( const float _r )
 {
   roll = _r;
 }
 
-void Camera::SetClip( const float& _near, const float& _far )
+void Camera::SetClip( const float _near, const float _far )
 {
   nearClip = _near;
   farClip = _far;
 }
 
-void Camera::SetResolution( const int& _width, const int& _height)
+void Camera::SetResolution( const int _width, const int _height)
 {
   width = _width;
   height = _height;
 }
 
-void Camera::SetFoV( const float& _fov )
+void Camera::SetFoV( const float _fov )
 {
   fov = _fov;
 }
 
-glm::mat4& Camera::GetViewMatrix( )
+glm::mat4 Camera::GetViewMatrix( )
 {
   return viewMatrix;
 }
 
-glm::mat4& Camera::GetProjectionMatrix( )
+glm::mat4 Camera::GetProjectionMatrix( )
 {
   return projectionMatrix;
 }
