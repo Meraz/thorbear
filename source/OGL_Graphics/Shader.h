@@ -29,12 +29,12 @@ public:
   
 	void UpdateUniform( );
 	void SetActiveCamera( Camera& _cam );
+  
+	Camera* m_activeCamera;
 
 private:
 	int handle;
 	GLuint subhandles[COUNT];
-  
-	Camera* m_activeCamera;
 	glm::mat4 m_modelMatrix;
   
 	void CreateProgram( );
