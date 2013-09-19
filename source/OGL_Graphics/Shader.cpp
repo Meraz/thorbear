@@ -122,10 +122,10 @@ void Shader::CreateProgram( )
 			char* errorLog = new char[ length ];
 			int written = 0;
 			glGetProgramInfoLog( handle, length, &written, errorLog );
-			throw error + stringf( "Shader error log:\n%s\n", errorLog );
+			printf( error + stringf( "Shader error log:\n%s\n", errorLog ) );
 			delete[ ] errorLog;
 		}
-		throw error;
+		printf( error );
 	}
 }
 
@@ -136,7 +136,7 @@ void compileShader( GLuint& _shaderHandle, const char* _shaderFileName, const in
 
 	file.open( _shaderFileName );
 	if( !file.is_open( ) )
-		throw stringf( "ERROR creating opening shader file %s\n", _shaderFileName );
+		printf( "ERROR creating opening shader file %s\n", _shaderFileName );
 
 	// Get the size of the file
     file.seekg(0,std::ios::end);
@@ -155,7 +155,7 @@ void compileShader( GLuint& _shaderHandle, const char* _shaderFileName, const in
 
 	// validate creation
 	if( _shaderHandle == 0 )
-		throw stringf( "ERROR creating shader type %d\n", _type );
+		printf( "ERROR creating shader type %d\n", _type );
 
 	// load source from a char array
 	const char* ptr = str.c_str( ); // get character pointer from string
@@ -179,10 +179,10 @@ void compileShader( GLuint& _shaderHandle, const char* _shaderFileName, const in
 			char* errorLog = new char[ length ];
 			int written = 0;
 			glGetShaderInfoLog( _shaderHandle, length, &written, errorLog );
-			throw error + stringf( "Shader error log;\n%s\n", errorLog );
+			printf( error + stringf( "Shader error log;\n%s\n", errorLog ) );
 			delete[ ] errorLog;
 		}
-		throw error;
+		printf( error );
 	}
 }
 
