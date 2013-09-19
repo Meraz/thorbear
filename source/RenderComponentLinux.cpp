@@ -107,6 +107,7 @@ bool RenderComponentLinux::Init()
     
   m_genericShader.Init( "../resources/OGLShaders/genericVertex.glsl", "../resources/OGLShaders/genericFragment.glsl" );
   m_genericShader.Build( );
+  m_genericShader.Use( );
   
   // Create and attach a camera
   static Camera l_cam;
@@ -173,9 +174,9 @@ void RenderComponentLinux::Render()
   m_genericShader.Use( );
   
   // Render here
-  glBindVertexArray(tmp_vao);
   m_genericShader.SetUniformMatrix( "modelMatrix", glm::mat4(1.f) );
   m_genericShader.UpdateUniform( );
+  glBindVertexArray(tmp_vao);
   glDrawArrays( GL_TRIANGLES, 0, 6 );
   
   glfwSwapBuffers();

@@ -1,5 +1,5 @@
 // set shader model version to 1.5 (opengl 3.3), use 420 for version 4.2
-#version 150
+#version 400
 #extension GL_ARB_explicit_attrib_location : enable
 
 

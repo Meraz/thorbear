@@ -1,4 +1,4 @@
-#version 150
+#version 400
 
 // In-data from VShader
 in vec3 normal;
