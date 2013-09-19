@@ -9,6 +9,20 @@ RenderComponentWin::RenderComponentWin(HWND p_hMainWnd)
 
 RenderComponentWin::~RenderComponentWin()
 {
+	delete m_modelManager;
+	delete m_shaderManager;
+	delete m_camera;
+	
+	ReleaseCOM(m_d3dDevice);
+	ReleaseCOM( m_d3dImmediateContext);
+	ReleaseCOM( m_swapChain);
+	ReleaseCOM( m_depthStencilBuffer);
+	ReleaseCOM( m_renderTargetView);
+	ReleaseCOM( m_depthStencilView);
+
+	
+	m_objVec.clear();
+	//delete m_objVec.at(0).model;
 }
 
 int RenderComponentWin::Initialize()
@@ -29,17 +43,11 @@ int RenderComponentWin::Initialize()
 	Load();
 	CreateTemplates();
 
-//	m_d3dImmediateContext->ClearRenderTargetView(m_renderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
-//	m_d3dImmediateContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
-
 	return 0;
 }
 
 void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)
 {
-	m_d3dImmediateContext->ClearRenderTargetView(m_renderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
-	m_d3dImmediateContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
-
 	Shader* l_shader = m_objVec.at((int)p_textureType).shader;
 	Model*	l_model = m_objVec.at((int)p_textureType).model;
 
@@ -77,10 +85,15 @@ void RenderComponentWin::RenderParticleSystem(ParticleSystem p_particleSystem)
 
 }
 
-void RenderComponentWin::Render()
+void RenderComponentWin::PreRender()
+{
+	m_d3dImmediateContext->ClearRenderTargetView(m_renderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
+	m_d3dImmediateContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+}
+
+void RenderComponentWin::PostRender()
 {
 	HR(m_swapChain->Present(0, 0));
-	
 }
 
 bool RenderComponentWin::InitializeDirect3D()
@@ -246,6 +259,7 @@ void RenderComponentWin::Load()
 	m_modelManager->CreateModel("cube1.obj",	"J:\\thorbear\\DX11\\ColorCUBE");
 
 	m_shaderManager->AddShader("J:\\thorbear\\source\\object.fx", 12);
+	
 }
 
 void RenderComponentWin::CreateTemplates()
@@ -255,3 +269,7 @@ void RenderComponentWin::CreateTemplates()
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube.obj"),	 m_shaderManager->GetShaderByName("object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube1.obj"), m_shaderManager->GetShaderByName("object.fx")));
 }
+
+
+
+

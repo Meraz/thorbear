@@ -16,6 +16,12 @@ struct ObjTemplate
 		shader = p_shader;
 	}
 
+	~ObjTemplate()
+	{
+		//delete model;
+		//delete shader;
+	}
+
 	Model*	model;
 	Shader*	shader;  
 };
@@ -31,7 +37,8 @@ public:
 	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType);
 	void RenderParticleSystem(ParticleSystem p_particleSystem);
 
-	void Render();
+	void PreRender();
+	void PostRender();
 
 private:
 	bool InitializeDirect3D();

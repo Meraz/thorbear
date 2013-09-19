@@ -1,5 +1,6 @@
 #ifdef _WIN32 
 #include "WindowWindows.h"
+//#include <vld.h>
 
 /*
 int main(int argc, char** argv)

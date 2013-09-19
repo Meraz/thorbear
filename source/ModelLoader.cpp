@@ -21,24 +21,28 @@ ModelLoader::ModelLoader(ID3D11Device* p_d3dDevice, ID3D11DeviceContext* p_conte
 	
 }
 
+ModelLoader::~ModelLoader()
+{
 
-Model ModelLoader::AddStaticModel( string p_modelName, string p_OBJFileName )
+}
+
+Model* ModelLoader::AddStaticModel( string p_modelName, string p_OBJFileName )
 {
 	LoadModelFromOBJFile(p_modelName, p_OBJFileName);
 
 	CreateBuffers();
 
-	Model tmpModel;
+	Model* tmpModel = new Model();
 
-	tmpModel.m_bufferName = p_modelName;
-	tmpModel.m_vertexBuffer = m_vertexBuffer;
-	tmpModel.m_indexBuffer = m_indexBuffer;
-	tmpModel.m_offset = 0;
-	tmpModel.m_stride = sizeof(LightVertex);
-	tmpModel.m_size = m_indices.size();
-	tmpModel.m_material = m_material;
-	tmpModel.m_bottomBoundingCorner = m_bottomCorner;
-	tmpModel.m_topBoundingCorner = m_topCorner;
+	tmpModel->m_bufferName = p_modelName;
+	tmpModel->m_vertexBuffer = m_vertexBuffer;
+	tmpModel->m_indexBuffer = m_indexBuffer;
+	tmpModel->m_offset = 0;
+	tmpModel->m_stride = sizeof(LightVertex);
+	tmpModel->m_size = m_indices.size();
+	tmpModel->m_material = m_material;
+	tmpModel->m_bottomBoundingCorner = m_bottomCorner;
+	tmpModel->m_topBoundingCorner = m_topCorner;
 
 	return tmpModel;
 }
@@ -252,14 +256,4 @@ void ModelLoader::LoadModelFromOBJFile(string p_modelName, string p_OBJFileName 
 	}
 
 }
-
-
-ModelLoader::~ModelLoader()
-{
-}
-
-
-
-
-
 

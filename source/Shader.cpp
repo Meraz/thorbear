@@ -9,14 +9,12 @@ Shader::Shader()
 
 Shader::~Shader()
 {
-	delete m_inputLayout;
-	//SAFE_RELEASE(m_pEffect);
-
-	if(m_pEffect)
-	{
-		while(m_pEffect->Release());
-		m_pEffect = NULL;
-	}
+	ReleaseCOM(m_inputLayout);
+	ReleaseCOM(m_pTechnique);
+	ReleaseCOM(m_compilationErrors);
+	ReleaseCOM(m_blobReflect);
+	ReleaseCOM(m_blobEffect);
+	ReleaseCOM(m_pEffect);
 }
 HRESULT Shader::Init(ID3D11Device* p_device, ID3D11DeviceContext *p_context, char* p_filename, DWORD p_shaderFlags)
 {

@@ -25,7 +25,7 @@ WindowWindows::WindowWindows()
 
 WindowWindows::~WindowWindows()
 {
-	delete m_renderComponentInterface;
+	delete m_renderComponent;
 	delete m_gameTimer;
 }
 
@@ -73,8 +73,8 @@ bool WindowWindows::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, PST
 	UpdateWindow(m_hMainWnd);
 
 	m_renderComponentInterface = new RenderComponentWin(m_hMainWnd);
-	RenderComponentWin* l_tempCast = (RenderComponentWin*)m_renderComponentInterface;
-	l_tempCast->Initialize();
+	m_renderComponent = (RenderComponentWin*)m_renderComponentInterface;
+	m_renderComponent->Initialize();
 	m_gameInterface->Initialize(m_renderComponentInterface);
 
 	return true;
@@ -85,8 +85,10 @@ int WindowWindows::Run()
 	MSG l_msg = {0};
 	m_gameTimer->Reset();
 
-	while(l_msg.message != WM_QUIT)
+	int i = 0;
+	while(l_msg.message != WM_QUIT && i < 5000)
 	{
+		i ++;
 		// If there are Window messages then process them.
 		if(PeekMessage( &l_msg, 0, 0, 0, PM_REMOVE ))
 		{
@@ -120,7 +122,9 @@ void WindowWindows::Update()
 
 void WindowWindows::Render()
 {	
+	m_renderComponent->PreRender();
 	WindowBaseClass::Render();
+	m_renderComponent->PostRender();
 }
 
 LRESULT WindowWindows::MsgProc(HWND p_hwnd, UINT p_msg, WPARAM p_wParam, LPARAM p_lParam)

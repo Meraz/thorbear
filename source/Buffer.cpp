@@ -9,7 +9,7 @@ Buffer::Buffer()
 
 Buffer::~Buffer()
 {
-	delete m_buffer;
+	ReleaseCOM(m_buffer);
 }
 
 

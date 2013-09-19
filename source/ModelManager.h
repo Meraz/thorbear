@@ -20,7 +20,7 @@ public:
 
 private:
 
-	Model					m_modelList[256];
+	Model*					m_modelList[256];
 	int						m_arraySize;
 	ID3D11Device*			m_d3dDevice;
 	ID3D11DeviceContext*	m_context;

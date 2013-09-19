@@ -20,7 +20,7 @@ class ModelLoader
 public:
 	
 	ModelLoader(ID3D11Device* p_d3dDevice, ID3D11DeviceContext* p_context);
-	Model	AddStaticModel(string p_modelName, string p_OBJFileName);
+	Model*	AddStaticModel(string p_modelName, string p_OBJFileName);
 	~ModelLoader();
 
 private:
@@ -50,7 +50,6 @@ private:
 	vector<D3DXVECTOR3> m_normals;
 
 	Material*			m_material;
-	Model				m_model;
 
 	D3DXVECTOR3			m_topCorner;
 	D3DXVECTOR3			m_bottomCorner;

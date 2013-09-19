@@ -21,6 +21,8 @@ protected:
 protected:
 	GameInterface* m_gameInterface;
 	RenderComponentInterface* m_renderComponentInterface;
+private:
+
 };
 
 #endif

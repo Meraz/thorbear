@@ -30,6 +30,8 @@ private:
 	bool		m_appPaused;
 	float m_mousePositionX;// = GET_X_LPARAM(p_lParam); 
 	float m_mousePositionY;// = GET_Y_LPARAM(p_lParam);
+	
+	RenderComponentWin* m_renderComponent;
 };
 
 #endif

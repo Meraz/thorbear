@@ -7,6 +7,12 @@ ShaderManager::ShaderManager()
 
 ShaderManager::~ShaderManager()
 {
+	/*m_shaderList.clear();
+	m_shaderList.shrink_to_fit();*/
+	for(int i = 0; i < m_shaderList.size(); i++)
+	{
+		delete m_shaderList.at(i);
+	}
 }
 
 void ShaderManager::Init( ID3D11Device* p_d3dDevice, ID3D11DeviceContext* p_context )

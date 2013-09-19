@@ -42,6 +42,10 @@ using namespace std;
 	int			m_shininess;
 	float		m_alpha;
 	ID3D11ShaderResourceView* m_textureResource;
+	~Material()
+	{
+		ReleaseCOM(m_textureResource);
+	}
 };
 
  struct Model
@@ -55,6 +59,13 @@ using namespace std;
 	UINT		m_stride;
 	int			m_size;
 	Material*	m_material;
+
+	~Model()
+	{
+		delete m_vertexBuffer;
+		delete m_indexBuffer;
+		delete m_material;
+	}
 };
 
 #endif
