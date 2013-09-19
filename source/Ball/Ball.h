@@ -1,6 +1,12 @@
 #ifndef BALL_H
 #define BALL_H
-#define NULL 1
+
+#define TOP 1
+#define BOTTOM 2
+#define RIGHT 3
+#define LEFT 4
+
+#define _USE_MATH_DEFINES
 #include <math.h>
 
 struct BoundingBox //will be included later
@@ -37,12 +43,13 @@ public:
 	int		GetPosX();
 	int		GetPosY();
 	int		GetSpeed();
-	float	GetDirection();
+	float	GetDirectionAngle();
 
 	BoundingBox GetBoundingBox();
 
 	void	BallBounceAgainstEnemy(BoundingBox p_enemyBBox);
 	void	BallBounceAgainstPaddle(BoundingBox p_paddleBBox);
+	int		CalculateBounceSide(BoundingBox p_objectBBox);
 
 	//void		SetGraphicalInterface(RenderComponentInterface* p_renderComp);
 
@@ -52,7 +59,11 @@ private:
 	int		m_width;
 	int		m_height;
 
+	int		m_maxBallAngle;
+	int		m_minBallAngle;
+
 	bool	m_isBallDead;
+	bool	m_hasBallBouncedAgainstEnemy;
 
 	int		m_speed;
 	Vector2 m_direction; 

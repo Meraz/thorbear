@@ -1,6 +1,7 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
+#include "Ball.h"
 #include "Paddle.h"
 #include "LevelImporter.h"
 
@@ -20,6 +21,7 @@ public:
 private:
 	BoundingBox	m_mapEdges;
 	Paddle*		m_paddle;
+	Ball*		m_ball;
 	int**		m_map;
 	bool		m_PaddleHasDied;
 	//RenderComponentInterface*	m_renderComp;
@@ -29,6 +31,7 @@ private:
 private:
 	void CheckAllCollisions();
 	bool BoundingBoxIntersect(BoundingBox p_box1, BoundingBox p_box2);
+	int	 CalculateBallOnPaddlePosX();
 };
 
 #endif LEVEL_H

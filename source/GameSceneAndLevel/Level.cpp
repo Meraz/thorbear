@@ -15,6 +15,7 @@ Level::~Level(void)
 {
 	delete m_paddle;
 	delete m_map;
+	delete m_ball;
 }
 
 void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight )
@@ -25,14 +26,19 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight )
 	string tmpString = "level"+to_string(p_lvlNr);
 	m_map = LevelImporter::LoadLevel(tmpString);
 	m_paddle = new Paddle(p_lvlWidth/2, p_lvlHeight-50, 20, 5, p_lvlWidth); //example values
+	m_ball = new Ball();
+	int l_ballHeight = 20; //TEST ONLY
+	int l_ballWidth = 20; //TEST ONLY
+
+	m_ball->Init(CalculateBallOnPaddlePosX(), m_paddle->GetPosY()-m_paddle->GetBoundingBox().Height-l_ballHeight, l_ballWidth, l_ballHeight, 10, m_mapEdges); //SPEED?!
 	//TODO Create enemies from data in m_map
 
-	
 }
 
 void Level::Update( int p_mousePosX )
 {
 	m_paddle->Update(p_mousePosX);
+	m_ball->Update();
 	CheckAllCollisions();
 	//TODO Update enemy position, make ball stick to paddle and shoot with mouse button
 }
@@ -40,6 +46,7 @@ void Level::Update( int p_mousePosX )
 void Level::Render()
 {
 	m_paddle->Render();
+	m_ball->Render();
 	//TODO Render enemies, lasers, powerups and ball. 
 	//m_renderComp->RenderObject(m_bBox, OUTERBOUNDS) Render maps outer bounds/edges
 }
@@ -59,16 +66,16 @@ void Level::CheckAllCollisions()
 		//m_PaddleHasDied = true;
 	
 	//Paddle vs Ball
-	//if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), BallBoundingBox))
-		//Bounce ball
+	if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_ball->GetBoundingBox()))
+		m_ball->BallBounceAgainstPaddle(m_paddle->GetBoundingBox());
 
 	//Paddle vs PowerUp
 	//if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
 		//Stuff happens
 	
 	//Ball vs Enemy
-	//if(BoundingBoxIntersect(BallBoundingBox, EnemyBoundingBox))
-		//Ball bounce
+	//if(BoundingBoxIntersect(m_ball->GetBoundingBox(), m_enemy->GetBoundingBox()))
+		//m_ball->BallBounceAgainstEnemy(m_enemy->GetBoundingBox());
 		//Enemy hit
 
 	//Ball vs Laser
@@ -97,6 +104,11 @@ int Level::GetNrOfEnemies()
 {
 	//m_nrOfEnemies--; //For test purposes only
 	return m_nrOfEnemies;
+}
+
+int Level::CalculateBallOnPaddlePosX()
+{
+	return m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width; //byt ut mot bättre algoritm!!!
 }
 
 /*void Level::SetGraphicalInterface(RenderComponentInterface* p_renderComp)

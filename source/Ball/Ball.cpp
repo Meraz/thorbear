@@ -10,6 +10,8 @@ Ball::Ball(void)
 	m_speed = 0;
 	m_direction.X = 0;
 	m_direction.Y = 0;
+	m_maxBallAngle = 170;
+	m_minBallAngle = 10;
 }
 
 
@@ -40,6 +42,7 @@ void Ball::Update()
 	m_posY += m_direction.Y * m_speed;
 
 	CheckCollisionAgainstWalls();
+	m_hasBallBouncedAgainstEnemy = false;
 }
 
 void Ball::Render()
@@ -84,7 +87,7 @@ int Ball::GetSpeed()
 	return m_speed;
 }
 
-float Ball::GetDirection()
+float Ball::GetDirectionAngle()
 {
 	return acos(m_direction.X);
 }
@@ -115,48 +118,125 @@ void Ball::CheckCollisionAgainstWalls()
 
 void Ball::BallBounceAgainstEnemy( BoundingBox p_enemyBBox )
 {
-	//Already bounced?
-
-	int l_insideX = 0;
-	int l_insideY = 0;
-
-	//Calculate how much of the ball is inside the enemy on either side
-	if(m_posX+m_width/2 < p_enemyBBox.posX) //if the middle of the ball is to the left of the enemy
-		l_insideX = m_posX + m_width - p_enemyBBox.posX;
-	else if(m_posX+m_width/2 > p_enemyBBox.posX+p_enemyBBox.Width) //if the middle of the ball is to the right of the enemy
-		l_insideX = p_enemyBBox.posX + p_enemyBBox.Width - m_posX;
-	else //the middle of the ball is inside the enemys width
-		l_insideX = p_enemyBBox.Width/2 - abs(p_enemyBBox.posX+p_enemyBBox.Width/2 - m_posX+m_width/2);
 	
-	//Same as above but with height
-	if(m_posY+m_height/2 < p_enemyBBox.posY)
-		l_insideY = m_posY + m_height - p_enemyBBox.posY;
-	else if(m_posY+m_height/2 > p_enemyBBox.posY+p_enemyBBox.Height)
-		l_insideY = p_enemyBBox.posY + p_enemyBBox.Height - m_posY;
-	else
-		l_insideY = p_enemyBBox.Height/2 - abs(p_enemyBBox.posY+p_enemyBBox.Height/2 - m_posY+m_height/2);
+	if (!m_hasBallBouncedAgainstEnemy)
+	{
+		int l_bounceSide = CalculateBounceSide(p_enemyBBox);
+	
+		if(l_bounceSide == TOP || l_bounceSide == BOTTOM)
+			m_direction.Y *= -1;
+		else if(l_bounceSide == LEFT || l_bounceSide == RIGHT)
+			m_direction.X *= -1;
+		m_hasBallBouncedAgainstEnemy = true;
+	}
 
 
-	//Compare the results
-	if(l_insideX > l_insideY) //if more inside x-wise
-	{
-		if((m_direction.Y > 0 && m_posY+m_height/2 > p_enemyBBox.posY+p_enemyBBox.Height) || //if coming from above and is under the enemy...
-			(m_direction.Y < 0 && m_posY+m_height/2 < p_enemyBBox.posY+p_enemyBBox.Height))  //or from below and is over the enemy...
-			m_direction.X *= -1; //change x direction
-		else
-			m_direction.Y *= -1; //otherwise change y as normal
-	}
-	else
-	{
-		if((m_direction.X > 0 && m_posX+m_width/2 > p_enemyBBox.posX+p_enemyBBox.Width) || //if coming from left and is to the right of the enemy...
-			(m_direction.X < 0 && m_posX+m_width/2 < p_enemyBBox.posX+p_enemyBBox.Width))  //or from right and is to the left of the enemy...
-			m_direction.Y *= -1; //change y direction
-		else
-			m_direction.X *= -1; //otherwise change x as normal
-	}
 }
 
 void Ball::BallBounceAgainstPaddle( BoundingBox p_paddleBBox )
 {
+	int l_bounceSide = CalculateBounceSide(p_paddleBBox);
+
+	if(l_bounceSide == LEFT || l_bounceSide == RIGHT)
+		m_direction.X *= -1;
+	else if(l_bounceSide == TOP)
+	{
+		int l_diff = m_posX+m_width/2 - p_paddleBBox.posX+p_paddleBBox.Width/2; //length between middle of ball and middle of paddle
+		float l_angle; //angle to add to the balls direction
+	
+		if(l_diff == 0) //if ball is in the middle of paddle
+			l_angle = 0; //just reflect the ball
+		else //set adding angle to a value between 45 and 135 (degrees)
+			l_angle = cos(((m_width/2 + p_paddleBBox.Width/2) / l_diff) * 0.7);
+	
+		float l_newAngle = l_angle + acos(m_direction.X); //add angle to previous
+	
+		//clamp the new angle between min and max values (10 and 170 degrees)
+		if(l_newAngle*180*M_1_PI < m_minBallAngle)
+			l_newAngle = m_minBallAngle*M_PI/180;
+		else if(l_newAngle*180/M_1_PI > m_maxBallAngle)
+			l_newAngle = m_maxBallAngle*M_PI/180;
+		
+		m_direction.X = cos(l_newAngle);
+		m_direction.Y = sin(l_newAngle)*-1;
+	}
+}
+
+int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
+{
+	int l_insideX = 0;
+	int l_insideY = 0;
+
+	//Calculate how much of the ball is inside the object on either side
+	if(m_posX+m_width/2 < p_objectBBox.posX) //if the middle of the ball is to the left of the object
+		l_insideX = m_posX + m_width - p_objectBBox.posX;
+	else if(m_posX+m_width/2 > p_objectBBox.posX+p_objectBBox.Width) //if the middle of the ball is to the right of the object
+		l_insideX = p_objectBBox.posX + p_objectBBox.Width - m_posX;
+	else //the middle of the ball is inside the objects width
+		l_insideX = p_objectBBox.Width/2 - abs(p_objectBBox.posX+p_objectBBox.Width/2 - m_posX+m_width/2);
+
+	//Same as above but with height
+	if(m_posY+m_height/2 < p_objectBBox.posY)
+		l_insideY = m_posY + m_height - p_objectBBox.posY;
+	else if(m_posY+m_height/2 > p_objectBBox.posY+p_objectBBox.Height)
+		l_insideY = p_objectBBox.posY + p_objectBBox.Height - m_posY;
+	else
+		l_insideY = p_objectBBox.Height/2 - abs(p_objectBBox.posY+p_objectBBox.Height/2 - m_posY+m_height/2);
+
+	//Compare the results
+	if(l_insideX > l_insideY) //if more inside x-wise
+	{
+		if(m_direction.Y < 0)//coming from above
+		{
+			if(m_posY+m_height/2 > p_objectBBox.posY+p_objectBBox.Height) //if below, can't bounce off top side
+			{
+				if(m_direction.X < 0) //choose left or right side instead
+					return RIGHT;
+				else
+					return LEFT;
+			}
+			else
+				return TOP;
+		}
+		else //coming from below
+		{
+			if(m_posY+m_height/2 < p_objectBBox.posY+p_objectBBox.Height) //if above, can't bounce off bottom side
+			{
+				if(m_direction.X < 0) //choose left or right side instead
+					return RIGHT;
+				else
+					return LEFT;
+			}
+			else
+				return BOTTOM;
+		}
+	}
+	else //more inside y-wise
+	{
+		if(m_direction.X > 0) //coming from left
+		{
+			if (m_posX+m_width/2 > p_objectBBox.posX+p_objectBBox.Width) //if right of object, can't bounce off left side
+			{
+				if(m_direction.Y < 0) //choose top or bottom side instead
+					return TOP;
+				else
+					return BOTTOM;
+			}
+			else
+				return LEFT;
+		}
+		else
+		{
+			if (m_posX+m_width/2 < p_objectBBox.posX+p_objectBBox.Width) //if left of object, can't bounce off right side
+			{
+				if(m_direction.Y < 0) //choose top or bottom side instead
+					return TOP;
+				else
+					return BOTTOM;
+			}
+			else
+				return RIGHT;
+		}
+	}
 
 }
