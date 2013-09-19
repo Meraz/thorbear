@@ -29,20 +29,17 @@ void main()
 	vec4 mKd;
 	vec3 specular;
 	
-	if ( shadow > 0 )
-	{
-		mKd = texture(map_Kd, uv);
+  mKd = texture(map_Kd, uv);
 
-		vec3 Ir = vec3( 0.0f ); // reflection from reflection map
+  vec3 Ir = vec3( 0.0f ); // reflection from reflection map
 
-		vec3 n = normalize( normal );
-		//vec3 s = normalize( vec3( lightPos - eyeCoords ) );
-		vec3 v = normalize( -vec3( eyeCoords ) );
-		vec3 r = reflect( -normalize( lightVec ), normal );
-	
-		// ToDo: Kd -> map_Kd
-		specular = pow ( max( 0.0f, dot( r, v ) ), c3 ) * Is + Ir;
-	}
+  vec3 n = normalize( normal );
+  //vec3 s = normalize( vec3( lightPos - eyeCoords ) );
+  vec3 v = normalize( -vec3( eyeCoords ) );
+  vec3 r = reflect( -normalize( lightVec ), normal );
+
+  // ToDo: Kd -> map_Kd
+  specular = pow ( max( 0.0f, dot( r, v ) ), c3 ) * Is + Ir;
 
 	fragmentColour = vec3(0.0f, 1.0f, 0.0f);//vec3(Ka * Ia + ( vec3( mKd ) * diffuse + Ks * specular ) );
 

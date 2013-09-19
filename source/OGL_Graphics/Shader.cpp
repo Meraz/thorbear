@@ -182,7 +182,7 @@ void compileShader( GLuint& _shaderHandle, const char* _shaderFileName, const in
 			printf( (error + stringf( "Shader error log;\n%s\n", errorLog )).c_str() );
 			delete[ ] errorLog;
 		}
-		printf( error.c_str(); );
+		printf( error.c_str() );
 	}
 }
 
