@@ -121,7 +121,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 			mtlf.open( ( dir + tmpstr ).c_str( ) );
 			if( mtlf.fail() )
 			{
-				printf stringf("MTL library m%s referenced in the object file could not be read!\n", tmpstr);
+				printf("MTL library m%s referenced in the object file could not be read!\n", tmpstr);
         break;
 			}
 
@@ -335,7 +335,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 	}
 
 	printf("Successfully loaded object\n");
-	printf(" %d vertices, %d indices\n", vertexData->size( ) / 8, indices->size( ) );
+	printf(" %d vertices, %d indices\n", (int)vertexData->size( ) / 8, (int)indices->size( ) );
 #pragma endregion
 
   model.m_vertexCount = indices->size();

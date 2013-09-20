@@ -19,8 +19,6 @@ public:
   
   Material* m_mtl;
   
-private:
-
 	GLuint m_handleVAO;
 	GLuint m_handleVBO;
   
