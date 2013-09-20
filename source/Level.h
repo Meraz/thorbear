@@ -26,6 +26,7 @@ private:
 	bool		m_PaddleHasDied;
 	RenderComponentInterface*	m_renderComp;
 
+	int		m_mapHeight;
 	int		m_nrOfEnemies; //TEST
 
 private:

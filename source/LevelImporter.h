@@ -5,17 +5,22 @@
 #include <string>
 #include <iostream>
 #include "LodePNG.h"
+
 using namespace std;
+
 class LevelImporter
 {
 public:
-	
+	LevelImporter(void);
 	~LevelImporter(void);
 
 	//Enter name of level without the .png file ending
-	static int** LoadLevel(string p_levelName);
+	int**	LoadLevel(string p_levelName);
+	int		GetLevelHeight();
+
 private:
-	LevelImporter(void);
+	
+	int m_mapHeight;
 };
 
 #endif
