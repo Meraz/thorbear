@@ -3,7 +3,7 @@
 
 #include "RenderComponentInterface.h"
 #include "OGL_Graphics/Shader.h"
-#include "OGL_Graphics/ModelManager.h"
+#include "OGL_Graphics/ModelMan.h"
 
 #include <GL/glew.h> // always include GLEW before including freeGLUT so that you get the latest opengl headers and not the default ones
 #include <GL/glfw.h>
