@@ -23,18 +23,18 @@ Model::~Model()
 
 bool Model::Load( std::string p_dir, std::string p_fileName )
 {
+  // create 1 VAO
+  glGenVertexArrays( 1, &m_handleVAO );
+  glBindVertexArray( m_handleVAO );
+  
   if( !LoadOBJ( p_dir, p_fileName, (*this) ) )
   {
     printf( "Failed to load model.\n" );
     return false;
   }
   
-  // create 1 VAO
-  glGenVertexArrays( 1, &m_handleVAO );
-  glBindVertexArray( m_handleVAO );
-
   // "Bind" (switch focus to) first buffer
-  glBindBuffer( GL_ARRAY_BUFFER, m_handleVBO );
+  //glBindBuffer( GL_ARRAY_BUFFER, m_handleVBO );
   // map index 0 to vertice buffer
   glEnableVertexAttribArray( 0 ); // vertices
   glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof( float ) , ( GLubyte* )NULL );
@@ -59,7 +59,6 @@ void Model::Render( Shader &p_shader )
   p_shader.SetUniformVector( "intensitySpecular", glm::vec3(0.5f) ); // specular intensity
 
   glBindVertexArray( m_handleVAO ); // bind VAO
-
   glDrawArrays( GL_TRIANGLES, 0, m_vertexCount );
 }
 
