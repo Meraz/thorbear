@@ -15,12 +15,13 @@ public:
   
   void Render( Shader &p_shader );
   
+  int m_vertexCount;
+  
 private:
   Material* m_mtl;
 
 	GLuint m_handleVAO;
 	GLuint m_handleVBO;
-  int m_vertexCount;
   
 };
 

@@ -1,7 +1,14 @@
 #include "Model.h"
 
+#include "TGALoader.h"
+#include "glm/ext.hpp"
+#include <fstream>
+#include <vector>
+#include <cstdio>
+
 // Parses the object data from an .obj file and stores it in the model
 bool LoadOBJ( std::string p_dir, std::string p_fileName, Shader &p_shader );
+extern inline std::string stringf( const char *p_fmt, ... );
 
 Model::Model( )
   : m_mtl( 0 )
@@ -10,18 +17,16 @@ Model::Model( )
 
 Model::~Model()
 {
-  glDeleteVertexArrays(1, m_handleVAO);
+  glDeleteVertexArrays( 1, &m_handleVAO );
 }
 
-bool Load( std::string p_dir, std::string p_fileName )
+bool Model::Load( std::string p_dir, std::string p_fileName )
 {
   if( !LoadOBJ( p_dir, p_fileName, (*this) ) )
   {
     throw stringf( "Failed to load model" );
     return false;
   }
-  m_vertexCount = indices->size();
-  m_modelMatrix = glm::translate( 0, 0, 0 );
   
   // create 1 VAO
   glGenVertexArrays( 1, &m_handleVAO );
@@ -43,7 +48,7 @@ bool Load( std::string p_dir, std::string p_fileName )
   return true;
 }
 
-void Render( Shader &p_shader )
+void Model::Render( Shader &p_shader )
 {
   m_mtl->Apply( p_shader );
   
@@ -52,7 +57,7 @@ void Render( Shader &p_shader )
   p_shader.SetUniformFloat( "powerSpecular", 2000.0f); // specular intensity
   p_shader.SetUniformVector( "intensitySpecular", glm::vec3(0.5f) ); // specular intensity
 
-  glBindVertexArray( VAOHandle ); // bind VAO
+  glBindVertexArray( m_handleVAO ); // bind VAO
 
   glDrawArrays( GL_TRIANGLES, 0, m_vertexCount );
 }
@@ -335,10 +340,10 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
   model.m_vertexCount = indices->size();
 
   // Make a new vertex buffer object
-  glGenBuffers(1, &(model->m_handleVBO));
+  glGenBuffers(1, &(model.m_handleVBO));
 
   // "Bind" (switch focus to) first buffer
-  glBindBuffer(GL_ARRAY_BUFFER, model->m_handleVBO);
+  glBindBuffer(GL_ARRAY_BUFFER, model.m_handleVBO);
   glBufferData(GL_ARRAY_BUFFER, vertexData->size() * sizeof(float), vertexData->data(), GL_STATIC_DRAW);
 
 
