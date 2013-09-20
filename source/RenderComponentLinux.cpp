@@ -157,7 +157,7 @@ void RenderComponentLinux::Render()
   
   // Render all objects
   for( int i = 0; i < m_objectList.size(); i++ )
-    m_objectList[i].Render( m_genericShader );
+    m_objectList[i]->Render( m_genericShader );
   
   glfwSwapBuffers();
   

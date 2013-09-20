@@ -34,7 +34,7 @@ private:
   
   Shader m_genericShader;
   
-  ModelManager m_modelManager;
+  ModelMan m_modelManager;
   std::vector< ModelInstance* > m_objectList;
   
   // Set the error message and return false to be returned further on for the error management
