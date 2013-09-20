@@ -11,7 +11,7 @@ ModelMan::~ModelMan( )
 {
 }
 
-void LoadModels( )
+void ModelMan::LoadModels( )
 {
   m_models[ ENEMY1 ].Load( MODEL_DIR, "Enemy1.obj");
   m_models[ ENEMY2 ].Load( MODEL_DIR, "Enemy2.obj");
@@ -19,7 +19,7 @@ void LoadModels( )
   m_models[ PADDLE ].Load( MODEL_DIR, "Paddle.obj");
 }
 
-Model* CreateInstance( BoundingBox p_boundingBox, TextureType p_textureType )
+Model* ModelMan::CreateInstance( BoundingBox p_boundingBox, TextureType p_textureType )
 {
   glm::mat4 l_modelMatrix = glm::translate(
       p_boundingBox.farTopLeftX + p_boundingBox.width/2.f,
@@ -27,5 +27,5 @@ Model* CreateInstance( BoundingBox p_boundingBox, TextureType p_textureType )
       0
     );
     
-  return new ModelInstance( models[ p_textureType ], l_modelMatrix );
+  return new ModelInstance( m_models[ p_textureType ], l_modelMatrix );
 }
