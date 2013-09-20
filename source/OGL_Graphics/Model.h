@@ -3,6 +3,8 @@
 
 #include "Material.h"
 
+#include <string>
+
 class Model
 {
 public:
