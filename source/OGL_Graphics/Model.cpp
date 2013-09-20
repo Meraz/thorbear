@@ -1,6 +1,7 @@
 #include "Model.h"
 
 #include "TGALoader.h"
+#include "glm/glm.hpp"
 #include "glm/ext.hpp"
 #include <fstream>
 #include <vector>
