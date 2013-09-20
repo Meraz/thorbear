@@ -114,10 +114,10 @@ bool RenderComponentLinux::Init()
   // Create and attach a camera
   static Camera l_cam;
   l_cam.SetPosition( glm::vec3( 0.f, 10.f, 0.f ) );
+  l_cam.SetYawPitch( 0, -90 );
   l_cam.UpdateViewMatrix( );
   l_cam.SetClip( 5.f, 1000.f );
   l_cam.SetFoV( 45.f );
-  l_cam.SetYawPitch( 0, -90 );
   //l_cam.UpdateProjectionMatrix( );
   m_genericShader.SetActiveCamera( l_cam );
   
