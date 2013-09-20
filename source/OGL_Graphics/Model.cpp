@@ -25,7 +25,7 @@ bool Model::Load( std::string p_dir, std::string p_fileName )
 {
   if( !LoadOBJ( p_dir, p_fileName, (*this) ) )
   {
-    printf( "Failed to load model" );
+    printf( "Failed to load model.\n" );
     return false;
   }
   
@@ -90,7 +90,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 
 	if (f.fail())
 	{
-		printf( "Error opening .obj file!\n" );
+		printf( "Error opening file: %s!\n", ( dir + fileName ).c_str( ) );
     return false;
 	}
 
