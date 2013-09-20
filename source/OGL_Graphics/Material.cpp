@@ -10,14 +10,9 @@ Material::Material( ) : name( "" ), m_coefficientAmbient( 0 ), m_coefficientDiff
 
 Material::~Material( )
 {
-  glDeleteTextures( &m_mapAmbient );
-  glDeleteTextures( &m_mapDiffuse );
-  glDeleteTextures( &m_mapSpecular );
-}
-
-bool Material::operator==( std::string _name )
-{
-  return name.compare( _name ) == 0;
+  glDeleteTextures( 1, &m_mapAmbient );
+  glDeleteTextures( 1, &m_mapDiffuse );
+  glDeleteTextures( 1, &m_mapSpecular );
 }
 
 void Material::Apply( Shader& p_shader )
