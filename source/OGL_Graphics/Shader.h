@@ -27,7 +27,7 @@ public:
 	void SetUniformMatrix( const char* p_name, glm::mat4 p_val );
 	
   
-	void UpdateUniform( );
+	void UpdateUniform( glm::mat4 p_modelMatrix );
 	void SetActiveCamera( Camera& p_cam );
   
 	Camera* m_activeCamera;
