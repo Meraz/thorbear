@@ -113,7 +113,13 @@ void WindowLinux::Render()
 {
 	WindowBaseClass::Render();
   
-  ((RenderComponentLinux*)m_renderComponentInterface)->RenderObject( BoundingBox(), ENEMY1 );
+  BoundingBox l_bb;
+  l_bb.farTopLeftX = 0;
+  l_bb.farTopLeftY = 0;
+  l_bb.width = 0;
+  l_bb.height = 0;
+  
+  ((RenderComponentLinux*)m_renderComponentInterface)->RenderObject( l_bb, ENEMY1 );
   ((RenderComponentLinux*)m_renderComponentInterface)->Render();
 }
 
