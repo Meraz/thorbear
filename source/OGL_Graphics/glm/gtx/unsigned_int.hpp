@@ -33,7 +33,7 @@ namespace unsigned_int ///< GLM_GTX_unsigned_int extension: Add support for unsi
 
 	//! 32bit signed integer. 
 	//! From GLM_GTX_unsigned_int extension.
-	typedef signed					sint;
+	typedef int					sint;
 
 	//! Returns x raised to the y power.
 	//! From GLM_GTX_unsigned_int extension.
