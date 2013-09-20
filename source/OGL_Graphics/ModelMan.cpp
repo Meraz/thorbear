@@ -19,7 +19,7 @@ void ModelMan::LoadModels( )
   m_models[ PADDLE ].Load( MODEL_DIR, "Paddle.obj");
 }
 
-Model* ModelMan::CreateInstance( BoundingBox p_boundingBox, TextureType p_textureType )
+ModelInstance* ModelMan::CreateInstance( BoundingBox p_boundingBox, TextureType p_textureType )
 {
   glm::mat4 l_modelMatrix = glm::translate(
       p_boundingBox.farTopLeftX + p_boundingBox.width/2.f,

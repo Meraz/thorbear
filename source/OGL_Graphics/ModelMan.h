@@ -17,7 +17,7 @@ public:
   ModelInstance* CreateInstance( BoundingBox p_boundingBox, TextureType p_textureType );
   
 private:
-  Model models[4];
+  Model m_models[4];
 
 };
 
