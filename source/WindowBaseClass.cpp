@@ -3,7 +3,7 @@
 
 WindowBaseClass::WindowBaseClass()
 {
-	m_gameInterface = new Game();
+	m_gameInterface = new GameScene();
 }
 
 

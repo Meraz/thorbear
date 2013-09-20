@@ -35,8 +35,8 @@ int RenderComponentWin::Initialize()
 	m_shaderManager = new ShaderManager();
 	m_shaderManager->Init(m_d3dDevice, m_d3dImmediateContext);
 	m_camera = new Camera();
-	m_camera->SetLens(MathHelper::Pi * 0.25f, (float)m_clientWidth/m_clientHeight, 0.5f, 1000.0f);
-	m_camera->SetPos(0, 0, -80);
+	m_camera->SetLens(MathHelper::PI * 0.25f, (float)m_clientWidth/m_clientHeight, 0.5f, 1000.0f);
+	m_camera->SetPos(0, 0, -110);
 
 	Load();
 	CreateTemplates();
@@ -56,7 +56,7 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 
 	// Translation matrix
 	D3DXMATRIX l_translateMat;
-	D3DXMatrixTranslation(&l_translateMat, (float)p_boundingBox.farTopLeftX, (float)p_boundingBox.farTopLeftY, 0);	// Create translation matrix
+	D3DXMatrixTranslation(&l_translateMat, (float)p_boundingBox.PosX, (float)p_boundingBox.PosY, 0);	// Create translation matrix
 
 	D3DXMATRIX l_worldMat	= l_scaleMat *  l_translateMat;												// 
 	D3DXMATRIX l_WVP		= l_worldMat * m_camera->GetViewMatrix() *  m_camera->GetProjMatrix();

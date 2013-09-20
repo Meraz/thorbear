@@ -1,5 +1,3 @@
-
-
 cbuffer cbPerObject
 {
 	float4x4 gWVP; 
@@ -65,19 +63,16 @@ VS_OUT VS(VS_IN vIn)
 
 float4 PS(VS_OUT pIn) : SV_Target
 {
-
 	float4 C = gTexture.Sample(gTriLinearSam, pIn.stretchedUV);
 	C *= pIn.shade;
 
-	return C; 
-	
+	return C; 	
 }
 
 RasterizerState Wireframe
 {
-        FillMode = Solid;
-        CullMode = None;
-    
+	FillMode = Solid;
+	CullMode = None;    
 };
 
 technique10 Color
@@ -91,4 +86,3 @@ technique10 Color
         SetRasterizerState(Wireframe);
     }
 }
-

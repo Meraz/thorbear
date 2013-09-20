@@ -114,7 +114,7 @@ int WindowWindows::Run()
 
 void WindowWindows::Update()
 {
-	WindowBaseClass::Update(m_gameTimer->DeltaTime(), m_mousePositionX, m_mousePositionY);	
+	WindowBaseClass::Update(m_gameTimer->DeltaTime(), m_mousePositionX, m_mousePositionY);
 }
 
 void WindowWindows::Render()

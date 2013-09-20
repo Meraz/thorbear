@@ -1,17 +1,7 @@
 #ifndef RENDERCOMPONENTINTERFACE_H
 #define RENDERCOMPONENTINTERFACE_H
 
-
-struct BoundingBox
-{
-	int farTopLeftX;
-	int farTopLeftY;
-	int farTopLeftZ;
-	int width;
-	int heigth;
-	int depth;
-};
-
+#include "BoundingBox.h"
 struct ParticleSystem
 {
 	int x;
