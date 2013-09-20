@@ -12,6 +12,7 @@ Ball::Ball(void)
 	m_direction.Y = 0;
 	m_maxBallAngle = 170;
 	m_minBallAngle = 10;
+	m_isBallDead = true;
 }
 
 
@@ -19,9 +20,9 @@ Ball::~Ball(void)
 {
 }
 
-void Ball::Init(int p_PosX, int p_posY, int p_width, int p_height, int p_speed, BoundingBox p_mapEdges, RenderComponentInterface* p_renderComp)
+void Ball::Init(int p_posX, int p_posY, int p_width, int p_height, int p_speed, BoundingBox p_mapEdges, RenderComponentInterface* p_renderComp)
 {
-	m_posX = p_PosX;
+	m_posX = p_posX;
 	m_posY = p_posY;
 	m_width = p_width;
 	m_height = p_height;

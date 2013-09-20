@@ -117,7 +117,9 @@ int Level::GetNrOfEnemies()
 
 int Level::CalculateBallOnPaddlePosX()
 {
-	return m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width; // TODO byt ut mot bättre algoritm!!!
+	//return m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width; // TODO byt ut mot bättre algoritm!!!
+	//Bättre algoritm?
+	return m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width/2 + ((m_paddle->GetBoundingBox().Width/2 / (m_mapEdges.Width/2))*(m_mapEdges.Width/2 - (m_paddle->GetPosX() + m_paddle->GetBoundingBox().Width/2))) - m_ball->GetBoundingBox().Width/2;
 }
 
 void Level::ShootBallFromPaddle()
