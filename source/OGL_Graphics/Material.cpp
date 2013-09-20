@@ -1,5 +1,7 @@
 #include "Material.h"
 
+#include <string>
+
 Material::Material( ) : name( "" ), m_coefficientAmbient( 0 ), m_coefficientDiffuse( 0 ),
   m_coefficientSpecular( 0 ), m_transparency( 0 ), m_illuminationModel( 0 ), m_mapAmbient( 0 ), m_mapDiffuse( 0 ),
   m_mapSpecular( 0 )
