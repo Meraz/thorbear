@@ -124,6 +124,8 @@ bool RenderComponentLinux::Init()
   glm::vec3 l_fwd = glm::vec3(0.f, 0.f, -1.f) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
   printf( "Debug info: Forward is towards %f, %f, %f\n", l_fwd[0], l_fwd[1], l_fwd[2] );
   
+  m_modelManager.LoadModels();
+  
   return true;
 }
 
