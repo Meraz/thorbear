@@ -13,7 +13,7 @@ public:
 
 	void Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight);
 
-	void	Update(int p_mousePosX); //Not sure if int or float
+	void	Update(int p_mousePosX, bool p_isMouseClicked); //Not sure if int or float
 	void	Render();
 	bool	HasPaddleDied();
 	int		GetNrOfEnemies();
@@ -32,6 +32,7 @@ private:
 	void CheckAllCollisions();
 	bool BoundingBoxIntersect(BoundingBox p_box1, BoundingBox p_box2);
 	int	 CalculateBallOnPaddlePosX();
+	void ShootBallFromPaddle();
 };
 
 #endif LEVEL_H

@@ -35,8 +35,15 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight )
 
 }
 
-void Level::Update( int p_mousePosX )
+void Level::Update( int p_mousePosX, bool p_isMouseClicked )
 {
+	if(m_ball->IsBallDead())
+	{
+		m_ball->SetPosX(CalculateBallOnPaddlePosX());
+		m_ball->SetPosY(m_paddle->GetPosY() - m_paddle->GetBoundingBox().Height - m_ball->GetBoundingBox().Height);
+		if(p_isMouseClicked)
+			ShootBallFromPaddle();
+	}
 	m_paddle->Update(p_mousePosX);
 	m_ball->Update();
 	CheckAllCollisions();
@@ -47,7 +54,7 @@ void Level::Render()
 {
 	m_paddle->Render();
 	m_ball->Render();
-	//TODO Render enemies, lasers, powerups and ball. 
+	//TODO Render enemies, lasers, powerups and ball[X]. 
 	//m_renderComp->RenderObject(m_bBox, OUTERBOUNDS) Render maps outer bounds/edges
 }
 
@@ -109,6 +116,22 @@ int Level::GetNrOfEnemies()
 int Level::CalculateBallOnPaddlePosX()
 {
 	return m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width; //byt ut mot bättre algoritm!!!
+}
+
+void Level::ShootBallFromPaddle()
+{
+	
+	int l_diff = m_ball->GetPosX()+m_ball->GetBoundingBox().Width/2 - m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width/2; //length between middle of ball and middle of paddle
+
+	if(l_diff == 0) //if ball is in the middle of paddle
+	{
+		m_ball->SetDirection(cos(0));
+	}
+	else //set angle to a value between 45 and 135 (degrees)
+	{
+		m_ball->SetDirection(cos(((m_ball->GetBoundingBox().Width/2 + m_paddle->GetBoundingBox().Width/2) / l_diff) * 0.7));
+	}
+	m_ball->ShootBall();
 }
 
 /*void Level::SetGraphicalInterface(RenderComponentInterface* p_renderComp)

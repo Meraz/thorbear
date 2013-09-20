@@ -29,14 +29,15 @@ public:
 	~Ball(void);
 
 	void Init(int p_posX, int p_posY, int p_width, int p_height, int p_speed, BoundingBox p_mapEdges); //Map edges are the inner bounds of the map
-	void Reset(int p_paddlePosX, int p_paddlePosY);
+	void ShootBall();
 
 	void Update();
 	void Render();
 
 	bool IsBallDead();
 
-	void SetPosition(int p_posX, int p_posY);
+	void SetPosX(int p_posX);
+	void SetPosY(int p_posY);
 	void SetSpeed(int p_speed);
 	void SetDirection(float p_direction); //Sets the direction in radians
 

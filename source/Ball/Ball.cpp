@@ -29,20 +29,21 @@ void Ball::Init(int p_posX, int p_posY, int p_width, int p_height, int p_speed, 
 	m_mapEdges = p_mapEdges;
 }
 
-void Ball::Reset(int p_paddlePosX, int p_paddlePosY)
+void Ball::ShootBall()
 {
-	m_posX = p_paddlePosX;
-	m_posY = p_paddlePosY;
 	m_isBallDead = false;
 }
 
 void Ball::Update()
 {
-	m_posX += m_direction.X * m_speed;
-	m_posY += m_direction.Y * m_speed;
-
-	CheckCollisionAgainstWalls();
-	m_hasBallBouncedAgainstEnemy = false;
+	if (!m_isBallDead)
+	{
+		m_posX += m_direction.X * m_speed;
+		m_posY += m_direction.Y * m_speed;
+	
+		CheckCollisionAgainstWalls();
+		m_hasBallBouncedAgainstEnemy = false;
+	}
 }
 
 void Ball::Render()
@@ -55,9 +56,13 @@ bool Ball::IsBallDead()
 	return m_isBallDead;
 }
 
-void Ball::SetPosition( int p_posX, int p_posY )
+void Ball::SetPosX( int p_posX)
 {
 	m_posX = p_posX;
+}
+
+void Ball::SetPosY( int p_posY )
+{
 	m_posY = p_posY;
 }
 
