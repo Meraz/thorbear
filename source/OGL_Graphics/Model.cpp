@@ -121,7 +121,8 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 			mtlf.open( ( dir + tmpstr ).c_str( ) );
 			if( mtlf.fail() )
 			{
-				throw stringf("MTL library m%s referenced in the object file could not be read!\n", tmpstr);
+				printf stringf("MTL library m%s referenced in the object file could not be read!\n", tmpstr);
+        break;
 			}
 
 #pragma region ParseMTL
@@ -145,29 +146,29 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				{
 					mtlf >> tmpstr;
 					printf( "New Material: %s\n", tmpstr.c_str( ) );
-					m_mtl = new Material( );
+					model.m_mtl = new Material( );
 					//mtls.push_back( mtl );
 				}
 				if( tmpstr.compare( "Ka" ) == 0 )
-					mtlf >> m_mtl->m_coefficientAmbient.x >> m_mtl->m_coefficientAmbient.y >> m_mtl->m_coefficientAmbient.z;
+					mtlf >> model.m_mtl->m_coefficientAmbient.x >> model.m_mtl->m_coefficientAmbient.y >> model.m_mtl->m_coefficientAmbient.z;
 				if( tmpstr.compare( "Kd" ) == 0 )
-					mtlf >> m_mtl->m_coefficientDiffuse.x >> m_mtl->m_coefficientDiffuse.y >> m_mtl->m_coefficientDiffuse.z;
+					mtlf >> model.m_mtl->m_coefficientDiffuse.x >> model.m_mtl->m_coefficientDiffuse.y >> model.m_mtl->m_coefficientDiffuse.z;
 				if( tmpstr.compare( "Ks" ) == 0 )
-					mtlf >> m_mtl->m_coefficientSpecular.x >> m_mtl->m_coefficientSpecular.y >> m_mtl->m_coefficientSpecular.z;
+					mtlf >> model.m_mtl->m_coefficientSpecular.x >> model.m_mtl->m_coefficientSpecular.y >> model.m_mtl->m_coefficientSpecular.z;
 				if( tmpstr.compare( "d" ) == 0 || tmpstr.compare( "Tr" ) == 0  )
-					mtlf >> m_mtl->m_transparency;
+					mtlf >> model.m_mtl->m_transparency;
 				if( tmpstr.compare( "illum" ) == 0 )
-					mtlf >> m_mtl->m_illuminationModel;
+					mtlf >> model.m_mtl->m_illuminationModel;
 				if( tmpstr.compare( "map_Ka" ) == 0 )
 				{
 					mtlf >> tmpstr;
 					printf( "Ambient texture: %s\n", ( dir + tmpstr ).c_str( ) );
 
 					tga_data_t* l_mapAmbient = tga_data_load( ( dir + tmpstr ).c_str( ) );
-          m_mtl->m_coefficientAmbient = glm::vec3(0);
+          model.m_mtl->m_coefficientAmbient = glm::vec3(0);
           
-          glGenTextures( 1, &m_mtl->m_mapAmbient );
-          glBindTexture( GL_TEXTURE_2D, m_mtl->m_mapAmbient );
+          glGenTextures( 1, &model.m_mtl->m_mapAmbient );
+          glBindTexture( GL_TEXTURE_2D, model.m_mtl->m_mapAmbient );
           
           glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapAmbient->w, l_mapAmbient->h, 0, GL_RGB, GL_UNSIGNED_BYTE, l_mapAmbient->data);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -181,10 +182,10 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 					printf( "Diffuse texture: %s\n", ( dir + tmpstr ).c_str( ) );
 
 					tga_data_t* l_mapDiffuse = tga_data_load( ( dir + tmpstr ).c_str( ) );
-          m_mtl->m_coefficientDiffuse = glm::vec3(0);
+          model.m_mtl->m_coefficientDiffuse = glm::vec3(0);
           
-          glGenTextures( 1, &m_mtl->m_mapDiffuse );
-          glBindTexture( GL_TEXTURE_2D, m_mtl->m_mapDiffuse );
+          glGenTextures( 1, &model.m_mtl->m_mapDiffuse );
+          glBindTexture( GL_TEXTURE_2D, model.m_mtl->m_mapDiffuse );
           
           glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapDiffuse->w, l_mapDiffuse->h, 0, GL_RGB, GL_UNSIGNED_BYTE, l_mapDiffuse->data);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -198,10 +199,10 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 					printf( "Specular texture: %s\n", ( dir + tmpstr ).c_str( ) );
 
 					tga_data_t* l_mapSpecular = tga_data_load( ( dir + tmpstr ).c_str( ) );
-          m_mtl->m_coefficientSpecular = glm::vec3(0);
+          model.m_mtl->m_coefficientSpecular = glm::vec3(0);
           
-          glGenTextures( 1, &m_mtl->m_mapSpecular );
-          glBindTexture( GL_TEXTURE_2D, m_mtl->m_mapSpecular );
+          glGenTextures( 1, &model.m_mtl->m_mapSpecular );
+          glBindTexture( GL_TEXTURE_2D, model.m_mtl->m_mapSpecular );
           
           glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapSpecular->w, l_mapSpecular->h, 0, GL_RGB, GL_UNSIGNED_BYTE, l_mapSpecular->data);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
