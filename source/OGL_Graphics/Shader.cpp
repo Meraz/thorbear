@@ -198,11 +198,12 @@ int Shader::GetUniformLocation( const char* p_name )
 	return l_loc;
 }
 
-void Shader::UpdateUniform( )
+void Shader::UpdateUniform( glm::mat4 p_modelMatrix )
 {
+  SetUniformMatrix( "modelMatrix", p_modelMatrix );
   SetUniformMatrix( "projectionMatrix", m_activeCamera->GetProjectionMatrix( ) );
   SetUniformMatrix( "viewMatrix", m_activeCamera->GetViewMatrix( ) );
-  SetUniformMatrix( "modelViewMatrix", m_activeCamera->GetViewMatrix( ) * m_modelMatrix );
+  SetUniformMatrix( "modelViewMatrix", m_activeCamera->GetViewMatrix( ) * p_modelMatrix );
   SetUniformMatrix( "normalMatrix", glm::inverseTranspose( glm::mat3( m_activeCamera->GetViewMatrix( ) * m_modelMatrix ) ) );
   SetUniformVector( "lightPosition", glm::vec4( 0.f, 0.f, 0.f, 1.f ) );
 }
