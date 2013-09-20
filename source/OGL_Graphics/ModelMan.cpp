@@ -27,5 +27,5 @@ ModelInstance* ModelMan::CreateInstance( BoundingBox p_boundingBox, TextureType 
       0.f
     );
     
-  return new ModelInstance( m_models[ p_textureType ], l_modelMatrix );
+  return new ModelInstance( &m_models[ p_textureType ], l_modelMatrix );
 }
