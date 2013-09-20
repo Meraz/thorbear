@@ -122,7 +122,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 			mtlf.open( ( dir + tmpstr ).c_str( ) );
 			if( mtlf.fail() )
 			{
-				printf("MTL library m%s referenced in the object file could not be read!\n", tmpstr.c_str());
+				printf("MTL library %s referenced in the object file could not be read!\n", tmpstr.c_str());
         break;
 			}
 

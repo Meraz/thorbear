@@ -1,6 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
-mtllib bth.mtl
+mtllib Enemy1.mtl
 g default
 v 13.558066 -16.220604 3.102481
 v 12.179350 -16.910206 3.102481
