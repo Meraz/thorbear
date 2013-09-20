@@ -32,7 +32,8 @@ private:
   
   Shader m_genericShader;
   
-  GLuint tmp_vao; // will be removed after testing
+  ModelManager m_modelManager;
+  std::vector< ModelInstance* > m_objectList;
   
   // Set the error message and return false to be returned further on for the error management
   bool SetError( std::string p_errorMessage );

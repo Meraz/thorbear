@@ -36,7 +36,6 @@ public:
 private:
 	int m_handle;
 	GLuint m_subhandles[COUNT];
-	glm::mat4 m_modelMatrix;
   
 	void CreateProgram( );
 	int GetUniformLocation( const char* p_name );

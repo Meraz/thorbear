@@ -113,41 +113,16 @@ bool RenderComponentLinux::Init()
   
   // Create and attach a camera
   static Camera l_cam;
-  l_cam.SetPosition( glm::vec3( 0.f, 0.f, 0.f ) );
+  l_cam.SetPosition( glm::vec3( 0.f, 10.f, 0.f ) );
   l_cam.UpdateViewMatrix( );
   l_cam.SetClip( 5.f, 1000.f );
   l_cam.SetFoV( 45.f );
+  l_cam.SetYawPitch( 0, -90 );
   //l_cam.UpdateProjectionMatrix( );
   m_genericShader.SetActiveCamera( l_cam );
   
-  float vertices[] = {
-      -10.f, -10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-       10.f, -10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-       10.f,  10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      -10.f, -10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-       10.f,  10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f,
-      -10.f,  10.f, -10.f, 0.f, 0.f, 0.f, 0.f, 1.f
-    };
-  GLuint l_vbo;
-  glGenVertexArrays(1, &tmp_vao);
-  glBindVertexArray(tmp_vao);
-  
-  glEnableVertexAttribArray( 0 ); // position
-  glEnableVertexAttribArray( 1 ); // UV
-  glEnableVertexAttribArray( 2 ); // normals
-  
-  glGenBuffers(1, &l_vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, l_vbo);
-  
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid *)0);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid *)(sizeof(float)*3));
-  glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (const GLvoid *)(sizeof(float)*5));
-	
-  glBindVertexArray(0);
-  
   glm::vec3 l_fwd = glm::vec3(0.f, 0.f, -1.f) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
-  printf( "Forward is: %f, %f, %f\n", l_fwd[0], l_fwd[1], l_fwd[2] );
+  printf( "Debug info: Forward is towards %f, %f, %f\n", l_fwd[0], l_fwd[1], l_fwd[2] );
   
   return true;
 }
@@ -164,7 +139,9 @@ void RenderComponentLinux::SetHints()
 void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)
 {
   // Create an object based on p_objectType (p_textureType)
+  ModelInstance* l_modelInstance = m_modelManager.CreateInstance( p_boundingBox, p_textureType );
   // Add the object to the list of objects to render
+  m_objectList.push_back( l_modelInstance );
 }
 
 void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
@@ -178,13 +155,14 @@ void RenderComponentLinux::Render()
   
   m_genericShader.Use( );
   
-  // Render here
-  m_genericShader.SetUniformMatrix( "modelMatrix", glm::mat4(1.f) );
-  m_genericShader.UpdateUniform( );
-  glBindVertexArray(tmp_vao);
-  glDrawArrays( GL_TRIANGLES, 0, 6 );
+  // Render all objects
+  for( int i = 0; i < m_objectList.size(); i++ )
+    m_objectList[i].Render( m_genericShader );
   
   glfwSwapBuffers();
+  
+  // Clear the render object list for next frame
+  m_objectList.clear();
 }
 
 std::string RenderComponentLinux::GetErrorMessage( )
