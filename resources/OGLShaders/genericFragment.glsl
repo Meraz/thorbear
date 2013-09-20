@@ -31,9 +31,9 @@ void main()
 {
 	vec3 specularComponent;
 	
-  coefficientDiffuse = coefficientDiffuse + vec3(texture(mapDiffuse, uv));
-  coefficientDiffuse = coefficientDiffuse + vec3(texture(mapAmbient, uv));
-  coefficientSpecular = coefficientSpecular + vec3(texture(mapSpecular, uv));
+  vec3 cAmbiemt = coefficientAmbient+ vec3(texture(mapAmbient, uv));
+  vec3 cDiffuse = coefficientDiffuse + vec3(texture(mapDiffuse, uv));
+  vec3 cSpecular = coefficientSpecular + vec3(texture(mapSpecular, uv));
 
   vec3 intensityReflection = vec3( 0.0f ); // reflection from reflection map
 
@@ -45,8 +45,8 @@ void main()
   specularComponent = pow ( max( 0.0f, dot( r, v ) ), powerSpecular ) * intensitySpecular + intensityReflection;
 
 	fragmentColour = vec3(0.0f, 1.0f, 0.0f);
-    //vec3(coefficientAmbient * intensityAmbient
-    //+ ( coefficientDiffuse * diffuse + coefficientSpecular * specularComponent ) );
+    //vec3(cAmbiemt * intensityAmbient
+    //+ ( cDiffuse * diffuse + cSpecular * specularComponent ) );
 
 	//fragmentColour = mKd;
 	//fragmentColour = vec4(Ka * Ia, 1.0f);
