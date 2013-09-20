@@ -7,7 +7,7 @@
 #include <cstdio>
 
 // Parses the object data from an .obj file and stores it in the model
-bool LoadOBJ( std::string p_dir, std::string p_fileName, Shader &p_shader );
+bool LoadOBJ( std::string p_dir, std::string p_fileName, Model &p_model );
 extern inline std::string stringf( const char *p_fmt, ... );
 
 Model::Model( )
