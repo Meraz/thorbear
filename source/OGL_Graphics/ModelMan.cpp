@@ -24,7 +24,7 @@ ModelInstance* ModelMan::CreateInstance( BoundingBox p_boundingBox, TextureType 
   glm::mat4 l_modelMatrix = glm::translate(
       p_boundingBox.farTopLeftX + p_boundingBox.width/2.f,
       p_boundingBox.farTopLeftY + p_boundingBox.height/2.f,
-      0
+      0.f
     );
     
   return new ModelInstance( m_models[ p_textureType ], l_modelMatrix );
