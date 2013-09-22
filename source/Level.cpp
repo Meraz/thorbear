@@ -14,7 +14,9 @@ Level::Level(void)
 Level::~Level(void)
 {
 	delete m_paddle;
-	delete m_map;
+	for (int i=0; i<m_mapHeight; i++)
+		delete [] m_map[i];
+	delete [] m_map;
 	delete m_ball;
 }
 
@@ -25,7 +27,12 @@ void Level::Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentIn
 	m_mapEdges.Width = p_lvlWidth; 
 	m_mapEdges.Height = p_lvlHeight; 
 	string tmpString = "level"+to_string(p_lvlNr);
-	m_map = LevelImporter::LoadLevel(tmpString);
+
+	LevelImporter* l_lvlImporter = new LevelImporter();
+	m_map = l_lvlImporter->LoadLevel(tmpString);
+	m_mapHeight = l_lvlImporter->GetLevelHeight();
+	delete l_lvlImporter;
+
 	m_paddle = new Paddle(0, 50, 20, 5, p_lvlWidth); //example values
 	m_paddle->Initialize(m_renderComp);
 	m_ball = new Ball();
