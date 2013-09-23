@@ -31,7 +31,7 @@ void Paddle::Update(int p_mousePosX)
 
 void Paddle::Render()
 {
-	m_renderComp->RenderObject(BoundingBox(m_posX, m_posY), PADDLE); //PADDLE == enum OH REALLY?!
+	m_renderComp->RenderObject(BoundingBox(m_posX, m_posY, 10, 2), PADDLE); //PADDLE == enum OH REALLY?!
 }
 
 int Paddle::GetPosX()

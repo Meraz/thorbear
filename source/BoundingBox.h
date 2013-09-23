@@ -9,6 +9,13 @@ struct BoundingBox
 		PosX = p_posX;
 		PosY = p_posY;
 	}
+	BoundingBox(int p_posX, int p_posY, int p_width, int p_height)
+	{
+		PosX = p_posX;
+		PosY = p_posY;
+		Width = p_width;
+		Height = p_height;
+	}
 	int PosX, PosY;
 	int Width, Height;
 };

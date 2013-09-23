@@ -50,7 +50,7 @@ void Ball::Update()
 
 void Ball::Render()
 {
-	m_renderComp->RenderObject(BoundingBox(m_posX, m_posY), BALL);
+	m_renderComp->RenderObject(BoundingBox(m_posX, m_posY, 30, 30), BALL);
 }
 
 bool Ball::IsBallDead()

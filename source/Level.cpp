@@ -10,7 +10,7 @@ Level::Level(void)
 	m_mapEdges.PosY = 0;
 	m_PaddleHasDied = false;
 	m_map = NULL;
-	m_nrOfEnemies = 0;
+	m_nrOfEnemies = 1;
 }
 
 

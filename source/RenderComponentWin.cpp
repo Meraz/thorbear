@@ -50,9 +50,16 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 	Model*	l_model = m_objVec.at((int)p_textureType).model;
 
 	m_camera->RebuildView();
+
+	float l_xScaleFactor = 1.0f/(l_model->m_topBoundingCorner.x - l_model->m_bottomBoundingCorner.x);
+	float l_yScaleFactor = 1.0f/(l_model->m_topBoundingCorner.y - l_model->m_bottomBoundingCorner.y);
+
+	l_xScaleFactor *= p_boundingBox.Width;
+	l_yScaleFactor *= p_boundingBox.Height;
+
 	// Scale matrix
 	D3DXMATRIX l_scaleMat;
-	D3DXMatrixIdentity(&l_scaleMat);
+	D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, l_yScaleFactor, 1.0f);
 
 	// Translation matrix
 	D3DXMATRIX l_translateMat;
