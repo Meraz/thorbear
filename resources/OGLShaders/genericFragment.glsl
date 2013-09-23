@@ -44,9 +44,9 @@ void main()
 
   specularComponent = pow ( max( 0.0f, dot( r, v ) ), powerSpecular ) * intensitySpecular + intensityReflection;
 
-	fragmentColour = vec3(0.0f, 1.0f, 0.0f);
-    //vec3(cAmbiemt * intensityAmbient
-    //+ ( cDiffuse * diffuse + cSpecular * specularComponent ) );
+	fragmentColour = //vec3(0.0f, 1.0f, 0.0f);
+    vec3(cAmbiemt * intensityAmbient
+    + ( cDiffuse * diffuse + cSpecular * specularComponent ) );
 
 	//fragmentColour = mKd;
 	//fragmentColour = vec4(Ka * Ia, 1.0f);
