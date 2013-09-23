@@ -3,24 +3,26 @@
 
 #include "RenderComponentInterface.h"
 #include "GameInterface.h"
-#include "Game.h"
+#include "GameScene.h"
 
 class WindowBaseClass
 {
 public:
 	WindowBaseClass();
 	virtual ~WindowBaseClass();
-	//virtual void Initialize(p_hInstance, p_hPrevInstance, p_pScmdline, 0) = 0;
+	virtual int Run() = 0;
 
 protected:
 	virtual void Render();
 	
 	/* Deltatime, Mouseposition.X, Mouseposition.Y */
-	void Update(double p_deltaTime, float p_mousePositionX, float p_mousePositionY);	// Add support for use of keyboard
+	void Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY);	// Add support for use of keyboard
 
 protected:
 	GameInterface* m_gameInterface;
 	RenderComponentInterface* m_renderComponentInterface;
+private:
+
 };
 
 #endif

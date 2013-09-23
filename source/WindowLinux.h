@@ -9,6 +9,7 @@ class WindowLinux : public WindowBaseClass
 public:
 	WindowLinux();
 	virtual ~WindowLinux();
+	int Run();
 
 	void Update();
 	void Render();
