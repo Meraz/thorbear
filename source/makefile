@@ -31,7 +31,7 @@ MKDIR= mkdir -p
 INTERMEDIATE_DIR_MK=../obj
 DESTINATION_DIR_MK=../bin
 
-EXCLUDES= %Windows.cpp %Win.cpp
+EXCLUDES= %Windows.cpp %Win.cpp Buffer.cpp
 SOURCEPATHS= $(filter-out $(EXCLUDES), $(wildcard *.cpp) $(wildcard */*.cpp))
 SOURCES= $(notdir $(SOURCEPATHS))
 HEADERS= $(wildcard *.h) $(wildcard */*.h)
