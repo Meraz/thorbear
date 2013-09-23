@@ -20,6 +20,7 @@ public:
 	void Render();
   
   static void GLFWCALL ResizeCallback( int p_width, int p_height );
+  void UpdateViewportSize( int p_width, int p_height );
   
   // Return the error message
   std::string GetErrorMessage( );

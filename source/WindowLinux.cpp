@@ -131,7 +131,11 @@ void WindowLinux::Render()
 
 void GLFWCALL WindowLinux::ResizeCallback( int p_width, int p_height )
 {
-  WindowLinux::m_windowLinux->((RenderComponentLinux*)m_renderComponentInterface)->UpdateViewportSize( p_width, p_height );
+  WindowLinux::m_windowLinux->UpdateViewportSize( p_width, p_height );
+}
+void WindowLinux::UpdateViewportSize( int p_width, int p_height )
+{
+  ((RenderComponentLinux*)m_renderComponentInterface)->UpdateViewportSize( p_width, p_height );
 }
 
 std::string WindowLinux::GetErrorMessage( )
