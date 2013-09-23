@@ -1,6 +1,7 @@
 #include "Level.h"
 
 #include <string>
+#include <stringstream>
 using namespace std;
 
 Level::Level(void)
