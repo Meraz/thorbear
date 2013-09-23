@@ -25,7 +25,7 @@ int** LevelImporter::LoadLevel( string p_levelName )
 
 	if(l_error) cout << "decode error " << l_error << ": " << lodepng_error_text(l_error) << endl;
 	//Creating a double array
-	int** l_map = new int*[l_height]; //Send or return this somewhere?
+	int** l_map = new int[][l_height]; //Send or return this somewhere?
 	for(int i = 0; i < l_height; i++)
 	{
 		l_map[i] = new int[l_width];

@@ -4,7 +4,7 @@
 #include "ModelInstance.h"
 #include "RenderComponentInterface.h"
 
-#define MODEL_DIR "../resources/models/"
+#define MODEL_DIR "resources/models/"
 
 class ModelMan
 {

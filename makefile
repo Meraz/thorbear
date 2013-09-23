@@ -23,18 +23,18 @@ CXXFLAGS= -g -iquote./
 ARFLAGS= cru
 LDFLAGS= -lX11 -lpthread -lglfw -lGLEW -lGLU -lGL
 RESULT=spaceout
-INTERMEDIATE_DIR=../obj
-DESTINATION_DIR=../bin
+INTERMEDIATE_DIR=./obj
+DESTINATION_DIR=.
 
 RM= rm -f
 MKDIR= mkdir -p
-INTERMEDIATE_DIR_MK=../obj
-DESTINATION_DIR_MK=../bin
+INTERMEDIATE_DIR_MK=./obj
+DESTINATION_DIR_MK=.
 
-EXCLUDES= %Windows.cpp %Win.cpp D3DX_Graphics/%.cpp
-SOURCEPATHS= $(filter-out $(EXCLUDES), $(wildcard *.cpp) $(wildcard */*.cpp))
+EXCLUDES= %Windows.cpp %Win.cpp source/D3DX_Graphics/%.cpp
+SOURCEPATHS= $(filter-out $(EXCLUDES), $(wildcard source/*.cpp) $(wildcard source/*/*.cpp))
 SOURCES= $(notdir $(SOURCEPATHS))
-HEADERS= $(wildcard *.h) $(wildcard */*.h)
+HEADERS= $(wildcard source/*.h) $(wildcard source/*/*.h)
 
 VPATH= $(INTERMEDIATE_DIR)
 
