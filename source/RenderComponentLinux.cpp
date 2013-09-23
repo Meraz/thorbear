@@ -124,6 +124,16 @@ bool RenderComponentLinux::Init()
   glm::vec3 l_fwd = glm::vec3(0.f, 0.f, -1.f) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
   printf( "Debug info: Forward is towards %f, %f, %f\n", l_fwd[0], l_fwd[1], l_fwd[2] );
   
+  int errCount = 0;
+  for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
+  {
+    //Do something with `currError`.
+    printf( "OpenGL error #%d.\n", currError );
+    ++errCount;
+  }
+  if( errCount > 0 )
+    printf( "RenderComponentLinux::Init: Total of %d OpenGL errors.\n", errCount );
+  
   m_modelManager.LoadModels();
   
   return true;
@@ -176,8 +186,8 @@ void RenderComponentLinux::Render()
       printf( "OpenGL error #%d.\n", currError );
       ++errCount;
     }
-   
-    printf( "Total of %d OpenGL errors.\n", errCount );
+    if( errCount > 0 )
+      printf( "RenderComponentLinux::Render: Total of %d OpenGL errors.\n", errCount );
     g_renderfirsttime = false;
   }
 }
