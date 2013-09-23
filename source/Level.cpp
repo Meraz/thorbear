@@ -28,7 +28,10 @@ void Level::Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentIn
 	//m_nrOfEnemies = 5; //Test only
 	m_mapEdges.Width = p_lvlWidth; 
 	m_mapEdges.Height = p_lvlHeight; 
-	string tmpString = "level"+to_string(p_lvlNr);
+  
+  std::stringstream l_ss;
+  ss << p_lvlNr;
+  std::string tmpString( "level" + l_ss.str() );
 
 	LevelImporter* l_lvlImporter = new LevelImporter();
 	m_map = l_lvlImporter->LoadLevel(tmpString);
