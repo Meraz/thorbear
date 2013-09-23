@@ -25,7 +25,7 @@ void WindowLinux::Update()
 	int l_mousePositionX = 0;
 	int l_mousePositionY = 0;
 
-	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY);
+	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY, false);
 }
 
 void WindowLinux::Render()
