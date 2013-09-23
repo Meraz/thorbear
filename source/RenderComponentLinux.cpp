@@ -113,7 +113,7 @@ bool RenderComponentLinux::Init()
   
   // Create and attach a camera
   static Camera l_cam;
-  l_cam.SetPosition( glm::vec3( 0.f, 0.f, 10.f ) );
+  l_cam.SetPosition( glm::vec3( 0.f, 0.f, 100.f ) );
   l_cam.SetYawPitch( 0, 0 );
   l_cam.UpdateViewMatrix( );
   l_cam.SetClip( 5.f, 1000.f );
@@ -138,14 +138,8 @@ void RenderComponentLinux::SetHints()
 	//glfwOpenWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE ); // force current version of spec
 }
 
-bool firsttime1 = true;
 void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)
 {
-  if( firsttime1 )
-  {
-    printf( "Added object into render queue" );
-    firsttime1 = false;
-  }
   // Create an object based on p_objectType (p_textureType)
   ModelInstance* l_modelInstance = m_modelManager.CreateInstance( p_boundingBox, p_textureType );
   // Add the object to the list of objects to render
