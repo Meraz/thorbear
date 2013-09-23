@@ -21,18 +21,20 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 {
 	m_renderComponentInterface = p_renderComponentInterface;
 	m_level = new Level();
-	m_level->Init(m_currentLevel, 600, 800, m_renderComponentInterface); // TODO : Don't hard code this
+	m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : Don't hard code this
 	m_lastKnownNrOfEnemies = m_level->GetNrOfEnemies();
 	//create and init user interface
 }
 
 void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY /* add keyboard parameters here*/)
 {
-	m_level->Update(p_mousePositionX,false); // TODO : NO hardcoded booleans
+	// TODO : delta time.
+
+	m_level->Update(p_mousePositionX, true, (float)p_deltaTime); // TODO : NO hardcoded booleans
 
 	CheckPaddleDeath();
 	CheckEnemyNr();
-	cout << "Level: " << m_currentLevel << ", lives: " << m_nrOfLives << ", score: " << m_score << endl;
+	//cout << "Level: " << m_currentLevel << ", lives: " << m_nrOfLives << ", score: " << m_score << endl;
 }
 
 void GameScene::Render()

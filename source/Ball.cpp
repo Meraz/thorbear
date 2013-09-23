@@ -20,7 +20,7 @@ Ball::~Ball(void)
 {
 }
 
-void Ball::Init(int p_posX, int p_posY, int p_width, int p_height, int p_speed, BoundingBox p_mapEdges, RenderComponentInterface* p_renderComp)
+void Ball::Init(float p_posX, float p_posY, int p_width, int p_height, float p_speed, BoundingBox p_mapEdges, RenderComponentInterface* p_renderComp)
 {
 	m_posX = p_posX;
 	m_posY = p_posY;
@@ -36,12 +36,12 @@ void Ball::ShootBall()
 	m_isBallDead = false;
 }
 
-void Ball::Update()
+void Ball::Update(float p_deltaTime)
 {
 	if (!m_isBallDead)
 	{
-		m_posX += m_direction.X * m_speed;
-		m_posY += m_direction.Y * m_speed;
+		m_posX += m_direction.X * m_speed * p_deltaTime;
+		m_posY += m_direction.Y * m_speed * p_deltaTime;
 	
 		CheckCollisionAgainstWalls();
 		m_hasBallBouncedAgainstEnemy = false;
@@ -50,7 +50,7 @@ void Ball::Update()
 
 void Ball::Render()
 {
-	m_renderComp->RenderObject(BoundingBox(m_posX, m_posY), BALL);
+	m_renderComp->RenderObject(BoundingBox((int)m_posX, (int)m_posY), BALL);
 }
 
 bool Ball::IsBallDead()
@@ -58,17 +58,17 @@ bool Ball::IsBallDead()
 	return m_isBallDead;
 }
 
-void Ball::SetPosX( int p_PosX)
+void Ball::SetPosX( float p_PosX)
 {
 	m_posX = p_PosX;
 }
 
-void Ball::SetPosY( int p_posY )
+void Ball::SetPosY( float p_posY )
 {
 	m_posY = p_posY;
 }
 
-void Ball::SetSpeed( int p_speed )
+void Ball::SetSpeed( float p_speed )
 {
 	m_speed = p_speed;
 }
@@ -79,24 +79,24 @@ void Ball::SetDirection( float p_direction )
 	m_direction.Y = sin(p_direction);
 }
 
-int Ball::GetPosX()
+float Ball::GetPosX()
 {
 	return m_posX;
 }
 
-int Ball::GetPosY()
+float Ball::GetPosY()
 {
 	return m_posY;
 }
 
-int Ball::GetSpeed()
+float Ball::GetSpeed()
 {
 	return m_speed;
 }
 
 float Ball::GetDirectionAngle()
 {
-	return acos(m_direction.X);
+	return atan2(m_posX, m_posY);
 }
 
 BoundingBox Ball::GetBoundingBox()
@@ -104,23 +104,23 @@ BoundingBox Ball::GetBoundingBox()
 	BoundingBox l_bBox;
 	l_bBox.Width = m_width;
 	l_bBox.Height = m_height;
-	l_bBox.PosX = m_posX;
-	l_bBox.PosY = m_posY;
+	l_bBox.PosX = (int)m_posX;
+	l_bBox.PosY = (int)m_posY;
 
 	return l_bBox;
 }
 
-void Ball::CheckCollisionAgainstWalls()
+void Ball::CheckCollisionAgainstWalls() 
 {
-	if(m_posX < m_mapEdges.PosX)
-		m_direction.Y *= -1;
-	else if (m_posX + m_width > m_mapEdges.PosX + m_mapEdges.Width)
-		m_direction.Y *= -1;
-
-	if(m_posY < m_mapEdges.PosY)
+	if(m_posX < 0 && m_direction.X < 0)
 		m_direction.X *= -1;
-	else if(m_posY + m_height > m_mapEdges.PosY + m_mapEdges.Height)
+	else if (m_posX + m_width > m_mapEdges.Width && m_direction.X > 0)
+		m_direction.X *= -1;
+	
+	if(m_posY < 0)
 		m_isBallDead = true;
+	else if(m_posY + m_height > m_mapEdges.Height && m_direction.Y > 0)
+		m_direction.Y *= -1;
 }
 
 void Ball::BallBounceAgainstEnemy( BoundingBox p_enemyBBox )
@@ -136,8 +136,6 @@ void Ball::BallBounceAgainstEnemy( BoundingBox p_enemyBBox )
 			m_direction.X *= -1;
 		m_hasBallBouncedAgainstEnemy = true;
 	}
-
-
 }
 
 void Ball::BallBounceAgainstPaddle( BoundingBox p_paddleBBox )
@@ -146,56 +144,56 @@ void Ball::BallBounceAgainstPaddle( BoundingBox p_paddleBBox )
 
 	if(l_bounceSide == LEFT || l_bounceSide == RIGHT)
 		m_direction.X *= -1;
-	else if(l_bounceSide == TOP)
+	else if(l_bounceSide == TOP && m_direction.Y < 0)
 	{
-		int l_diff = m_posX+m_width/2 - p_paddleBBox.PosX+p_paddleBBox.Width/2; //length between middle of ball and middle of paddle
+		float l_diff = (m_posX+(m_width/2)) - (p_paddleBBox.PosX+(p_paddleBBox.Width/2)); //length between middle of ball and middle of paddle
 		float l_angle; //angle to add to the balls direction
 	
 		if(l_diff == 0) //if ball is in the middle of paddle
-			l_angle = 0; //just reflect the ball
+			l_angle = (float)M_PI_2; //just reflect the ball
 		else //set adding angle to a value between 45 and 135 (degrees)
-			l_angle = cos(((m_width/2 + p_paddleBBox.Width/2) / l_diff) * 0.7);
+			l_angle = (float)cos((((m_width/2) + (p_paddleBBox.Width/2)) / l_diff) * 0.7);
 	
-		float l_newAngle = l_angle + acos(m_direction.X); //add angle to previous
+		float l_newAngle = l_angle + atan2(m_posX, m_posY); //add angle to previous
 	
 		//clamp the new angle between min and max values (10 and 170 degrees)
 		if(l_newAngle*180*M_1_PI < m_minBallAngle)
-			l_newAngle = m_minBallAngle*M_PI/180;
-		else if(l_newAngle*180/M_1_PI > m_maxBallAngle)
-			l_newAngle = m_maxBallAngle*M_PI/180;
+			l_newAngle = (float)(m_minBallAngle*M_PI/180);
+		else if(l_newAngle*180*M_1_PI > m_maxBallAngle)
+			l_newAngle = (float)(m_maxBallAngle*M_PI/180);
 		
 		m_direction.X = cos(l_newAngle);
-		m_direction.Y = sin(l_newAngle)*-1;
+		m_direction.Y = sin(l_newAngle);
 	}
 }
 
 int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
 {
-	int l_insideX = 0;
-	int l_insideY = 0;
+	float l_insideX = 0;
+	float l_insideY = 0;
 
 	//Calculate how much of the ball is inside the object on either side
-	if(m_posX+m_width/2 < p_objectBBox.PosX) //if the middle of the ball is to the left of the object
+	if(m_posX+(m_width/2) < p_objectBBox.PosX) //if the middle of the ball is to the left of the object
 		l_insideX = m_posX + m_width - p_objectBBox.PosX;
-	else if(m_posX+m_width/2 > p_objectBBox.PosX+p_objectBBox.Width) //if the middle of the ball is to the right of the object
+	else if(m_posX+(m_width/2) > p_objectBBox.PosX+p_objectBBox.Width) //if the middle of the ball is to the right of the object
 		l_insideX = p_objectBBox.PosX + p_objectBBox.Width - m_posX;
 	else //the middle of the ball is inside the objects width
-		l_insideX = p_objectBBox.Width/2 - abs(p_objectBBox.PosX+p_objectBBox.Width/2 - m_posX+m_width/2);
+		l_insideX = (p_objectBBox.Width/2) - abs(p_objectBBox.PosX+(p_objectBBox.Width/2) - (m_posX+m_width/2));
 
 	//Same as above but with height
-	if(m_posY+m_height/2 < p_objectBBox.PosY)
+	if(m_posY+(m_height/2) < p_objectBBox.PosY)
 		l_insideY = m_posY + m_height - p_objectBBox.PosY;
-	else if(m_posY+m_height/2 > p_objectBBox.PosY+p_objectBBox.Height)
+	else if(m_posY+(m_height/2) > p_objectBBox.PosY+p_objectBBox.Height)
 		l_insideY = p_objectBBox.PosY + p_objectBBox.Height - m_posY;
 	else
-		l_insideY = p_objectBBox.Height/2 - abs(p_objectBBox.PosY+p_objectBBox.Height/2 - m_posY+m_height/2);
+		l_insideY = (p_objectBBox.Height/2) - abs(p_objectBBox.PosY+(p_objectBBox.Height/2) - (m_posY+m_height/2));
 
 	//Compare the results
 	if(l_insideX > l_insideY) //if more inside x-wise
 	{
 		if(m_direction.Y < 0)//coming from above
 		{
-			if(m_posY+m_height/2 > p_objectBBox.PosY+p_objectBBox.Height) //if below, can't bounce off top side
+			if(m_posY+(m_height/2) < p_objectBBox.PosY+p_objectBBox.Height) //if below, can't bounce off top side
 			{
 				if(m_direction.X < 0) //choose left or right side instead
 					return RIGHT;
@@ -207,7 +205,7 @@ int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
 		}
 		else //coming from below
 		{
-			if(m_posY+m_height/2 < p_objectBBox.PosY+p_objectBBox.Height) //if above, can't bounce off bottom side
+			if(m_posY+(m_height/2) > p_objectBBox.PosY+p_objectBBox.Height) //if above, can't bounce off bottom side
 			{
 				if(m_direction.X < 0) //choose left or right side instead
 					return RIGHT;
@@ -222,7 +220,7 @@ int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
 	{
 		if(m_direction.X > 0) //coming from left
 		{
-			if (m_posX+m_width/2 > p_objectBBox.PosX+p_objectBBox.Width) //if right of object, can't bounce off left side
+			if (m_posX+(m_width/2) > p_objectBBox.PosX+p_objectBBox.Width) //if right of object, can't bounce off left side
 			{
 				if(m_direction.Y < 0) //choose top or bottom side instead
 					return TOP;
@@ -234,7 +232,7 @@ int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
 		}
 		else
 		{
-			if (m_posX+m_width/2 < p_objectBBox.PosX+p_objectBBox.Width) //if left of object, can't bounce off right side
+			if (m_posX+(m_width/2) < p_objectBBox.PosX+p_objectBBox.Width) //if left of object, can't bounce off right side
 			{
 				if(m_direction.Y < 0) //choose top or bottom side instead
 					return TOP;

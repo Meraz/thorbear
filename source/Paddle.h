@@ -1,7 +1,7 @@
 #ifndef PADDLE_H
 #define PADDLE_H
 
-#include <Windows.h>
+
 using namespace std;
 #include "RenderComponentInterface.h"
 
@@ -21,7 +21,6 @@ public:
 	BoundingBox	GetBoundingBox();
 	void		SetWidth(int p_width);
 	void		SetHeight(int p_height);
-	void		SetGraphicalInterface(RenderComponentInterface* p_renderComp);
 
 private:
 	int		m_posX; 
@@ -29,6 +28,7 @@ private:
 	int		m_width;
 	int		m_height;
 	int		m_screenWidth;
+	int		m_prevMousePosX;
 	RenderComponentInterface*	m_renderComp;
 };
 

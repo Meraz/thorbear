@@ -3,11 +3,12 @@
 
 Paddle::Paddle(int p_posX, int p_posY, int p_width, int p_height, int p_screenWidth)
 {
-	m_posX = p_posX - p_width/2;
+	m_posX = p_width - p_posX - (p_width/2);
 	m_posY = p_posY;
 	m_width = p_width;
 	m_height = p_height;
 	m_screenWidth = p_screenWidth;
+	m_prevMousePosX = p_posX;
 }
 
 Paddle::~Paddle()
@@ -21,12 +22,14 @@ void Paddle::Initialize(RenderComponentInterface* p_renderComp)
 
 void Paddle::Update(int p_mousePosX)
 {
-	m_posX = p_mousePosX; // TODO : Change to change in mouse pos instead of actual mouse pos
+	m_posX += p_mousePosX - m_prevMousePosX; 
 
 	if(m_posX > m_screenWidth - m_width)
 		m_posX = m_screenWidth - m_width;
 	else if (m_posX < 0)
 		m_posX = 0;
+
+	m_prevMousePosX = p_mousePosX;
 }
 
 void Paddle::Render()

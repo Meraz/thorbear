@@ -7,7 +7,7 @@ Level::Level(void)
 	m_mapEdges.PosY = 0;
 	m_PaddleHasDied = false;
 	m_map = NULL;
-	m_nrOfEnemies = 0;
+	m_nrOfEnemies = 1;
 }
 
 
@@ -26,28 +26,28 @@ void Level::Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentIn
 	m_mapEdges.Height = p_lvlHeight; 
 	string tmpString = "level"+to_string(p_lvlNr);
 	m_map = LevelImporter::LoadLevel(tmpString);
-	m_paddle = new Paddle(0, 50, 20, 5, p_lvlWidth); //example values
+	m_paddle = new Paddle(0, 50, 100, 5, p_lvlWidth); //example values
 	m_paddle->Initialize(m_renderComp);
 	m_ball = new Ball();
 	int l_ballHeight = 20; //TEST ONLY
 	int l_ballWidth = 20; //TEST ONLY
 
-	m_ball->Init(CalculateBallOnPaddlePosX(), m_paddle->GetPosY()-m_paddle->GetBoundingBox().Height-l_ballHeight, l_ballWidth, l_ballHeight, 10, m_mapEdges, m_renderComp); //SPEED?!
+	m_ball->Init(CalculateBallOnPaddlePosX(), (float)m_paddle->GetPosY()-m_paddle->GetBoundingBox().Height-l_ballHeight, l_ballWidth, l_ballHeight, 200.0f, m_mapEdges, m_renderComp); //SPEED?!
 	// TODO Create enemies from data in m_map
 
 }
 
-void Level::Update( int p_mousePosX, bool p_isMouseClicked )
+void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
 	if(m_ball->IsBallDead())
 	{
 		m_ball->SetPosX(CalculateBallOnPaddlePosX());
-		m_ball->SetPosY(m_paddle->GetPosY() - m_paddle->GetBoundingBox().Height - m_ball->GetBoundingBox().Height);
+		m_ball->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height));
 		if(p_isMouseClicked)
 			ShootBallFromPaddle();
 	}
-//	m_paddle->Update(p_mousePosX);
-	m_ball->Update();
+	m_paddle->Update(p_mousePosX);
+	m_ball->Update(p_deltaTime);
 	CheckAllCollisions();
 	//TODO Update enemy position, make ball stick to paddle and shoot with mouse button
 }
@@ -115,25 +115,25 @@ int Level::GetNrOfEnemies()
 	return m_nrOfEnemies;
 }
 
-int Level::CalculateBallOnPaddlePosX()
+float Level::CalculateBallOnPaddlePosX()
 {
 	//return m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width; // TODO byt ut mot bättre algoritm!!!
 	//Bättre algoritm?
-	return m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width/2 + ((m_paddle->GetBoundingBox().Width/2 / (m_mapEdges.Width/2))*(m_mapEdges.Width/2 - (m_paddle->GetPosX() + m_paddle->GetBoundingBox().Width/2))) - m_ball->GetBoundingBox().Width/2;
+	return m_paddle->GetPosX()+(m_paddle->GetBoundingBox().Width/2) + (((m_paddle->GetBoundingBox().Width/2) / (m_mapEdges.Width/2))*((m_mapEdges.Width/2.0f) - (m_paddle->GetPosX() + (m_paddle->GetBoundingBox().Width/2)))) - (m_ball->GetBoundingBox().Width/2);
 }
 
 void Level::ShootBallFromPaddle()
 {
 	
-	int l_diff = m_ball->GetPosX()+m_ball->GetBoundingBox().Width/2 - m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width/2; //length between middle of ball and middle of paddle
+	float l_diff = m_ball->GetPosX()+(m_ball->GetBoundingBox().Width/2) - m_paddle->GetPosX()+(m_paddle->GetBoundingBox().Width/2); //length between middle of ball and middle of paddle
 
 	if(l_diff == 0) //if ball is in the middle of paddle
 	{
-		m_ball->SetDirection(cos(0));
+		m_ball->SetDirection((float)cos(0));
 	}
 	else //set angle to a value between 45 and 135 (degrees)
 	{
-		m_ball->SetDirection(cos(((m_ball->GetBoundingBox().Width/2 + m_paddle->GetBoundingBox().Width/2) / l_diff) * 0.7));
+		m_ball->SetDirection((float)cos((((m_ball->GetBoundingBox().Width/2) + (m_paddle->GetBoundingBox().Width/2)) / l_diff) * 0.7));
 	}
 	m_ball->ShootBall();
 }
@@ -144,8 +144,3 @@ void Level::ShootBallFromPaddle()
 	m_paddle->SetGraphicalInterface(p_renderComp);
 	//Set the interface for enemy,ball
 }*/
-
-/* BALL BOUNCE
-Enum left, right, top, down, i bollen och block
-jämför mittpunkt på bollen och paddlen
-*/
