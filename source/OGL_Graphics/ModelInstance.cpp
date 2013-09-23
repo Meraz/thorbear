@@ -19,10 +19,10 @@ void ModelInstance::Render( Shader& p_shader )
   {
     printf( "Drawing the model instance. Model matrix:\n");
     printf( "%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n%f\t%f\t%f\t%f\n",
-        (float)m_modelMatrix[0], (float)m_modelMatrix[1], (float)m_modelMatrix[2], (float)m_modelMatrix[3],
-        (float)m_modelMatrix[4], (float)m_modelMatrix[5], (float)m_modelMatrix[6], (float)m_modelMatrix[7],
-        (float)m_modelMatrix[8], (float)m_modelMatrix[9], (float)m_modelMatrix[10], (float)m_modelMatrix[11],
-        (float)m_modelMatrix[12], (float)m_modelMatrix[13], (float)m_modelMatrix[14], (float)m_modelMatrix[15]
+        (float)m_modelMatrix[0][0], (float)m_modelMatrix[0][1], (float)m_modelMatrix[0][2], (float)m_modelMatrix[0][3],
+        (float)m_modelMatrix[1][0], (float)m_modelMatrix[1][1], (float)m_modelMatrix[1][2], (float)m_modelMatrix[1][3],
+        (float)m_modelMatrix[2][0], (float)m_modelMatrix[2][1], (float)m_modelMatrix[2][2], (float)m_modelMatrix[2][3],
+        (float)m_modelMatrix[3][0], (float)m_modelMatrix[3][1], (float)m_modelMatrix[3][2], (float)m_modelMatrix[3][3]
       );
     firsttime = false;
   }
