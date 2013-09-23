@@ -1,5 +1,6 @@
 #include "Ball.h"
 
+#include <cstdlib>
 
 Ball::Ball(void)
 {
