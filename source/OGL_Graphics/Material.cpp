@@ -17,9 +17,18 @@ Material::~Material( )
 
 void Material::Apply( Shader& p_shader )
 {
+  glActiveTexture( GL_TEXOFFSET_AMBIENT );
+  glBindTexture( GL_TEXTURE_2D, m_mapAmbient );
   p_shader.SetUniformInt( "mapAmbient", GL_TEXOFFSET_AMBIENT );
+  
+  glActiveTexture( GL_TEXOFFSET_DIFFUSE );
+  glBindTexture( GL_TEXTURE_2D, m_mapDiffuse );
   p_shader.SetUniformInt( "mapDiffuse", GL_TEXOFFSET_DIFFUSE );
+  
+  glActiveTexture( GL_TEXOFFSET_SPECULAR );
+  glBindTexture( GL_TEXTURE_2D, m_mapSpecular );
   p_shader.SetUniformInt( "mapSpecular", GL_TEXOFFSET_SPECULAR );
+  
   // These shoudl equal 0 if there is a texture bound
   p_shader.SetUniformVector( "coefficientAmbient", m_coefficientAmbient ); // material's ambient coefficient
   p_shader.SetUniformVector( "coefficientDiffuse", m_coefficientDiffuse ); // material's diffuse coefficient
