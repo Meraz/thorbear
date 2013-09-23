@@ -1,7 +1,6 @@
 #ifndef PADDLE_H
 #define PADDLE_H
 
-#include <Windows.h>
 using namespace std;
 #include "RenderComponentInterface.h"
 
