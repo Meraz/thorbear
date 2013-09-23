@@ -136,6 +136,16 @@ bool RenderComponentLinux::Init()
   
   m_modelManager.LoadModels();
   
+  errCount = 0;
+  for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
+  {
+    //Do something with `currError`.
+    printf( "OpenGL error #%d.\n", currError );
+    ++errCount;
+  }
+  if( errCount > 0 )
+    printf( "RenderComponentLinux::m_modelManager.LoadModels: Total of %d OpenGL errors.\n", errCount );
+  
   return true;
 }
 
