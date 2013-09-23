@@ -138,8 +138,14 @@ void RenderComponentLinux::SetHints()
 	//glfwOpenWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE ); // force current version of spec
 }
 
+bool firsttime = true;
 void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)
 {
+  if( firsttime )
+  {
+    printf( "Added object into render queue" );
+    firsttime = false;
+  }
   // Create an object based on p_objectType (p_textureType)
   ModelInstance* l_modelInstance = m_modelManager.CreateInstance( p_boundingBox, p_textureType );
   // Add the object to the list of objects to render

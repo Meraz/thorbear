@@ -90,6 +90,8 @@ void WindowLinux::Run()
   {
     this->Update();
     
+    this->Render();
+    
     glfwPollEvents();
   }
 }
