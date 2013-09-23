@@ -5,7 +5,7 @@
 
 #include "RenderComponentWin.h"
 #include "WindowBaseClass.h"
-#include "GameTimer.h"
+#include "D3DX_Graphics\GameTimer.h"
 
 class WindowWindows : public WindowBaseClass
 {
