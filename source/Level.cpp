@@ -31,7 +31,7 @@ void Level::Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentIn
 	m_mapEdges.Height = p_lvlHeight; 
   
   std::stringstream l_ss;
-  ss << p_lvlNr;
+  l_ss << p_lvlNr;
   std::string tmpString( "level" + l_ss.str() );
 
 	LevelImporter* l_lvlImporter = new LevelImporter();
