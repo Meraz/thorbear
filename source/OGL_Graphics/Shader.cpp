@@ -205,7 +205,7 @@ void Shader::UpdateUniform( glm::mat4 p_modelMatrix )
   SetUniformMatrix( "viewMatrix", m_activeCamera->GetViewMatrix( ) );
   SetUniformMatrix( "modelViewMatrix", m_activeCamera->GetViewMatrix( ) * p_modelMatrix );
   SetUniformMatrix( "normalMatrix", glm::inverseTranspose( glm::mat3( m_activeCamera->GetViewMatrix( ) * p_modelMatrix ) ) );
-  SetUniformVector( "lightPosition", glm::vec4( 0.f, 0.f, 0.f, 1.f ) );
+  SetUniformVector( "lightPosition", glm::vec4( m_activeCamera->GetPosition( ), 1.f ) );
 }
 
 void Shader::SetActiveCamera( Camera& p_cam )

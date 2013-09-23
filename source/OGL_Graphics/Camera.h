@@ -26,6 +26,7 @@ public:
 	Camera( );
 
 	void SetPosition( const glm::vec3 p_pos);
+	glm::vec3 GetPosition( );
 	void SetYawPitch( const float p_y, const float p_p );
 	void SetRoll( const float p_r );
 

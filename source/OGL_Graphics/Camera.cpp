@@ -12,6 +12,11 @@ void Camera::SetPosition( const glm::vec3 p_pos)
   m_position = p_pos;
 }
 
+glm::vec3 Camera::GetPosition( )
+{
+  return m_position;
+}
+
 void Camera::SetYawPitch( const float p_y, const float p_p )
 {
   m_yaw = p_y;
