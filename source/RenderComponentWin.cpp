@@ -36,7 +36,7 @@ int RenderComponentWin::Initialize()
 	m_shaderManager->Init(m_d3dDevice, m_d3dImmediateContext);
 	m_camera = new Camera();
 	m_camera->SetLens(MathHelper::PI * 0.25f, (float)m_clientWidth/m_clientHeight, 0.5f, 1000.0f);
-	m_camera->SetPos(0, 0, -110);
+	m_camera->SetPos(0, 0, -600);
 
 	Load();
 	CreateTemplates();

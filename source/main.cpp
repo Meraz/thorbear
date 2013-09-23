@@ -1,6 +1,6 @@
 #ifdef _WIN32 
 #include "WindowWindows.h"
-//#include <vld.h>
+#include <vld.h>
 
 int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrevInstance, PSTR p_pScmdline, int p_Cmdshow)
 {

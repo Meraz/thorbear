@@ -53,7 +53,7 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked )
 		if(p_isMouseClicked)
 			ShootBallFromPaddle();
 	}
-//	m_paddle->Update(p_mousePosX);
+	m_paddle->Update(p_mousePosX);
 	m_ball->Update();
 	CheckAllCollisions();
 	//TODO Update enemy position, make ball stick to paddle and shoot with mouse button

@@ -30,6 +30,7 @@ private:
 	bool		m_appPaused;
 	int m_mousePositionX; 
 	int m_mousePositionY;
+	bool m_lMouseClicked;
 	
 	RenderComponentWin* m_renderComponent;
 };
