@@ -34,3 +34,4 @@ void Enemy::SetRenderComponentInterface(RenderComponentInterface* p_RenderComp)
 {
 	m_RenderComp = p_RenderComp;
 }
+

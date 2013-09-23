@@ -37,7 +37,7 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentI
 
 	m_renderComp = p_renderComp;
 
-	for(int i = 0; i < m_enemy.size(); i++)
+	for(unsigned int i = 0; i < m_enemy.size(); i++)
 	{
 		m_enemy.at(i)->SetRenderComponentInterface(p_renderComp);
 	}
@@ -71,10 +71,19 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked )
 {
 	m_paddle->Update(p_mousePosX);
 	CheckAllCollisions();
+	
+	MoveEnemies();
+
+	
+	//TODO make ball stick to paddle and shoot with mouse button
+}
+
+void Level::MoveEnemies()
+{
 	switch(m_currentEnemyDirection)
 	{
 	case HORIZONTAL:
-		for(int i = 0; i < m_enemy.size(); i++)
+		for(unsigned int i = 0; i < m_enemy.size(); i++)
 		{
 			m_enemy.at(i)->Update(m_enemyVelocityX, 0);
 			if(m_enemy.at(i)->GetBoundingBox().PosX <= m_mapEdges.PosX || 
@@ -83,7 +92,7 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked )
 				m_enemyVelocityX *= -1;
 				m_currentEnemyDirection = VERTICAL;
 				m_targetY = m_enemy.at(0)->GetBoundingBox().PosY + m_enemy.at(0)->GetBoundingBox().Height;
-				m_currentEnemyY = m_enemy.at(0)->GetBoundingBox().PosY;
+				m_currentEnemyY = FindLowestEnemyRow(); //Use the lowest row so that we can use the same variable for laser firing checks
 			}
 		}
 		break;
@@ -91,28 +100,60 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked )
 		m_currentEnemyY += m_enemyVelocityY;
 		if(m_currentEnemyY > m_targetY)
 		{
+			m_currentEnemyY = m_targetY; //Helps for checking which enemies will fire lasers
 			m_currentEnemyDirection = HORIZONTAL;
 			if(m_targetY >= m_paddle->GetBoundingBox().PosY)
 			{
 				//Game Over
 			}
 		}
-		for(int i = 0; i < m_enemy.size(); i++)
+		for(unsigned int i = 0; i < m_enemy.size(); i++)
 		{
 			m_enemy.at(i)->Update(0, m_enemyVelocityY);
-			
+
 		}
+		for(unsigned int i = 0; i < m_laser.size(); i++)
+			m_laser.at(i)->Update();
 		break;
 	}
-	
-	//TODO make ball stick to paddle and shoot with mouse button
+}
+
+int Level::FindLowestEnemyRow()
+{
+	int l_lowestRow = 0;
+	for(unsigned int i = 0; i < m_enemy.size(); i++)
+	{
+		if(m_enemy.at(i)->GetBoundingBox().PosY > l_lowestRow) //The higher the Y value, the lower the row 
+			l_lowestRow = m_enemy.at(i)->GetBoundingBox().PosY;
+	}
+
+	return l_lowestRow;
+}
+
+void Level::HandleLaserFiring()
+{
+	for(unsigned int i = 0; i < m_enemy.size(); i++)
+	{
+		if(m_enemy.at(i)->WantsToFire())
+			if(m_enemy.at(i)->GetBoundingBox().PosY == m_currentEnemyY) //Make sure that only the enemies in the lowest row gets to fire
+			{
+				Laser* temp = new Laser();
+				BoundingBox box(m_enemy.at(i)->GetBoundingBox().PosX, m_enemy.at(i)->GetBoundingBox().PosY);
+				box.Height = 5;
+				box.Width = 1;
+				temp->Init(m_renderComp, 1, box);
+			}
+	}
 }
 
 void Level::Render()
 {
 	m_paddle->Render();
-	for(int i = 0; i < m_enemy.size(); i++)
+	for(unsigned int i = 0; i < m_enemy.size(); i++)
 		m_enemy.at(i)->Render();
+
+	for(unsigned int i = 0; i < m_laser.size(); i++)
+		m_laser.at(i)->Render();
 	//TODO lasers, powerups and ball. 
 	//m_renderComp->RenderObject(m_bBox, OUTERBOUNDS) Render maps outer bounds/edges
 }

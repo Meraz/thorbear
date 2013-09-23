@@ -9,6 +9,7 @@ public:
 	~DefensiveEnemy(void);
 	void Update(int p_posX, int p_posY);
 	void Render();
+	bool WantsToFire();
 private:
 
 };

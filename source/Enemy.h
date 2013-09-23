@@ -16,8 +16,10 @@ public:
 	void TakeDamage();
 	int GetNumOfLives();
 	void WritePosition(); //For test purpose
+	virtual bool WantsToFire() = 0;
 protected:
 	int m_numOfLives;
+	int m_enemyType;
 	BoundingBox m_BoundingBox;
 	RenderComponentInterface* m_RenderComp;
 };
