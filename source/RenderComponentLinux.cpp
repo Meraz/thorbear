@@ -151,6 +151,7 @@ void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
   
 }
 
+bool g_renderfirsttime = true;
 void RenderComponentLinux::Render()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
@@ -165,6 +166,20 @@ void RenderComponentLinux::Render()
   
   // Clear the render object list for next frame
   m_objectList.clear();
+  
+  if( g_renderfirsttime )
+  {
+    int errCount = 0;
+    for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
+    {
+      //Do something with `currError`.
+      printf( "OpenGL error #%d.\n", currError );
+      ++errCount;
+    }
+   
+    printf( "Total of %d OpenGL errors.\n", errCount );
+    g_renderfirsttime = false;
+  }
 }
 
 std::string RenderComponentLinux::GetErrorMessage( )

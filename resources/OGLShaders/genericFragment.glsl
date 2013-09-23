@@ -31,7 +31,7 @@ void main()
 {
 	vec3 specularComponent;
 	
-  vec3 cAmbiemt = coefficientAmbient+ vec3(texture(mapAmbient, uv));
+  vec3 cAmbiemt = coefficientAmbient + vec3(texture(mapAmbient, uv));
   vec3 cDiffuse = coefficientDiffuse + vec3(texture(mapDiffuse, uv));
   vec3 cSpecular = coefficientSpecular + vec3(texture(mapSpecular, uv));
 

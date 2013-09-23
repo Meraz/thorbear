@@ -162,7 +162,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				if( tmpstr.compare( "map_Ka" ) == 0 )
 				{
 					mtlf >> tmpstr;
-					printf( "Ambient texture: %s\n", ( dir + tmpstr ).c_str( ) );
+					printf( "Ambient texture: " );
 
 					tga_data_t* l_mapAmbient = tga_data_load( ( dir + tmpstr ).c_str( ) );
           model.m_mtl->m_coefficientAmbient = glm::vec3(0);
@@ -179,7 +179,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				if( tmpstr.compare( "map_Kd" ) == 0 )
 				{
 					mtlf >> tmpstr;
-					printf( "Diffuse texture: %s\n", ( dir + tmpstr ).c_str( ) );
+					printf( "Diffuse texture: " );
 
 					tga_data_t* l_mapDiffuse = tga_data_load( ( dir + tmpstr ).c_str( ) );
           model.m_mtl->m_coefficientDiffuse = glm::vec3(0);
@@ -196,7 +196,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				if( tmpstr.compare( "map_Ks" ) == 0 )
 				{
 					mtlf >> tmpstr;
-					printf( "Specular texture: %s\n", ( dir + tmpstr ).c_str( ) );
+					printf( "Specular texture: " );
 
 					tga_data_t* l_mapSpecular = tga_data_load( ( dir + tmpstr ).c_str( ) );
           model.m_mtl->m_coefficientSpecular = glm::vec3(0);
