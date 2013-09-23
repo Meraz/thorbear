@@ -88,7 +88,7 @@ bool WindowLinux::Init( RenderComponentLinux *p_renderComponentLinux )
   return true;
 }
 
-void WindowLinux::Run()
+int WindowLinux::Run()
 {
   while( glfwGetWindowParam(GLFW_OPENED) ) //3.x.x: !glfwWindowShouldClose(window)
   {
@@ -110,7 +110,7 @@ void WindowLinux::Update()
   int l_mousePositionX, l_mousePositionY;
   glfwGetMousePos( &l_mousePositionX, &l_mousePositionY );
 
-	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY);
+	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY, false);
   
   glfwSleep( 1. / 60. - l_deltaTime - .01 ); // Limit UPS
 }

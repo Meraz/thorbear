@@ -13,9 +13,7 @@ public:
 	WindowLinux();
 	virtual ~WindowLinux();
   
-  bool Init( RenderComponentLinux *p_renderComponentLinux );
-
-  void Run(); // like a Kenyan
+  int Run(); // like a Kenyan
 	void Update();
 	void Render();
   
@@ -30,6 +28,8 @@ private:
   double m_oldTime;
   // Assume a single window to be created, required for ResizeCallback to be able to call necessary methods
   static WindowLinux* m_windowLinux;
+  
+  bool Init( RenderComponentLinux *p_renderComponentLinux );
   
   // Set the error message and return false to be returned further on for the error management
   bool SetError( std::string p_errorMessage );
