@@ -1,5 +1,7 @@
 #include "ModelInstance.h"
 
+#include <cstdio>
+
 ModelInstance::ModelInstance( Model* p_model, glm::mat4 p_modelMatrix )
 {
   m_model = p_model;
