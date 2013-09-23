@@ -101,11 +101,6 @@ bool RenderComponentLinux::Init()
 	
 	glfwSetWindowTitle( "SpaceOut: OpenGL4 Test" );//l_windowTitle.c_str( ) );
 	glfwSwapInterval( 1 ); // VSync on
-  
-  // Get window size and set the viewport to match
-  int l_windowWidth, l_windowHeight; // 800x600?
-  glfwGetWindowSize( &l_windowWidth, &l_windowHeight );
-  glViewport( 0, 0, l_windowWidth, l_windowHeight );
     
   m_genericShader.Init( "../resources/OGLShaders/genericVertex.glsl", "../resources/OGLShaders/genericFragment.glsl" );
   m_genericShader.Build( );
@@ -120,6 +115,11 @@ bool RenderComponentLinux::Init()
   l_cam.SetFoV( 45.f );
   //l_cam.UpdateProjectionMatrix( );
   m_genericShader.SetActiveCamera( l_cam );
+  
+  // Get window size and set the viewport to match
+  int l_windowWidth, l_windowHeight; // 800x600?
+  glfwGetWindowSize( &l_windowWidth, &l_windowHeight );
+  UpdateViewportSize( l_windowWidth, l_windowHeight );
   
   glm::vec3 l_fwd = glm::vec3(0.f, 0.f, -1.f) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
   printf( "Debug info: Forward is towards %f, %f, %f\n", l_fwd[0], l_fwd[1], l_fwd[2] );
@@ -168,7 +168,6 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
 
 void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
 {
-  
 }
 
 bool g_renderfirsttime = true;
@@ -200,6 +199,13 @@ void RenderComponentLinux::Render()
       printf( "RenderComponentLinux::Render: Total of %d OpenGL errors.\n", errCount );
     g_renderfirsttime = false;
   }
+}
+
+void RenderComponentLinux::UpdateViewportSize( int p_width, int p_height )
+{
+  glViewport( 0, 0, p_width, p_height );
+  m_genericShader.m_activeCamera->SetResolution( p_width, p_height );
+  m_genericShader.m_activeCamera->UpdateProjectionMatrix( );
 }
 
 std::string RenderComponentLinux::GetErrorMessage( )

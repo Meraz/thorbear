@@ -26,6 +26,8 @@ public:
 	void RenderParticleSystem(ParticleSystem p_particleSystem);
 	void Render();
   
+  void UpdateViewportSize( int p_width, int p_height );
+  
   // Return the error message
   std::string GetErrorMessage( );
   

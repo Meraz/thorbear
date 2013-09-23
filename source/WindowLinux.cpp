@@ -23,10 +23,12 @@ WindowLinux::WindowLinux()
   }
   
 	// TODO set-up callbacks. we can also do a keyboard and mouse input callback, and various others
-	//glfwSetWindowSizeCallback( ResizeCallback ); // register callback for reshape (if set earlier won't be called until an actual resize)
+	glfwSetWindowSizeCallback( ResizeCallback ); // register callback for reshape (if set earlier won't be called until an actual resize)
   
 	m_renderComponentInterface = l_renderComponentLinux;
 	m_gameInterface->Initialize( m_renderComponentInterface );
+  
+  m_windowLinux = this;
 }
 
 WindowLinux::~WindowLinux()
@@ -125,6 +127,11 @@ void WindowLinux::Render()
   l_bb.farTopLeftY = -20;
   ((RenderComponentLinux*)m_renderComponentInterface)->RenderObject( l_bb, ENEMY2 );
   ((RenderComponentLinux*)m_renderComponentInterface)->Render();
+}
+
+static void GLFWCALL WindowLinux::ResizeCallback( int p_width, int p_height )
+{
+  ((RenderComponentLinux*)m_renderComponentInterface)->UpdateViewportSize( p_width, p_height );
 }
 
 std::string WindowLinux::GetErrorMessage( )
