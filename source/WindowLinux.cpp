@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <cstdlib>
 
+WindowLinux* WindowLinux::m_windowLinux = NULL;
+
 WindowLinux::WindowLinux()
 	: WindowBaseClass()
 {
