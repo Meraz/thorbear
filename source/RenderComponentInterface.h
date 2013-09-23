@@ -6,10 +6,8 @@ struct BoundingBox
 {
 	int farTopLeftX;
 	int farTopLeftY;
-	int farTopLeftZ;
 	int width;
-	int heigth;
-	int depth;
+	int height;
 };
 
 struct ParticleSystem

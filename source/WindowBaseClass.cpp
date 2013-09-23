@@ -15,8 +15,6 @@ WindowBaseClass::~WindowBaseClass()
 void WindowBaseClass::Render()
 {
 	m_gameInterface->Render();
-
-	m_renderComponentInterface->Render();
 }
 
 void WindowBaseClass::Update(double p_deltaTime, float p_mousePositionX, float p_mousePositionY)
