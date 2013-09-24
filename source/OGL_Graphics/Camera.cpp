@@ -81,7 +81,7 @@ void Camera::UpdateProjectionMatrix( )
       glm::vec4( 2.0, 0.0, 0.0, 0.0 ),
       glm::vec4( 0.0, 2.0, 0.0, 0.0 ),
       glm::vec4( 0.0, 0.0,-1.0, 0.0 ),
-      glm::vec4(-m_width,-m_height, 0.0, 1.0 )
+      glm::vec4(-m_width/2.0,-m_height/2.0, 0.0, 1.0 )
     );
   m_projectionMatrix = glm::perspective(
     m_fov,
