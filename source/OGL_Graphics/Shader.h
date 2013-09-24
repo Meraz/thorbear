@@ -12,7 +12,7 @@ class Shader
 	enum ShaderType { VertShader, TConShader, TEvalShader, GeomShader, FragShader, COUNT };
 
 public:
-  void Init( std::string &p_vertFileName, std::string &p_fragFileName );
+  void Init( std::string p_vertFileName, std::string p_fragFileName );
 	void Init( const char* p_vertFileName, const char* p_fragFileName, const char* p_gsFileName = NULL, const char* p_tessConFileName = NULL, const char* p_tessEvalFileName = NULL );
 	
 	void Build( );
