@@ -15,7 +15,7 @@ void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const 
 void Shader::Init( const char* p_vertFileName, const char* p_fragFileName, const char* p_gsFileName, const char* p_tessConFileName, const char* p_tessEvalFileName )
 {
 	if( p_vertFileName == NULL )
-		throw "Shader error: Shader must have a vertex shader";
+		printf( "Shader error: Shader must have a vertex shader" );
 	
 	CompileShader( m_subhandles[ VertShader ], p_vertFileName, GL_VERTEX_SHADER );
 
@@ -37,7 +37,7 @@ void Shader::Init( const char* p_vertFileName, const char* p_fragFileName, const
 	m_handle = glCreateProgram( );
 
 	if( m_handle == 0 )
-		throw "ERROR creating shader programme\n";
+		printf( "ERROR creating shader programme\n" );
 	
 	// attach shaders
 	for( unsigned i = 0; i < COUNT; i++ )
@@ -136,19 +136,19 @@ void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const 
 
 	l_file.open( p_shaderFileName );
 	if( !l_file.is_open( ) )
-		printf( "ERROR creating opening shader file %s\n", p_shaderFileName );
+		printf( "ERROR opening shader file %s\n", p_shaderFileName );
 
 	// Get the size of the file
-    l_file.seekg(0,std::ios::end);
-    std::streampos l_length = l_file.tellg();
-    l_file.seekg(0,std::ios::beg);
+  l_file.seekg(0,std::ios::end);
+  std::streampos l_length = l_file.tellg();
+  l_file.seekg(0,std::ios::beg);
 
 	// Use a vector as the buffer.
-    std::vector< char > l_buffer( l_length );
-    l_file.read( &l_buffer[ 0 ], l_length );
+  std::vector< char > l_buffer( l_length );
+  l_file.read( &l_buffer[ 0 ], l_length );
 
 	//std::stringstream ss;
-    std::string l_str( &l_buffer[ 0 ], l_length );
+  std::string l_str( &l_buffer[ 0 ], l_length );
 
 	// create shader object
 	p_shaderHandle = glCreateShader( p_type );

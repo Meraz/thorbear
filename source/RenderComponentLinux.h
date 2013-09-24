@@ -10,6 +10,8 @@
 #include <string>
 #include <vector>
 
+#define SHADER_DIRECTORY std::string("resources/OGLShaders/")
+
 class RenderComponentLinux : public RenderComponentInterface
 {
     
