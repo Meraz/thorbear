@@ -13,10 +13,10 @@ ModelMan::~ModelMan( )
 
 void ModelMan::LoadModels( )
 {
-  m_models[ ENEMY1 ].Load( MODEL_DIR, "Enemy1.obj");
+  m_models[ ENEMY1 ].Load( MODEL_DIR, "invader.obj");
   m_models[ ENEMY2 ].Load( MODEL_DIR, "invader.obj");
-  m_models[ BALL ].Load( MODEL_DIR, "Ball.obj");
-  m_models[ PADDLE ].Load( MODEL_DIR, "Paddle.obj");
+  m_models[ BALL ].Load( MODEL_DIR, "invader.obj");
+  m_models[ PADDLE ].Load( MODEL_DIR, "invader.obj");
 }
 
 ModelInstance* ModelMan::CreateInstance( BoundingBox p_boundingBox, TextureType p_textureType )
