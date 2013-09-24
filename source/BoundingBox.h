@@ -4,12 +4,19 @@
 struct BoundingBox
 {
 	BoundingBox(){}
-	BoundingBox(int p_posX, int p_posY)
+	BoundingBox(float p_posX, float p_posY)
 	{
 		PosX = p_posX;
 		PosY = p_posY;
 	}
-	int PosX, PosY;
+	BoundingBox(float p_posX, float p_posY, int p_width, int p_height)
+	{
+		PosX = p_posX;
+		PosY = p_posY;
+		Width = p_width;
+		Height = p_height;
+	}
+	float PosX, PosY;
 	int Width, Height;
 };
 

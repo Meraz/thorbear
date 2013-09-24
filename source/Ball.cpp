@@ -42,7 +42,7 @@ void Ball::Update(float p_deltaTime)
 	{
 		m_posX += m_direction.X * m_speed * p_deltaTime;
 		m_posY += m_direction.Y * m_speed * p_deltaTime;
-	
+
 		CheckCollisionAgainstWalls();
 		m_hasBallBouncedAgainstEnemy = false;
 	}
@@ -50,7 +50,7 @@ void Ball::Update(float p_deltaTime)
 
 void Ball::Render()
 {
-	m_renderComp->RenderObject(BoundingBox((int)m_posX, (int)m_posY), BALL);
+	m_renderComp->RenderObject(GetBoundingBox(), BALL);
 }
 
 bool Ball::IsBallDead()
@@ -104,8 +104,8 @@ BoundingBox Ball::GetBoundingBox()
 	BoundingBox l_bBox;
 	l_bBox.Width = m_width;
 	l_bBox.Height = m_height;
-	l_bBox.PosX = (int)m_posX;
-	l_bBox.PosY = (int)m_posY;
+	l_bBox.PosX = m_posX;
+	l_bBox.PosY = m_posY;
 
 	return l_bBox;
 }
@@ -116,7 +116,7 @@ void Ball::CheckCollisionAgainstWalls()
 		m_direction.X *= -1;
 	else if (m_posX + m_width > m_mapEdges.Width && m_direction.X > 0)
 		m_direction.X *= -1;
-	
+
 	if(m_posY < 0)
 		m_isBallDead = true;
 	else if(m_posY + m_height > m_mapEdges.Height && m_direction.Y > 0)
@@ -125,14 +125,14 @@ void Ball::CheckCollisionAgainstWalls()
 
 void Ball::BallBounceAgainstEnemy( BoundingBox p_enemyBBox )
 {
-	
+
 	if (!m_hasBallBouncedAgainstEnemy)
 	{
 		int l_bounceSide = CalculateBounceSide(p_enemyBBox);
-	
-		if(l_bounceSide == TOP || l_bounceSide == BOTTOM)
+
+		if((l_bounceSide == TOP && m_direction.Y < 0)|| (l_bounceSide == BOTTOM && m_direction.Y > 0))
 			m_direction.Y *= -1;
-		else if(l_bounceSide == LEFT || l_bounceSide == RIGHT)
+		else if((l_bounceSide == LEFT && m_direction.X < 0) || (l_bounceSide == RIGHT && m_direction.X > 0))
 			m_direction.X *= -1;
 		m_hasBallBouncedAgainstEnemy = true;
 	}
@@ -148,20 +148,20 @@ void Ball::BallBounceAgainstPaddle( BoundingBox p_paddleBBox )
 	{
 		float l_diff = (m_posX+(m_width/2)) - (p_paddleBBox.PosX+(p_paddleBBox.Width/2)); //length between middle of ball and middle of paddle
 		float l_angle; //angle to add to the balls direction
-	
+
 		if(l_diff == 0) //if ball is in the middle of paddle
 			l_angle = (float)M_PI_2; //just reflect the ball
 		else //set adding angle to a value between 45 and 135 (degrees)
 			l_angle = (float)cos((((m_width/2) + (p_paddleBBox.Width/2)) / l_diff) * 0.7);
-	
+
 		float l_newAngle = l_angle + atan2(m_posX, m_posY); //add angle to previous
-	
+
 		//clamp the new angle between min and max values (10 and 170 degrees)
 		if(l_newAngle*180*M_1_PI < m_minBallAngle)
 			l_newAngle = (float)(m_minBallAngle*M_PI/180);
 		else if(l_newAngle*180*M_1_PI > m_maxBallAngle)
 			l_newAngle = (float)(m_maxBallAngle*M_PI/180);
-		
+
 		m_direction.X = cos(l_newAngle);
 		m_direction.Y = sin(l_newAngle);
 	}

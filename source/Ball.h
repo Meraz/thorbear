@@ -48,7 +48,7 @@ public:
 	int		CalculateBounceSide(BoundingBox p_objectBBox);
 
 private:
-	float	m_posX; //Kan bli avrundningsfel; float?
+	float	m_posX; 
 	float	m_posY;
 	int		m_width;
 	int		m_height;

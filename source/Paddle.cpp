@@ -1,14 +1,14 @@
 #include "Paddle.h"
 
 
-Paddle::Paddle(int p_posX, int p_posY, int p_width, int p_height, int p_screenWidth)
+Paddle::Paddle(float p_posX, float p_posY, int p_width, int p_height, int p_screenWidth)
 {
 	m_posX = p_width - p_posX - (p_width/2);
 	m_posY = p_posY;
 	m_width = p_width;
 	m_height = p_height;
 	m_screenWidth = p_screenWidth;
-	m_prevMousePosX = p_posX;
+	m_prevMousePosX = 0;
 }
 
 Paddle::~Paddle()
@@ -25,7 +25,7 @@ void Paddle::Update(int p_mousePosX)
 	m_posX += p_mousePosX - m_prevMousePosX; 
 
 	if(m_posX > m_screenWidth - m_width)
-		m_posX = m_screenWidth - m_width;
+		m_posX = (float)(m_screenWidth - m_width);
 	else if (m_posX < 0)
 		m_posX = 0;
 
@@ -34,15 +34,15 @@ void Paddle::Update(int p_mousePosX)
 
 void Paddle::Render()
 {
-	m_renderComp->RenderObject(BoundingBox(m_posX, m_posY), PADDLE); //PADDLE == enum OH REALLY?!
+	m_renderComp->RenderObject(GetBoundingBox(), PADDLE); //PADDLE == enum OH REALLY?!
 }
 
-int Paddle::GetPosX()
+float Paddle::GetPosX()
 {
 	return m_posX;
 }
 
-int Paddle::GetPosY()
+float Paddle::GetPosY()
 {
 	return m_posY;
 }
