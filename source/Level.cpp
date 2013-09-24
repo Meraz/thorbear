@@ -233,7 +233,7 @@ int Level::GetNrOfEnemies()
 float Level::CalculateBallOnPaddlePosX()
 {
 	//return m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width; // TODO byt ut mot bättre algoritm!!!
-	//Bättre algoritm?
+	//del/max
 	return m_paddle->GetPosX()+(m_paddle->GetBoundingBox().Width/2) + (((m_paddle->GetBoundingBox().Width/2) / (m_mapEdges.Width/2))*((m_mapEdges.Width/2.0f) - (m_paddle->GetPosX() + (m_paddle->GetBoundingBox().Width/2)))) - (m_ball->GetBoundingBox().Width/2);
 }
 
