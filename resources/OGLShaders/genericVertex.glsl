@@ -39,7 +39,7 @@ void main()
 	normal = normalize( normalMatrix * vertexNormal );
 	uv = vertexUV;
 
-	eyeCoords = modelViewMatrix * (vec4( vertexPosition, 1.0f ) * gl2dx);
+	eyeCoords = modelViewMatrix * gl2dx * vec4( vertexPosition, 1.0f );
 
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
 	diffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
