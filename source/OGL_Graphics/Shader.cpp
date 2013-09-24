@@ -12,6 +12,11 @@ extern inline std::string stringf( const char *p_fmt, ... );
 
 void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const int& p_type );
 
+void Shader::Init( std::string &p_vertFileName, std::string &p_fragFileName )
+{
+  Init( p_vertFileName.c_str(), p_fragFileName.c_str() );
+}
+
 void Shader::Init( const char* p_vertFileName, const char* p_fragFileName, const char* p_gsFileName, const char* p_tessConFileName, const char* p_tessEvalFileName )
 {
 	if( p_vertFileName == NULL )
