@@ -16,10 +16,10 @@ uniform mat4 projectionMatrix;
 
 uniform vec4 lightPosition;
 
-const mat4 gl2dx = mat4( 0.5, 0.0, 0.0,-0.5,
-                         0.0, 0.5, 0.0,-0.5,
+const mat4 gl2dx = mat4( 0.5, 0.0, 0.0, 0.0,
+                         0.0, 0.5, 0.0, 0.0,
                          0.0, 0.0,-0.5, 0.0,
-                         0.0, 0.0, 0.0, 1.0);
+                        -0.5,-0.5, 0.0, 1.0);
 
 // Diffuse
 uniform vec3 intensityDiffuse;
