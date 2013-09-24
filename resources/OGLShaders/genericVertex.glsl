@@ -16,14 +16,8 @@ uniform mat4 projectionMatrix;
 
 uniform vec4 lightPosition;
 
-const mat4 gl2dx = mat4( 0.5, 0.0, 0.0, 0.0,
-                         0.0, 0.5, 0.0, 0.0,
-                         0.0, 0.0,-0.5, 0.0,
-                        -0.5,-0.5, 0.0, 1.0);
-
 // Diffuse
 uniform vec3 intensityDiffuse;
-
 
 out vec3 normal;
 out vec2 uv;
@@ -39,7 +33,7 @@ void main()
 	normal = normalize( normalMatrix * vertexNormal );
 	uv = vertexUV;
 
-	eyeCoords = modelViewMatrix * gl2dx * vec4( vertexPosition, 1.0f );
+	eyeCoords = modelViewMatrix * vec4( vertexPosition, 1.0f );
 
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
 	diffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;

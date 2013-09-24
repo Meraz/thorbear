@@ -77,10 +77,16 @@ void Camera::UpdateViewMatrix( )
 
 void Camera::UpdateProjectionMatrix( )
 {
+  glm::mat4 gl2dx = glm::mat4(
+      glm::vec4( 2.0, 0.0, 0.0, 0.0 ),
+      glm::vec4( 0.0, 2.0, 0.0, 0.0 ),
+      glm::vec4( 0.0, 0.0,-1.0, 0.0 ),
+      glm::vec4(-m_width,-m_height, 0.0, 1.0 ),
+    );
   m_projectionMatrix = glm::perspective(
     m_fov,
     (float)m_width / m_height,
     m_nearClip,
     m_farClip
-  );
+  ) * gl2dx;
 }
