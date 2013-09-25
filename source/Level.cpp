@@ -49,20 +49,20 @@ void Level::CreateEnemies()
 			if(m_map[i][j] == ENEMY1)
 			{
 				tempEnemy = new ShootingEnemy();
-				tempEnemy->Init(j * 20.0f, m_mapEdges.Height - (i * 20.0f), 20, 20); //Don't hard code width and height in the end
+				tempEnemy->Init(j * 20.0f, m_mapEdges.Height - (i * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
 				l_enemy.push_back(tempEnemy);
 			}
 			else if(m_map[i][j] == ENEMY2)
 			{
 				tempEnemy = new DefensiveEnemy();
-				tempEnemy->Init(j * 20.0f, m_mapEdges.Height - (i * 20.0f), 20, 20); //Don't hard code width and height in the end
+				tempEnemy->Init(j * 20.0f, m_mapEdges.Height - (i * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
 				l_enemy.push_back(tempEnemy);
 			}
 		}
 	}
 
 	tempSquad = new EnemySquad();
-	tempSquad->Init(m_mapEdges, 100, l_enemy);
+	tempSquad->Init(m_mapEdges, 50, l_enemy);
 	tempSquad->SetSquadRenderComponent(m_renderComp);
 	m_squad.push_back(tempSquad);
 }
@@ -79,7 +79,7 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 	m_paddle->Update(p_mousePosX);
 	m_ball->Update(p_deltaTime);
 
-	for(int i = 0; i < m_squad.size(); i++)
+	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
 		m_squad.at(i)->Update(p_deltaTime);
 	}
@@ -94,7 +94,7 @@ void Level::Render()
 	m_paddle->Render();
 	m_ball->Render();
 	
-	for(int i = 0; i < m_squad.size(); i++)
+	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
 		m_squad.at(i)->Render();
 	}
@@ -105,40 +105,45 @@ void Level::Render()
 void Level::CheckAllCollisions()
 {
 	
-	/*
-	BoundingBox LaserBoundingBox;
-	LaserBoundingBox.Height = 50;
-	LaserBoundingBox.Width	= 20;
-	LaserBoundingBox.posX = 400;
-	LaserBoundingBox.posY = 740;
-	*/
-	//Paddle vs Laser
-	//if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), LaserBoundingBox))
-		//m_PaddleHasDied = true;
+	//Paddle vs Laser and Ball vs Laser
+	for(unsigned int i = 0; i < m_squad.size(); i++)
+	{
+			for(unsigned int j = 0; j < m_squad.at(i)->GetLasers().size(); j++)
+			{
+				if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
+				{
+					m_PaddleHasDied = true;
+					m_squad.at(i)->EraseMember(BALL, j); //TODO Change to LASER once this define is implemented
+				}
+				else if(BoundingBoxIntersect(m_ball->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
+					m_squad.at(i)->EraseMember(BALL, j); //TODO Change to LASER once this define is implemented
+			}
+	}
 	
 	//Paddle vs Ball
 	if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_ball->GetBoundingBox()))
 		m_ball->BallBounceAgainstPaddle(m_paddle->GetBoundingBox());
 
+	for(unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		for(unsigned int j = 0; j < m_squad.at(i)->GetEnemies().size(); j++)
+		{
+			//Ball vs Enemy
+			if(BoundingBoxIntersect(m_ball->GetBoundingBox(), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox()))
+			{
+				m_ball->BallBounceAgainstEnemy(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox());
+				m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
+				if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
+					m_squad.at(i)->EraseMember(ENEMY1, j);
+			}
+		}
+		
+	}
+
 	//Paddle vs PowerUp
 	//if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
-		//Stuff happens
-	
-	/*for(unsigned int i = 0; i < m_enemy.size(); i++)
-	{
-		//Ball vs Enemy
-		if(BoundingBoxIntersect(m_ball->GetBoundingBox(), m_enemy.at(i)->GetBoundingBox()))
-		{
-			m_ball->BallBounceAgainstEnemy(m_enemy.at(i)->GetBoundingBox());
-			m_enemy.at(i)->TakeDamage();
-			if(m_enemy.at(i)->GetNumOfLives() == 0)
-				m_enemy.erase(m_enemy.begin() + i);
-		}
-	}*/
+	//TODO Stuff happens
 
-	//Ball vs Laser
-	//if(BoundingBoxIntersect(BallBoundingBox, LaserBoundingBox))
-		//Remove laser
 }
 
 bool Level::BoundingBoxIntersect(BoundingBox p_box1, BoundingBox p_box2)
@@ -161,7 +166,7 @@ bool Level::HasPaddleDied()
 int Level::GetNrOfEnemies()
 {
 	int l_numEnemies = 0;
-	for(int i = 0; i < m_squad.size(); i++)
+	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
 		l_numEnemies += m_squad.at(i)->GetNumOfEnemies();
 	}

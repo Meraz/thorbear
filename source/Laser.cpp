@@ -28,3 +28,8 @@ void Laser::Render()
 {
 	m_renderComp->RenderObject( m_BoundingBox, BALL); //TODO change to LASER once this exists
 }
+
+BoundingBox Laser::GetBoundingBox()
+{
+	return m_BoundingBox;
+}

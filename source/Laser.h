@@ -10,6 +10,7 @@ public:
 	void Init(RenderComponentInterface* p_renderComp, int p_velocity, BoundingBox p_BoundingBox);
 	void Update(float p_deltaTime);
 	void Render();
+	BoundingBox GetBoundingBox();
 private:
 	BoundingBox m_BoundingBox;
 	int m_velocity;
