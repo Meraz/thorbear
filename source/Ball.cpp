@@ -132,7 +132,7 @@ void Ball::BallBounceAgainstEnemy( BoundingBox p_enemyBBox )
 
 		if((l_bounceSide == TOP && m_direction.Y < 0)|| (l_bounceSide == BOTTOM && m_direction.Y > 0))
 			m_direction.Y *= -1;
-		else if((l_bounceSide == LEFT && m_direction.X < 0) || (l_bounceSide == RIGHT && m_direction.X > 0))
+		else if((l_bounceSide == LEFT && m_direction.X > 0) || (l_bounceSide == RIGHT && m_direction.X < 0))
 			m_direction.X *= -1;
 		m_hasBallBouncedAgainstEnemy = true;
 	}
@@ -142,7 +142,7 @@ void Ball::BallBounceAgainstPaddle( BoundingBox p_paddleBBox )
 {
 	int l_bounceSide = CalculateBounceSide(p_paddleBBox);
 
-	if(l_bounceSide == LEFT || l_bounceSide == RIGHT)
+	if((l_bounceSide == LEFT && m_direction.X > 0) || (l_bounceSide == RIGHT && m_direction.X < 0)) // TODO fixa med studs då bollen är bredvid paddlen
 		m_direction.X *= -1;
 	else if(l_bounceSide == TOP && m_direction.Y < 0)
 	{
@@ -152,18 +152,20 @@ void Ball::BallBounceAgainstPaddle( BoundingBox p_paddleBBox )
 		if(l_diff == 0) //if ball is in the middle of paddle
 			l_angle = (float)M_PI_2; //just reflect the ball
 		else //set adding angle to a value between 45 and 135 (degrees)
-			l_angle = (float)cos((((m_width/2) + (p_paddleBBox.Width/2)) / l_diff) * 0.7);
+			l_angle = (float)acos((l_diff / ((m_width/2) + (p_paddleBBox.Width/2))) * 0.7f);
 
-		float l_newAngle = l_angle + atan2(m_posX, m_posY); //add angle to previous
-
+		float l_newAngle = (M_PI - acos(m_direction.X)) - (2 * (M_PI - acos(m_direction.X) - l_angle)); 
+		
 		//clamp the new angle between min and max values (10 and 170 degrees)
 		if(l_newAngle*180*M_1_PI < m_minBallAngle)
 			l_newAngle = (float)(m_minBallAngle*M_PI/180);
 		else if(l_newAngle*180*M_1_PI > m_maxBallAngle)
 			l_newAngle = (float)(m_maxBallAngle*M_PI/180);
-
+		
 		m_direction.X = cos(l_newAngle);
 		m_direction.Y = sin(l_newAngle);
+
+		m_posY = p_paddleBBox.PosY + p_paddleBBox.Height;
 	}
 }
 
