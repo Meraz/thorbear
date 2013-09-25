@@ -8,7 +8,7 @@ public:
 	Laser(void);
 	~Laser(void);
 	void Init(RenderComponentInterface* p_renderComp, int p_velocity, BoundingBox p_BoundingBox);
-	void Update();
+	void Update(float p_deltaTime);
 	void Render();
 private:
 	BoundingBox m_BoundingBox;

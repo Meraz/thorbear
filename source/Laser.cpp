@@ -19,9 +19,9 @@ void Laser::Init( RenderComponentInterface* p_renderComp, int p_velocity, Boundi
 	m_velocity = p_velocity;
 }
 
-void Laser::Update()
+void Laser::Update(float p_deltaTime)
 {
-	m_BoundingBox.PosY -= m_velocity;
+	m_BoundingBox.PosY -= m_velocity * p_deltaTime;
 }
 
 void Laser::Render()
