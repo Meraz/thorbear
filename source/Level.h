@@ -42,6 +42,8 @@ private:
 	float	m_currentEnemyY; //dynamic variable for above check
 	int		m_nrOfEnemies; //TEST
 
+	int		m_mapBorderThickness;
+
 private:
 	void	CheckAllCollisions();
 	bool	BoundingBoxIntersect(BoundingBox p_box1, BoundingBox p_box2);
@@ -51,6 +53,7 @@ private:
 	void	MoveEnemies(float p_deltaTime);
 	float	FindLowestEnemyRow();
 	void	HandleLaserFiring();
+	void	RenderMapEdges();
 };
 
 #endif LEVEL_H

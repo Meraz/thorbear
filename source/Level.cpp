@@ -13,6 +13,8 @@ Level::Level(void)
 	m_currentEnemyDirection = HORIZONTAL;
 	m_targetY = 0;
 	m_currentEnemyY = 0;
+
+	m_mapBorderThickness = 10;
 }
 
 
@@ -30,7 +32,7 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentI
 	m_mapEdges.Height = p_lvlHeight; 
 	string tmpString = "level"+to_string(p_lvlNr); 
 	m_map = LevelImporter::LoadLevel(tmpString);	
-	m_paddle = new Paddle(p_lvlWidth/2.0f, 50.0f, 200, 50, p_lvlWidth); //example values
+	m_paddle = new Paddle(p_lvlWidth/2.0f, 50.0f, 50, 50, p_lvlWidth); //example values
 	m_paddle->Initialize(p_renderComp);
 
 	m_ball = new Ball();
@@ -157,6 +159,7 @@ void Level::HandleLaserFiring()
 
 void Level::Render()
 {
+	RenderMapEdges();
 	m_paddle->Render();
 	m_ball->Render();
 	for(unsigned int i = 0; i < m_enemy.size(); i++)
@@ -232,9 +235,8 @@ int Level::GetNrOfEnemies()
 
 float Level::CalculateBallOnPaddlePosX()
 {
-	//return m_paddle->GetPosX()+m_paddle->GetBoundingBox().Width; // TODO byt ut mot bättre algoritm!!!
-	//del/max
-	return m_paddle->GetPosX()+(m_paddle->GetBoundingBox().Width/2) + (((m_paddle->GetBoundingBox().Width/2) / (m_mapEdges.Width/2))*((m_mapEdges.Width/2.0f) - (m_paddle->GetPosX() + (m_paddle->GetBoundingBox().Width/2)))) - (m_ball->GetBoundingBox().Width/2);
+	
+	return ((m_paddle->GetPosX()/(m_mapEdges.Width-m_paddle->GetBoundingBox().Width)) * (m_mapEdges.Width - (2 * m_paddle->GetBoundingBox().Width))) + m_paddle->GetBoundingBox().Width - (m_ball->GetBoundingBox().Width/2.0f);
 }
 
 void Level::ShootBallFromPaddle()
@@ -248,7 +250,18 @@ void Level::ShootBallFromPaddle()
 	}
 	else //set angle to a value between 45 and 135 (degrees)
 	{
-		m_ball->SetDirection((float)cos((((m_ball->GetBoundingBox().Width/2) + (m_paddle->GetBoundingBox().Width/2)) / l_diff) * 0.7));
+		m_ball->SetDirection((float)cos((l_diff / ((m_ball->GetBoundingBox().Width/2) + (m_paddle->GetBoundingBox().Width/2))) * 0.7));
 	}
 	m_ball->ShootBall();
+}
+
+void Level::RenderMapEdges()
+{
+	BoundingBox l_leftSide = BoundingBox(m_mapEdges.PosX - m_mapBorderThickness, m_mapEdges.PosY, m_mapBorderThickness, m_mapEdges.Height + m_mapBorderThickness);
+	BoundingBox l_rightSide = BoundingBox(m_mapEdges.PosX + m_mapEdges.Width, m_mapEdges.PosY, m_mapBorderThickness, m_mapEdges.Height + m_mapBorderThickness);
+	BoundingBox l_topSide = BoundingBox(m_mapEdges.PosX + m_mapBorderThickness/2, m_mapEdges.PosY + m_mapEdges.Height, m_mapEdges.Width + m_mapBorderThickness, m_mapBorderThickness);
+
+	m_renderComp->RenderObject(l_leftSide, BALL);
+	m_renderComp->RenderObject(l_rightSide, BALL);
+	m_renderComp->RenderObject(l_topSide, BALL);
 }

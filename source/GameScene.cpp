@@ -30,7 +30,7 @@ void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePosi
 {
 	// TODO : delta time.
 
-	m_level->Update(p_mousePositionX, true, (float)p_deltaTime); // TODO : NO hardcoded booleans
+	m_level->Update(p_mousePositionX, false, (float)p_deltaTime); // TODO : NO hardcoded booleans
 
 	CheckPaddleDeath();
 	CheckEnemyNr();
