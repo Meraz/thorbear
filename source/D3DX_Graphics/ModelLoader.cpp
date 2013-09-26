@@ -145,7 +145,7 @@ void ModelLoader::LoadMaterialFromMTL(string p_materialPath, string p_materialFi
 			{
 				string materialTextureName;
 				lineStream >> materialTextureName;
-				m_material->m_textureResource = CreateTexture(p_materialPath + "\\" + materialTextureName);
+				m_material->m_textureResource = CreateTexture(p_materialPath + "\\" + materialTextureName + ".dds");
 			}
 			else if(prefix == "Ns")
 			{

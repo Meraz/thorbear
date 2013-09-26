@@ -33,7 +33,7 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentI
   std::string tmpString( "level" + l_ss.str() );
 
 	m_map = LevelImporter::LoadLevel(tmpString);	
-	m_paddle = new Paddle(p_lvlWidth/2.0f, 10.0f, 50, 20, p_lvlWidth); //example values
+	m_paddle = new Paddle(p_lvlWidth/2.0f, 10.0f, 50, 10, p_lvlWidth); //example values
 	m_paddle->Initialize(p_renderComp);
 
 	m_ball = new Ball();
