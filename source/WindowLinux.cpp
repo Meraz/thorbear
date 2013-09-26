@@ -10,6 +10,8 @@ WindowLinux* WindowLinux::m_windowLinux = NULL;
 WindowLinux::WindowLinux()
 	: WindowBaseClass()
 {
+  m_countFps = 0;
+  m_lastFpsUpdate = 0;
   RenderComponentLinux* l_renderComponentLinux = new RenderComponentLinux();
   
   // Attempt to init the window
