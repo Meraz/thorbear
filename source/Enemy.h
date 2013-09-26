@@ -11,7 +11,7 @@ class Enemy
 {
 public:
 	void			Init(float p_posX, float p_posY, int p_width, int p_height);
-	virtual void	Update(float p_velocity, EnemyDirection p_direction) = 0;
+	virtual void	Update(float p_velocity, EnemyDirection p_direction, float p_deltaTime) = 0;
 	virtual void	Render() = 0;
 	BoundingBox		GetBoundingBox();
 	void			SetRenderComponentInterface(RenderComponentInterface* p_RenderComp);

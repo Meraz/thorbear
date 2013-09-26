@@ -1,5 +1,7 @@
 #include "SoundHandler.h"
 
+#include <cstring>
+
 SoundHandler::SoundHandler()
 {
 	//empty 'cause initialize functions is the way to go
@@ -82,9 +84,9 @@ void SoundHandler::Initialize()
 	ErrorCheck(m_result);
 
 	//Load all audio ADD AUDIO HERE
-	AudioLoader("Audio/bounce.wav", SOUNDTYPE::BALLBOUNCE);
-	AudioLoader("Audio/Enemyfire.mp3", SOUNDTYPE::ENEMYFIRE);
-	AudioLoader("Audio/Enemydeath.wav", SOUNDTYPE::ENEMYDEATH);
+	AudioLoader("Audio/bounce.wav", BALLBOUNCE);
+	AudioLoader("Audio/Enemyfire.mp3", ENEMYFIRE);
+	AudioLoader("Audio/Enemydeath.wav", ENEMYDEATH);
 	
 }
 

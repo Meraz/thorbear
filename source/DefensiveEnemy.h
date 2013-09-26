@@ -7,7 +7,7 @@ class DefensiveEnemy: public Enemy
 public:
 	DefensiveEnemy(void);
 	~DefensiveEnemy(void);
-	void Update(float p_velocity, EnemyDirection p_direction);
+	void Update(float p_velocity, EnemyDirection p_direction, float p_deltaTime);
 	void Render();
 	bool WantsToFire();
 private:

@@ -11,11 +11,13 @@ class ShootingEnemy: public Enemy
 public:
 	ShootingEnemy(void);
 	~ShootingEnemy(void);
-	void Update(float p_velocity, EnemyDirection p_direction);
+	void Update(float p_velocity, EnemyDirection p_direction, float p_deltaTime);
 	void Render();
 	bool WantsToFire();
 private:
 	bool m_wantsToFire;
+	float m_shootIntervall;
+	float m_tick;
 };
 
 #endif
