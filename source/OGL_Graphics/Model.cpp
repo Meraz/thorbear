@@ -302,7 +302,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
                 1/l_diff.z
               )
           );
-        vertices[tmpi-1] = l_scale * vertices[tmpi-1];
+        vertices[tmpi-1] = glm::vec3( l_scale * glm::vec4( vertices[tmpi-1], 1.f ) );
 
 				vertexData->push_back(vertices[tmpi-1].x);
 				vertexData->push_back(vertices[tmpi-1].y);
