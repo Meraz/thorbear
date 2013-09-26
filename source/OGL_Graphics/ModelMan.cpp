@@ -25,7 +25,7 @@ ModelInstance* ModelMan::CreateInstance( BoundingBox p_boundingBox, TextureType 
       p_boundingBox.PosX + p_boundingBox.Width/2.f,
       p_boundingBox.PosY + p_boundingBox.Height/2.f,
       0.f
-    );
+    ) * glm::scale(glm::mat4(1.f), glm::vec3(p_boundingBox.Width, p_boundingBox.Height, 1.f));
     
   return new ModelInstance( &m_models[ p_textureType ], l_modelMatrix );
 }
