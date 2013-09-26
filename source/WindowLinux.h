@@ -25,7 +25,9 @@ public:
   
 private:
   std::string m_errorMessage;
-  double m_oldTime;
+  double m_oldTime, m_lastFpsUpdate;
+  int m_countFps;
+  
   // Assume a single window to be created, required for ResizeCallback to be able to call necessary methods
   static WindowLinux* m_windowLinux;
   

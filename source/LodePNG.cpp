@@ -354,7 +354,6 @@ static void lodepng_add32bitInt(ucvector* buffer, unsigned value)
 /* ////////////////////////////////////////////////////////////////////////// */
 
 #ifdef LODEPNG_COMPILE_DISK
-
 unsigned lodepng_load_file(unsigned char** out, size_t* outsize, const char* filename)
 {
   FILE* file;
@@ -364,7 +363,7 @@ unsigned lodepng_load_file(unsigned char** out, size_t* outsize, const char* fil
   *out = 0;
   *outsize = 0;
 
-  fopen_s(&file,filename, "rb");
+  file = fopen(filename, "rb");
   if(!file) return 78;
 
   /*get filesize:*/
@@ -386,7 +385,7 @@ unsigned lodepng_load_file(unsigned char** out, size_t* outsize, const char* fil
 unsigned lodepng_save_file(const unsigned char* buffer, size_t buffersize, const char* filename)
 {
   FILE* file;
-  fopen_s(&file,filename, "wb" );
+  file = fopen(filename, "wb" );
   if(!file) return 79;
   fwrite((char*)buffer , 1 , buffersize, file);
   fclose(file);
@@ -3104,7 +3103,7 @@ static unsigned rgba16ToPixel(unsigned char* out, size_t i,
   return 0; /*no error*/
 }
 
-/*Get RGBA8 color of pixel with index i (y * Width + x) from the raw image with given color type.*/
+/*Get RGBA8 color of pixel with index i (y * width + x) from the raw image with given color type.*/
 static unsigned getPixelColorRGBA8(unsigned char* r, unsigned char* g,
                                    unsigned char* b, unsigned char* a,
                                    const unsigned char* in, size_t i,
@@ -3353,7 +3352,7 @@ static unsigned getPixelColorsRGBA8(unsigned char* buffer, size_t numpixels,
   return 0; /*no error*/
 }
 
-/*Get RGBA16 color of pixel with index i (y * Width + x) from the raw image with
+/*Get RGBA16 color of pixel with index i (y * width + x) from the raw image with
 given color type, but the given color type must be 16-bit itself.*/
 static unsigned getPixelColorRGBA16(unsigned short* r, unsigned short* g, unsigned short* b, unsigned short* a,
                                     const unsigned char* in, size_t i, const LodePNGColorMode* mode)
@@ -3907,7 +3906,7 @@ static const unsigned ADAM7_DY[7] = { 8, 8, 8, 4, 4, 2, 2 }; /*y delta values*/
 
 /*
 Outputs various dimensions and positions in the image related to the Adam7 reduced images.
-passw: output containing the Width of the 7 passes
+passw: output containing the width of the 7 passes
 passh: output containing the height of the 7 passes
 filter_passstart: output containing the index of the start and end of each
  reduced image with filter bytes
@@ -3915,7 +3914,7 @@ padded_passstart output containing the index of the start and end of each
  reduced image when without filter bytes but with padded scanlines
 passstart: output containing the index of the start and end of each reduced
  image without padding between scanlines, but still padding between the images
-w, h: Width and height of non-interlaced image
+w, h: width and height of non-interlaced image
 bpp: bits per pixel
 "padded" is only relevant if bpp is less than 8 and a scanline or image does not
  end at a full byte
@@ -3926,7 +3925,7 @@ static void Adam7_getpassvalues(unsigned passw[7], unsigned passh[7], size_t fil
   /*the passstart values have 8 values: the 8th one indicates the byte after the end of the 7th (= last) pass*/
   unsigned i;
 
-  /*calculate Width and height in pixels of each pass*/
+  /*calculate width and height in pixels of each pass*/
   for(i = 0; i < 7; i++)
   {
     passw[i] = (w + ADAM7_DX[i] - ADAM7_IX[i] - 1) / ADAM7_DX[i];
@@ -4013,12 +4012,12 @@ unsigned lodepng_inspect(unsigned* w, unsigned* h, LodePNGState* state,
 }
 
 static unsigned unfilterScanline(unsigned char* recon, const unsigned char* scanline, const unsigned char* precon,
-                                 size_t byteWidth, unsigned char filterType, size_t length)
+                                 size_t bytewidth, unsigned char filterType, size_t length)
 {
   /*
   For PNG filter method 0
   unfilter a PNG image scanline by scanline. when the pixels are smaller than 1 byte,
-  the filter works byte per byte (byteWidth = 1)
+  the filter works byte per byte (bytewidth = 1)
   precon is the previous unfiltered scanline, recon the result, scanline the current one
   the incoming scanlines do NOT include the filtertype byte, that one is given in the parameter filterType instead
   recon and scanline MAY be the same memory address! precon must be disjoint.
@@ -4031,8 +4030,8 @@ static unsigned unfilterScanline(unsigned char* recon, const unsigned char* scan
       for(i = 0; i < length; i++) recon[i] = scanline[i];
       break;
     case 1:
-      for(i = 0; i < byteWidth; i++) recon[i] = scanline[i];
-      for(i = byteWidth; i < length; i++) recon[i] = scanline[i] + recon[i - byteWidth];
+      for(i = 0; i < bytewidth; i++) recon[i] = scanline[i];
+      for(i = bytewidth; i < length; i++) recon[i] = scanline[i] + recon[i - bytewidth];
       break;
     case 2:
       if(precon)
@@ -4047,37 +4046,37 @@ static unsigned unfilterScanline(unsigned char* recon, const unsigned char* scan
     case 3:
       if(precon)
       {
-        for(i = 0; i < byteWidth; i++) recon[i] = scanline[i] + precon[i] / 2;
-        for(i = byteWidth; i < length; i++) recon[i] = scanline[i] + ((recon[i - byteWidth] + precon[i]) / 2);
+        for(i = 0; i < bytewidth; i++) recon[i] = scanline[i] + precon[i] / 2;
+        for(i = bytewidth; i < length; i++) recon[i] = scanline[i] + ((recon[i - bytewidth] + precon[i]) / 2);
       }
       else
       {
-        for(i = 0; i < byteWidth; i++) recon[i] = scanline[i];
-        for(i = byteWidth; i < length; i++) recon[i] = scanline[i] + recon[i - byteWidth] / 2;
+        for(i = 0; i < bytewidth; i++) recon[i] = scanline[i];
+        for(i = bytewidth; i < length; i++) recon[i] = scanline[i] + recon[i - bytewidth] / 2;
       }
       break;
     case 4:
       if(precon)
       {
-        for(i = 0; i < byteWidth; i++)
+        for(i = 0; i < bytewidth; i++)
         {
           recon[i] = (scanline[i] + precon[i]); /*paethPredictor(0, precon[i], 0) is always precon[i]*/
         }
-        for(i = byteWidth; i < length; i++)
+        for(i = bytewidth; i < length; i++)
         {
-          recon[i] = (scanline[i] + paethPredictor(recon[i - byteWidth], precon[i], precon[i - byteWidth]));
+          recon[i] = (scanline[i] + paethPredictor(recon[i - bytewidth], precon[i], precon[i - bytewidth]));
         }
       }
       else
       {
-        for(i = 0; i < byteWidth; i++)
+        for(i = 0; i < bytewidth; i++)
         {
           recon[i] = scanline[i];
         }
-        for(i = byteWidth; i < length; i++)
+        for(i = bytewidth; i < length; i++)
         {
-          /*paethPredictor(recon[i - byteWidth], 0, 0) is always recon[i - byteWidth]*/
-          recon[i] = (scanline[i] + recon[i - byteWidth]);
+          /*paethPredictor(recon[i - bytewidth], 0, 0) is always recon[i - bytewidth]*/
+          recon[i] = (scanline[i] + recon[i - bytewidth]);
         }
       }
       break;
@@ -4099,8 +4098,8 @@ static unsigned unfilter(unsigned char* out, const unsigned char* in, unsigned w
   unsigned y;
   unsigned char* prevline = 0;
 
-  /*byteWidth is used for filtering, is 1 when bpp < 8, number of bytes per pixel otherwise*/
-  size_t byteWidth = (bpp + 7) / 8;
+  /*bytewidth is used for filtering, is 1 when bpp < 8, number of bytes per pixel otherwise*/
+  size_t bytewidth = (bpp + 7) / 8;
   size_t linebytes = (w * bpp + 7) / 8;
 
   for(y = 0; y < h; y++)
@@ -4109,7 +4108,7 @@ static unsigned unfilter(unsigned char* out, const unsigned char* in, unsigned w
     size_t inindex = (1 + linebytes) * y; /*the extra filterbyte added to each row*/
     unsigned char filterType = in[inindex];
 
-    CERROR_TRY_RETURN(unfilterScanline(&out[outindex], &in[inindex + 1], prevline, byteWidth, filterType, linebytes));
+    CERROR_TRY_RETURN(unfilterScanline(&out[outindex], &in[inindex + 1], prevline, bytewidth, filterType, linebytes));
 
     prevline = &out[outindex];
   }
@@ -4141,13 +4140,13 @@ static void Adam7_deinterlace(unsigned char* out, const unsigned char* in, unsig
     for(i = 0; i < 7; i++)
     {
       unsigned x, y, b;
-      size_t byteWidth = bpp / 8;
+      size_t bytewidth = bpp / 8;
       for(y = 0; y < passh[i]; y++)
       for(x = 0; x < passw[i]; x++)
       {
-        size_t pixelinstart = passstart[i] + (y * passw[i] + x) * byteWidth;
-        size_t pixeloutstart = ((ADAM7_IY[i] + y * ADAM7_DY[i]) * w + ADAM7_IX[i] + x * ADAM7_DX[i]) * byteWidth;
-        for(b = 0; b < byteWidth; b++)
+        size_t pixelinstart = passstart[i] + (y * passw[i] + x) * bytewidth;
+        size_t pixeloutstart = ((ADAM7_IY[i] + y * ADAM7_DY[i]) * w + ADAM7_IX[i] + x * ADAM7_DX[i]) * bytewidth;
+        for(b = 0; b < bytewidth; b++)
         {
           out[pixeloutstart + b] = in[pixelinstart + b];
         }
@@ -4915,7 +4914,7 @@ static unsigned addChunk_IHDR(ucvector* out, unsigned w, unsigned h,
   ucvector header;
   ucvector_init(&header);
 
-  lodepng_add32bitInt(&header, w); /*Width*/
+  lodepng_add32bitInt(&header, w); /*width*/
   lodepng_add32bitInt(&header, h); /*height*/
   ucvector_push_back(&header, (unsigned char)bitdepth); /*bit depth*/
   ucvector_push_back(&header, (unsigned char)colortype); /*color type*/
@@ -5165,7 +5164,7 @@ static unsigned addChunk_pHYs(ucvector* out, const LodePNGInfo* info)
 #endif /*LODEPNG_COMPILE_ANCILLARY_CHUNKS*/
 
 static void filterScanline(unsigned char* out, const unsigned char* scanline, const unsigned char* prevline,
-                           size_t length, size_t byteWidth, unsigned char filterType)
+                           size_t length, size_t bytewidth, unsigned char filterType)
 {
   size_t i;
   switch(filterType)
@@ -5176,13 +5175,13 @@ static void filterScanline(unsigned char* out, const unsigned char* scanline, co
     case 1: /*Sub*/
       if(prevline)
       {
-        for(i = 0; i < byteWidth; i++) out[i] = scanline[i];
-        for(i = byteWidth; i < length; i++) out[i] = scanline[i] - scanline[i - byteWidth];
+        for(i = 0; i < bytewidth; i++) out[i] = scanline[i];
+        for(i = bytewidth; i < length; i++) out[i] = scanline[i] - scanline[i - bytewidth];
       }
       else
       {
-        for(i = 0; i < byteWidth; i++) out[i] = scanline[i];
-        for(i = byteWidth; i < length; i++) out[i] = scanline[i] - scanline[i - byteWidth];
+        for(i = 0; i < bytewidth; i++) out[i] = scanline[i];
+        for(i = bytewidth; i < length; i++) out[i] = scanline[i] - scanline[i - bytewidth];
       }
       break;
     case 2: /*Up*/
@@ -5198,30 +5197,30 @@ static void filterScanline(unsigned char* out, const unsigned char* scanline, co
     case 3: /*Average*/
       if(prevline)
       {
-        for(i = 0; i < byteWidth; i++) out[i] = scanline[i] - prevline[i] / 2;
-        for(i = byteWidth; i < length; i++) out[i] = scanline[i] - ((scanline[i - byteWidth] + prevline[i]) / 2);
+        for(i = 0; i < bytewidth; i++) out[i] = scanline[i] - prevline[i] / 2;
+        for(i = bytewidth; i < length; i++) out[i] = scanline[i] - ((scanline[i - bytewidth] + prevline[i]) / 2);
       }
       else
       {
-        for(i = 0; i < byteWidth; i++) out[i] = scanline[i];
-        for(i = byteWidth; i < length; i++) out[i] = scanline[i] - scanline[i - byteWidth] / 2;
+        for(i = 0; i < bytewidth; i++) out[i] = scanline[i];
+        for(i = bytewidth; i < length; i++) out[i] = scanline[i] - scanline[i - bytewidth] / 2;
       }
       break;
     case 4: /*Paeth*/
       if(prevline)
       {
         /*paethPredictor(0, prevline[i], 0) is always prevline[i]*/
-        for(i = 0; i < byteWidth; i++) out[i] = (scanline[i] - prevline[i]);
-        for(i = byteWidth; i < length; i++)
+        for(i = 0; i < bytewidth; i++) out[i] = (scanline[i] - prevline[i]);
+        for(i = bytewidth; i < length; i++)
         {
-          out[i] = (scanline[i] - paethPredictor(scanline[i - byteWidth], prevline[i], prevline[i - byteWidth]));
+          out[i] = (scanline[i] - paethPredictor(scanline[i - bytewidth], prevline[i], prevline[i - bytewidth]));
         }
       }
       else
       {
-        for(i = 0; i < byteWidth; i++) out[i] = scanline[i];
-        /*paethPredictor(scanline[i - byteWidth], 0, 0) is always scanline[i - byteWidth]*/
-        for(i = byteWidth; i < length; i++) out[i] = (scanline[i] - scanline[i - byteWidth]);
+        for(i = 0; i < bytewidth; i++) out[i] = scanline[i];
+        /*paethPredictor(scanline[i - bytewidth], 0, 0) is always scanline[i - bytewidth]*/
+        for(i = bytewidth; i < length; i++) out[i] = (scanline[i] - scanline[i - bytewidth]);
       }
       break;
     default: return; /*unexisting filter type given*/
@@ -5247,10 +5246,10 @@ static unsigned filter(unsigned char* out, const unsigned char* in, unsigned w, 
   */
 
   unsigned bpp = lodepng_get_bpp(info);
-  /*the Width of a scanline in bytes, not including the filter type*/
+  /*the width of a scanline in bytes, not including the filter type*/
   size_t linebytes = (w * bpp + 7) / 8;
-  /*byteWidth is used for filtering, is 1 when bpp < 8, number of bytes per pixel otherwise*/
-  size_t byteWidth = (bpp + 7) / 8;
+  /*bytewidth is used for filtering, is 1 when bpp < 8, number of bytes per pixel otherwise*/
+  size_t bytewidth = (bpp + 7) / 8;
   const unsigned char* prevline = 0;
   unsigned x, y;
   unsigned error = 0;
@@ -5281,7 +5280,7 @@ static unsigned filter(unsigned char* out, const unsigned char* in, unsigned w, 
       size_t outindex = (1 + linebytes) * y; /*the extra filterbyte added to each row*/
       size_t inindex = linebytes * y;
       out[outindex] = 0; /*filter type byte*/
-      filterScanline(&out[outindex + 1], &in[inindex], prevline, linebytes, byteWidth, 0);
+      filterScanline(&out[outindex + 1], &in[inindex], prevline, linebytes, bytewidth, 0);
       prevline = &in[inindex];
     }
   }
@@ -5306,7 +5305,7 @@ static unsigned filter(unsigned char* out, const unsigned char* in, unsigned w, 
         /*try the 5 filter types*/
         for(type = 0; type < 5; type++)
         {
-          filterScanline(attempt[type].data, &in[y * linebytes], prevline, linebytes, byteWidth, type);
+          filterScanline(attempt[type].data, &in[y * linebytes], prevline, linebytes, bytewidth, type);
 
           /*calculate the sum of the result*/
           sum[type] = 0;
@@ -5363,7 +5362,7 @@ static unsigned filter(unsigned char* out, const unsigned char* in, unsigned w, 
       /*try the 5 filter types*/
       for(type = 0; type < 5; type++)
       {
-        filterScanline(attempt[type].data, &in[y * linebytes], prevline, linebytes, byteWidth, type);
+        filterScanline(attempt[type].data, &in[y * linebytes], prevline, linebytes, bytewidth, type);
         for(x = 0; x < 256; x++) count[x] = 0;
         for(x = 0; x < linebytes; x++) count[attempt[type].data[x]]++;
         count[type]++; /*the filter type itself is part of the scanline*/
@@ -5398,7 +5397,7 @@ static unsigned filter(unsigned char* out, const unsigned char* in, unsigned w, 
       size_t inindex = linebytes * y;
       unsigned type = settings->predefined_filters[y];
       out[outindex] = type; /*filter type byte*/
-      filterScanline(&out[outindex + 1], &in[inindex], prevline, linebytes, byteWidth, type);
+      filterScanline(&out[outindex + 1], &in[inindex], prevline, linebytes, bytewidth, type);
       prevline = &in[inindex];
     }
   }
@@ -5434,7 +5433,7 @@ static unsigned filter(unsigned char* out, const unsigned char* in, unsigned w, 
         unsigned testsize = attempt[type].size;
         /*if(testsize > 8) testsize /= 8;*/ /*it already works good enough by testing a part of the row*/
 
-        filterScanline(attempt[type].data, &in[y * linebytes], prevline, linebytes, byteWidth, type);
+        filterScanline(attempt[type].data, &in[y * linebytes], prevline, linebytes, bytewidth, type);
         size[type] = 0;
         dummy = 0;
         zlib_compress(&dummy, &size[type], attempt[type].data, testsize, &zlibsettings);
@@ -5503,13 +5502,13 @@ static void Adam7_interlace(unsigned char* out, const unsigned char* in, unsigne
     for(i = 0; i < 7; i++)
     {
       unsigned x, y, b;
-      size_t byteWidth = bpp / 8;
+      size_t bytewidth = bpp / 8;
       for(y = 0; y < passh[i]; y++)
       for(x = 0; x < passw[i]; x++)
       {
-        size_t pixelinstart = ((ADAM7_IY[i] + y * ADAM7_DY[i]) * w + ADAM7_IX[i] + x * ADAM7_DX[i]) * byteWidth;
-        size_t pixeloutstart = passstart[i] + (y * passw[i] + x) * byteWidth;
-        for(b = 0; b < byteWidth; b++)
+        size_t pixelinstart = ((ADAM7_IY[i] + y * ADAM7_DY[i]) * w + ADAM7_IX[i] + x * ADAM7_DX[i]) * bytewidth;
+        size_t pixeloutstart = passstart[i] + (y * passw[i] + x) * bytewidth;
+        for(b = 0; b < bytewidth; b++)
         {
           out[pixeloutstart + b] = in[pixelinstart + b];
         }

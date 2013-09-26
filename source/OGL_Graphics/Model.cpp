@@ -73,6 +73,9 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 	int tmpi = 0;
 	glm::vec3 tmpv3;
 	glm::vec2 tmpv2;
+  
+  glm::vec3 l_min_val = glm::vec3(0);
+  glm::vec3 l_max_val = glm::vec3(0);
 
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> verticeUV;
@@ -262,6 +265,22 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 					//printf("%f ", tmpf);
 				}
 				vertices.push_back(tmpv3);
+        
+        // Update min and max values of model to find the current scale of the model
+        if( tmpv3.x < l_min_val.x )
+          l_min_val.x = tmpv3.x;
+        if( tmpv3.y < l_min_val.y )
+          l_min_val.y = tmpv3.y;
+        if( tmpv3.z < l_min_val.z )
+          l_min_val.z = tmpv3.z;
+          
+        if( tmpv3.x > l_max_val.x )
+          l_max_val.x = tmpv3.x;
+        if( tmpv3.y > l_max_val.y )
+          l_max_val.y = tmpv3.y;
+        if( tmpv3.z > l_max_val.z )
+          l_max_val.z = tmpv3.z;
+        
 				if (f.peek() != '\n' && f.peek() != '\r')
 				{
 					throw stringf( "Unexpected symbol." );
@@ -275,10 +294,18 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				f >> tmpi;
 				indices->push_back(tmpi-1);
 				//printf("%i", tmpi);
+        
+        // Normalize model scaling
+        glm::vec3 l_diff = 1.f/(l_max_val - l_min_val);
+        glm::vec3 l_vertex = vertices[tmpi-1];
+        l_vertex.x = l_vertex.x * l_diff.x;
+        l_vertex.y = l_vertex.y * l_diff.y;
+        l_vertex.z = l_vertex.z * l_diff.z;
+        printf( "Scaling model down by %f, %f, %f\n", l_diff.x, l_diff.y, l_diff.z );
 
-				vertexData->push_back(vertices[tmpi-1].x);
-				vertexData->push_back(vertices[tmpi-1].y);
-				vertexData->push_back(vertices[tmpi-1].z);
+				vertexData->push_back(l_vertex.x);
+				vertexData->push_back(l_vertex.y);
+				vertexData->push_back(l_vertex.z);
 
 				f >> tmp;
 				if (tmp != '/')
