@@ -5,6 +5,10 @@
 #include <cstdarg>
 #include <vector>
 #include <cstdio>
+#include <cmath>
+
+#define SCREEN_UNITS_X 800
+#define SCREEN_UNITS_Y 600
 
 #include "OGL_Graphics/glm/ext.hpp"
 
@@ -108,7 +112,7 @@ bool RenderComponentLinux::Init()
   
   // Create and attach a camera
   static Camera l_cam;
-  l_cam.SetPosition( glm::vec3( 0.f, 0.f, 100.f ) );
+  l_cam.SetPosition( glm::vec3( SCREEN_UNITS_X*0.5f, SCREEN_UNITS_Y*0.5f, (float)(SCREEN_UNITS_Y*0.5f/tan( 45*0.5*3.1415/180 )) ) );
   l_cam.SetYawPitch( 0, 0 );
   l_cam.UpdateViewMatrix( );
   l_cam.SetClip( 5.f, 1000.f );
