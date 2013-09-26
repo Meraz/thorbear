@@ -264,6 +264,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 					//printf("%f ", tmpf);
 				}
 				vertices.push_back(tmpv3);
+        
         // Update min and max values of model to find the current scale of the model
         if( tmpv3.x < l_min_val.x )
           l_min_val.x = tmpv3.x;
@@ -293,13 +294,14 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				indices->push_back(tmpi-1);
 				//printf("%i", tmpi);
         
+        // Normalize model scaling
         glm::vec3 l_diff = l_max_val - l_min_val;
         glm::mat4 l_scale = glm::scale(
             glm::mat4(1.f),
             glm::vec3(
-                1/l_diff.x,
-                1/l_diff.y,
-                1/l_diff.z
+                1.f/l_diff.x,
+                1.f/l_diff.y,
+                1.f/l_diff.z
               )
           );
         vertices[tmpi-1] = glm::vec3( l_scale * glm::vec4( vertices[tmpi-1], 1.f ) );
