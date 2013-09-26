@@ -3,8 +3,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>$(THORBEAR)\source\Fmod\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>$(THORBEAR)\source\Fmod;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(THORBEAR)\source\fmod\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(THORBEAR)\source\fmod;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>

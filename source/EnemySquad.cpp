@@ -105,7 +105,7 @@ void EnemySquad::HandleLaserFiring()
 				Laser* temp = new Laser();
 				BoundingBox box(m_enemy.at(i)->GetBoundingBox().PosX, m_enemy.at(i)->GetBoundingBox().PosY);
 				box.Height = 10;
-				box.Width = 22;
+				box.Width = 1;
 				temp->Init(m_renderComp, 200, box); //TODO Don't hard code velocity in the end
 				m_laser.push_back(temp);
 			}

@@ -60,20 +60,20 @@ void Level::CreateEnemies()
 			if(m_map[i][j] == ENEMY1)
 			{
 				tempEnemy = new ShootingEnemy();
-				tempEnemy->Init(j * 20.0f, m_mapEdges.Height - (i * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
+				tempEnemy->Init(j * 20.0f, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
 				l_enemy.push_back(tempEnemy);
 			}
 			else if(m_map[i][j] == ENEMY2)
 			{
 				tempEnemy = new DefensiveEnemy();
-				tempEnemy->Init(j * 20.0f, m_mapEdges.Height - (i * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
+				tempEnemy->Init(j * 20.0f, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
 				l_enemy.push_back(tempEnemy);
 			}
 		}
 	}
 
 	tempSquad = new EnemySquad();
-	tempSquad->Init(m_mapEdges, 50, l_enemy);
+	tempSquad->Init(m_mapEdges, 25, l_enemy);
 	tempSquad->SetSquadRenderComponent(m_renderComp);
 	m_squad.push_back(tempSquad);
 }
