@@ -2,10 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup>
+    <IncludePath>$(THORBEAR)\source\Fmod\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(THORBEAR)\source\Fmod;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalDependencies>fmod/fmodex_vc.lib;fmod/fmodexL_vc.lib;fmod/fmodex64_vc.lib;fmod/fmodexL64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>fmodex_vc.lib;fmodexL_vc.lib;fmodex64_vc.lib;fmodexL64_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
