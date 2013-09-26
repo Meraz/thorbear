@@ -47,7 +47,7 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 	case HORIZONTAL:
 		for(unsigned int i = 0; i < m_enemy.size(); i++)
 		{
-			m_enemy.at(i)->Update(m_velocity * p_deltaTime, m_currentEnemyDirection);
+			m_enemy.at(i)->Update(m_velocity * p_deltaTime, m_currentEnemyDirection, p_deltaTime);
 		}
 		for(unsigned int i = 0; i < m_enemy.size(); i++)
 			if(m_enemy.at(i)->GetBoundingBox().PosX <= m_mapEdges.PosX || 
@@ -57,6 +57,12 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 				m_currentEnemyDirection = VERTICAL;
 				m_currentEnemyY = FindLowestEnemyRow(); //Use the lowest row so that we can use the same variable for laser firing checks
 				m_targetY = m_currentEnemyY - m_enemy.at(0)->GetBoundingBox().Height;
+
+				for(unsigned int i = 0; i < m_enemy.size(); i++)
+				{
+					m_enemy.at(i)->Update(m_velocity * (-p_deltaTime), m_currentEnemyDirection, p_deltaTime);
+				}
+
 				break;
 			}
 		break;
@@ -70,7 +76,7 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 		}
 		for(unsigned int i = 0; i < m_enemy.size(); i++)
 		{
-			m_enemy.at(i)->Update(abs(m_velocity * p_deltaTime), m_currentEnemyDirection);
+			m_enemy.at(i)->Update(abs(m_velocity * p_deltaTime), m_currentEnemyDirection, p_deltaTime);
 
 		}
 		break;
@@ -94,12 +100,12 @@ void EnemySquad::HandleLaserFiring()
 	for(unsigned int i = 0; i < m_enemy.size(); i++)
 	{
 		if(m_enemy.at(i)->WantsToFire())
-			if(m_enemy.at(i)->GetBoundingBox().PosY <= m_currentEnemyY) //Make sure that only the enemies in the lowest row gets to fire
+			if(m_enemy.at(i)->GetBoundingBox().PosY - (m_enemy.at(i)->GetBoundingBox().Height / 2) <= m_currentEnemyY) //Make sure that only the enemies in the lowest row gets to fire
 			{
 				Laser* temp = new Laser();
 				BoundingBox box(m_enemy.at(i)->GetBoundingBox().PosX, m_enemy.at(i)->GetBoundingBox().PosY);
 				box.Height = 10;
-				box.Width = 2;
+				box.Width = 22;
 				temp->Init(m_renderComp, 200, box); //TODO Don't hard code velocity in the end
 				m_laser.push_back(temp);
 			}

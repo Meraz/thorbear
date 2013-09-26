@@ -12,7 +12,7 @@ DefensiveEnemy::~DefensiveEnemy(void)
 {
 }
 
-void DefensiveEnemy::Update( float p_velocity, EnemyDirection p_direction)
+void DefensiveEnemy::Update( float p_velocity, EnemyDirection p_direction, float p_deltaTime)
 {
 	if(p_direction == HORIZONTAL)
 		m_posX += p_velocity;
