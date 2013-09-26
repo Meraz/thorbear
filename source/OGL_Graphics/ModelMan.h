@@ -4,7 +4,9 @@
 #include "ModelInstance.h"
 #include "RenderComponentInterface.h"
 
-#define MODEL_DIR "resources/models/"
+#include <string>
+
+#define MODEL_DIR std::string("resources/models/")
 
 class ModelMan
 {
