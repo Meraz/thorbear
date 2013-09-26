@@ -1,5 +1,7 @@
 #include "EnemySquad.h"
 
+#include <cmath>
+
 EnemySquad::EnemySquad()
 {
 	m_velocity = 0;
