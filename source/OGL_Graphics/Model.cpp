@@ -301,7 +301,6 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
         l_vertex.x = l_vertex.x * l_diff.x;
         l_vertex.y = l_vertex.y * l_diff.y;
         l_vertex.z = l_vertex.z * l_diff.z;
-        printf( "Scaling model down by %f, %f, %f\n", l_diff.x, l_diff.y, l_diff.z );
 
 				vertexData->push_back(l_vertex.x);
 				vertexData->push_back(l_vertex.y);
