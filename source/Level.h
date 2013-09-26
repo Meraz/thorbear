@@ -7,6 +7,8 @@
 #include "LevelImporter.h"
 #include "Ball.h"
 
+#include "SoundHandler.h"
+
 class Level
 {
 public:
@@ -30,6 +32,8 @@ private:
 
 	RenderComponentInterface*	m_renderComp;
 	int		m_mapBorderThickness;
+
+	SoundHandler* m_soundHandler;
 
 private:
 	void	CheckAllCollisions();
