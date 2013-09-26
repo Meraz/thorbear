@@ -296,11 +296,11 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				//printf("%i", tmpi);
         
         // Normalize model scaling
-        glm::vec3 l_diff = l_max_val - l_min_val;
-        vertices[tmpi-1].x = vertices[tmpi-1].x / l_diff.x;
-        vertices[tmpi-1].y = vertices[tmpi-1].y / l_diff.y;
-        vertices[tmpi-1].z = vertices[tmpi-1].z / l_diff.z;
-        printf( "Scaling model down by %f, %f, %f\n", l_diff.x, l_diff.y, l_diff.z );
+        //glm::vec3 l_diff = l_max_val - l_min_val;
+        //vertices[tmpi-1].x = vertices[tmpi-1].x / l_diff.x;
+        //vertices[tmpi-1].y = vertices[tmpi-1].y / l_diff.y;
+        //vertices[tmpi-1].z = vertices[tmpi-1].z / l_diff.z;
+        //printf( "Scaling model down by %f, %f, %f\n", l_diff.x, l_diff.y, l_diff.z );
 
 				vertexData->push_back(vertices[tmpi-1].x);
 				vertexData->push_back(vertices[tmpi-1].y);
