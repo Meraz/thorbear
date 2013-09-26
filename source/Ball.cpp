@@ -196,7 +196,7 @@ int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
 	{
 		if(m_direction.Y < 0)//coming from above
 		{
-			if(m_posY+(m_height/2) < p_objectBBox.PosY+p_objectBBox.Height) //if below, can't bounce off top side
+			if(m_posY+(m_height/2) < p_objectBBox.PosY) //if below, can't bounce off top side
 			{
 				if(m_direction.X < 0) //choose left or right side instead
 					return RIGHT;

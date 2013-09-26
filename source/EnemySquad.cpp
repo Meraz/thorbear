@@ -1,5 +1,10 @@
 #include "EnemySquad.h"
 
+//DEBUGGING ONLY
+/*#include <windows.h>
+#include <sstream>
+#include <iostream>*/
+
 EnemySquad::EnemySquad()
 {
 	m_velocity = 0;
@@ -26,6 +31,12 @@ void EnemySquad::Update( float p_deltaTime )
 	MoveEnemies(p_deltaTime);
 	HandleLaserFiring();
 
+	//DEBUGGING ONLY
+	/*std:wstringstream ss;
+	ss << "Crazy Enemy: " << m_enemy.at(9)->GetBoundingBox().PosX << "Normal Enemy: " << m_enemy.at(0)->GetBoundingBox().PosX << "\n";
+	std::wstring tt = ss.str();
+	OutputDebugStringW(tt.c_str());*/
+
 	for(unsigned int i = 0; i < m_laser.size(); i++)
 		m_laser.at(i)->Update(p_deltaTime);
 }
@@ -38,6 +49,8 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 		for(unsigned int i = 0; i < m_enemy.size(); i++)
 		{
 			m_enemy.at(i)->Update(m_velocity * p_deltaTime, m_currentEnemyDirection);
+		}
+		for(unsigned int i = 0; i < m_enemy.size(); i++)
 			if(m_enemy.at(i)->GetBoundingBox().PosX <= m_mapEdges.PosX || 
 				m_enemy.at(i)->GetBoundingBox().PosX + m_enemy.at(i)->GetBoundingBox().Width >= m_mapEdges.PosX + m_mapEdges.Width)
 			{
@@ -45,9 +58,8 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 				m_currentEnemyDirection = VERTICAL;
 				m_currentEnemyY = FindLowestEnemyRow(); //Use the lowest row so that we can use the same variable for laser firing checks
 				m_targetY = m_currentEnemyY - m_enemy.at(0)->GetBoundingBox().Height;
-
+				break;
 			}
-		}
 		break;
 	case VERTICAL:
 		m_currentEnemyY -= abs(m_velocity * p_deltaTime);
