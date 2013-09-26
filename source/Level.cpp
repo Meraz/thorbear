@@ -42,7 +42,9 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentI
 	m_ball->Init(CalculateBallOnPaddlePosX(), (float)m_paddle->GetPosY()-m_paddle->GetBoundingBox().Height-l_ballHeight, l_ballWidth, l_ballHeight, 200.0f, m_mapEdges, m_renderComp); //SPEED?!
 
 	CreateEnemies();
-
+	m_soundHandler = new SoundHandler();
+	m_soundHandler->Initialize();
+	m_soundHandler->PlayBackGroundSound("Audio/GameBackground.wav");
 }
 
 
@@ -95,6 +97,8 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 	}
 
 	CheckAllCollisions();
+
+	m_soundHandler->Update();
 }
 
 
@@ -133,7 +137,10 @@ void Level::CheckAllCollisions()
 	
 	//Paddle vs Ball
 	if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_ball->GetBoundingBox()))
+	{
 		m_ball->BallBounceAgainstPaddle(m_paddle->GetBoundingBox());
+		m_soundHandler->PlayGameSound(BALLBOUNCE);
+	}
 
 	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
@@ -145,7 +152,11 @@ void Level::CheckAllCollisions()
 				m_ball->BallBounceAgainstEnemy(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox());
 				m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
 				if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
+				{
 					m_squad.at(i)->EraseMember(ENEMY1, j);
+					m_soundHandler->PlayGameSound(ENEMYDEATH);
+				}
+				m_soundHandler->PlayGameSound(BALLBOUNCE);
 			}
 		}
 		
