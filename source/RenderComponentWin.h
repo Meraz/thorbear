@@ -3,10 +3,10 @@
 
 #include <vector>
 #include "RenderComponentInterface.h"
-#include "d3dUtil.h"
-#include "ModelManager.h"
-#include "ShaderManager.h"
-#include "Camera.h"
+#include "D3DX_Graphics\d3dUtil.h"
+#include "D3DX_Graphics\ModelManager.h"
+#include "D3DX_Graphics\ShaderManager.h"
+#include "D3DX_Graphics\Camera.h"
 
 struct ObjTemplate
 {

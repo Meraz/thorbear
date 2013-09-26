@@ -35,6 +35,7 @@ bool WindowWindows::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, PST
 	g_win32 = this;
 	m_clientWidth  = 800; 
 	m_clientHeight = 600;
+	m_lMouseClicked = false;
 	m_gameTimer->Reset();
 
 	WNDCLASS l_wc;
@@ -161,12 +162,13 @@ LRESULT WindowWindows::MsgProc(HWND p_hwnd, UINT p_msg, WPARAM p_wParam, LPARAM 
 	case WM_LBUTTONUP:
 		m_lMouseClicked = false;
 		return 0;
-
+    
 	case WM_MOUSEMOVE:
 		//OnMouseMove(p_wParam, GET_X_LPARAM(p_lParam), GET_Y_LPARAM(p_lParam));
 		m_mousePositionX = GET_X_LPARAM(p_lParam); 
 		m_mousePositionY = GET_Y_LPARAM(p_lParam);
 		return 0;
+	
 	
 	}
 	return DefWindowProc(p_hwnd, p_msg, p_wParam, p_lParam);

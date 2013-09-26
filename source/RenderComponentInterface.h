@@ -2,6 +2,7 @@
 #define RENDERCOMPONENTINTERFACE_H
 
 #include "BoundingBox.h"
+
 struct ParticleSystem
 {
 	int x;

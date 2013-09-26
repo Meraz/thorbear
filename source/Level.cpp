@@ -1,5 +1,8 @@
 #include "Level.h"
 
+#include <string>
+#include <sstream>
+using namespace std;
 
 Level::Level(void)
 {
@@ -24,7 +27,11 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentI
 	m_renderComp = p_renderComp;
 	m_mapEdges.Width = p_lvlWidth; 
 	m_mapEdges.Height = p_lvlHeight; 
-	string tmpString = "level"+to_string(p_lvlNr); 
+
+  std::stringstream l_ss;
+  l_ss << p_lvlNr;
+  std::string tmpString( "level" + l_ss.str() );
+
 	m_map = LevelImporter::LoadLevel(tmpString);	
 	m_paddle = new Paddle(p_lvlWidth/2.0f, 10.0f, 50, 20, p_lvlWidth); //example values
 	m_paddle->Initialize(p_renderComp);
@@ -79,6 +86,7 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 			ShootBallFromPaddle();
 	}
 	m_paddle->Update(p_mousePosX);
+  
 	m_ball->Update(p_deltaTime);
 
 	for(unsigned int i = 0; i < m_squad.size(); i++)
