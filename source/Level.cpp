@@ -7,12 +7,6 @@ Level::Level(void)
 	m_mapEdges.PosY = 0;
 	m_PaddleHasDied = false;
 	m_map = NULL;
-	m_nrOfEnemies = 0;
-	m_enemyVelocityX = 10;
-	m_enemyVelocityY = 10;
-	m_currentEnemyDirection = HORIZONTAL;
-	m_targetY = 0;
-	m_currentEnemyY = 0;
 
 	m_mapBorderThickness = 10;
 }
@@ -22,7 +16,7 @@ Level::~Level(void)
 {
 	delete m_paddle;
 	delete m_map;
-	vector<Enemy*>().swap(m_enemy);
+	vector<EnemySquad*>().swap(m_squad);
 }
 
 void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentInterface* p_renderComp )
@@ -42,35 +36,37 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentI
 
 	CreateEnemies();
 
-	for(unsigned int i = 0; i < m_enemy.size(); i++)
-	{
-		m_enemy.at(i)->SetRenderComponentInterface(p_renderComp);
-	}
 }
 
 
 void Level::CreateEnemies()
 {
-	Enemy* temp;
+	vector<Enemy*> l_enemy;
+	Enemy* tempEnemy;
+	EnemySquad* tempSquad;
 	for(int i = 0; i < 5; i++)
 	{
 		for(int j = 0; j < 15; j++)
 		{
 			if(m_map[i][j] == ENEMY1)
 			{
-				temp = new ShootingEnemy();
-				temp->Init(j * 20.0f, m_mapEdges.Height - (i * 20.0f), 20, 20, 10.0f);
-				m_enemy.push_back(temp);
+				tempEnemy = new ShootingEnemy();
+				tempEnemy->Init(j * 20.0f, m_mapEdges.Height - (i * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
+				l_enemy.push_back(tempEnemy);
 			}
 			else if(m_map[i][j] == ENEMY2)
 			{
-				temp = new DefensiveEnemy();
-				temp->Init(j * 20.0f, m_mapEdges.Height - (i * 20.0f), 20, 20, 10.0f);
-				m_enemy.push_back(temp);
+				tempEnemy = new DefensiveEnemy();
+				tempEnemy->Init(j * 20.0f, m_mapEdges.Height - (i * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
+				l_enemy.push_back(tempEnemy);
 			}
-			m_nrOfEnemies ++;
 		}
 	}
+
+	tempSquad = new EnemySquad();
+	tempSquad->Init(m_mapEdges, 50, l_enemy);
+	tempSquad->SetSquadRenderComponent(m_renderComp);
+	m_squad.push_back(tempSquad);
 }
 
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
@@ -84,130 +80,73 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 	}
 	m_paddle->Update(p_mousePosX);
 	m_ball->Update(p_deltaTime);
+
+	for(unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		m_squad.at(i)->Update(p_deltaTime);
+	}
+
 	CheckAllCollisions();
-	
-	MoveEnemies(p_deltaTime);
 }
 
-void Level::MoveEnemies( float p_deltaTime)
-{
-	switch(m_currentEnemyDirection)
-	{
-	case HORIZONTAL:
-		for(unsigned int i = 0; i < m_enemy.size(); i++)
-		{
-			m_enemy.at(i)->Update(p_deltaTime, m_currentEnemyDirection);
-			if(m_enemy.at(i)->GetBoundingBox().PosX <= m_mapEdges.PosX || 
-				m_enemy.at(i)->GetBoundingBox().PosX + m_enemy.at(i)->GetBoundingBox().Width >= m_mapEdges.PosX + m_mapEdges.Width)
-			{
-				m_enemy.at(0)->SetVelocity(m_enemy.at(0)->GetVelocity()*-1);
-				m_currentEnemyDirection = VERTICAL;
-				m_targetY = m_enemy.at(0)->GetBoundingBox().PosY - m_enemy.at(0)->GetBoundingBox().Height;
-				m_currentEnemyY = FindLowestEnemyRow(); //Use the lowest row so that we can use the same variable for laser firing checks
-			}
-		}
-		break;
-	case VERTICAL:
-		m_currentEnemyY -= m_enemy.at(0)->GetVelocity() * p_deltaTime;
-		if(m_currentEnemyY < m_targetY)
-		{
-			m_currentEnemyY = m_targetY; //Helps for checking which enemies will fire lasers
-			m_currentEnemyDirection = HORIZONTAL;
-			if(m_targetY <= m_paddle->GetBoundingBox().PosY)
-			{
-				//Game Over
-			}
-		}
-		for(unsigned int i = 0; i < m_enemy.size(); i++)
-		{
-			m_enemy.at(i)->Update(p_deltaTime, m_currentEnemyDirection);
 
-		}
-		for(unsigned int i = 0; i < m_laser.size(); i++)
-			m_laser.at(i)->Update();
-		break;
-	}
-}
-
-float Level::FindLowestEnemyRow()
-{
-	float l_lowestRow = 0;
-	for(unsigned int i = 0; i < m_enemy.size(); i++)
-	{
-		if(m_enemy.at(i)->GetBoundingBox().PosY < l_lowestRow) //The higher the Y value, the lower the row 
-			l_lowestRow = m_enemy.at(i)->GetBoundingBox().PosY;
-	}
-
-	return l_lowestRow;
-}
-
-void Level::HandleLaserFiring()
-{
-	for(unsigned int i = 0; i < m_enemy.size(); i++)
-	{
-		if(m_enemy.at(i)->WantsToFire())
-			if(m_enemy.at(i)->GetBoundingBox().PosY == m_currentEnemyY) //Make sure that only the enemies in the lowest row gets to fire
-			{
-				Laser* temp = new Laser();
-				BoundingBox box(m_enemy.at(i)->GetBoundingBox().PosX, m_enemy.at(i)->GetBoundingBox().PosY);
-				box.Height = 5;
-				box.Width = 1;
-				temp->Init(m_renderComp, 1, box);
-			}
-	}
-}
 
 void Level::Render()
 {
 	RenderMapEdges();
 	m_paddle->Render();
 	m_ball->Render();
-	for(unsigned int i = 0; i < m_enemy.size(); i++)
-		m_enemy.at(i)->Render();
-
-	for(unsigned int i = 0; i < m_laser.size(); i++)
-		m_laser.at(i)->Render();
-	//TODO lasers, powerups and ball. 
+	
+	for(unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		m_squad.at(i)->Render();
+	}
+	//TODO powerups. 
 	//m_renderComp->RenderObject(m_bBox, OUTERBOUNDS) Render maps outer bounds/edges
 }
 
 void Level::CheckAllCollisions()
 {
 	
-	/*
-	BoundingBox LaserBoundingBox;
-	LaserBoundingBox.Height = 50;
-	LaserBoundingBox.Width	= 20;
-	LaserBoundingBox.posX = 400;
-	LaserBoundingBox.posY = 740;
-	*/
-	//Paddle vs Laser
-	//if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), LaserBoundingBox))
-		//m_PaddleHasDied = true;
+	//Paddle vs Laser and Ball vs Laser
+	for(unsigned int i = 0; i < m_squad.size(); i++)
+	{
+			for(unsigned int j = 0; j < m_squad.at(i)->GetLasers().size(); j++)
+			{
+				if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
+				{
+					m_PaddleHasDied = true;
+					m_squad.at(i)->EraseMember(BALL, j); //TODO Change to LASER once this define is implemented
+				}
+				else if(BoundingBoxIntersect(m_ball->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
+					m_squad.at(i)->EraseMember(BALL, j); //TODO Change to LASER once this define is implemented
+			}
+	}
 	
 	//Paddle vs Ball
 	if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_ball->GetBoundingBox()))
 		m_ball->BallBounceAgainstPaddle(m_paddle->GetBoundingBox());
 
-	//Paddle vs PowerUp
-	//if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
-		//Stuff happens
-	
-	for(unsigned int i = 0; i < m_enemy.size(); i++)
+	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
-		//Ball vs Enemy
-		if(BoundingBoxIntersect(m_ball->GetBoundingBox(), m_enemy.at(i)->GetBoundingBox()))
+		for(unsigned int j = 0; j < m_squad.at(i)->GetEnemies().size(); j++)
 		{
-			m_ball->BallBounceAgainstEnemy(m_enemy.at(i)->GetBoundingBox());
-			m_enemy.at(i)->TakeDamage();
-			if(m_enemy.at(i)->GetNumOfLives() == 0)
-				m_enemy.erase(m_enemy.begin() + i);
+			//Ball vs Enemy
+			if(BoundingBoxIntersect(m_ball->GetBoundingBox(), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox()))
+			{
+				m_ball->BallBounceAgainstEnemy(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox());
+				m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
+				if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
+					m_squad.at(i)->EraseMember(ENEMY1, j);
+			}
 		}
+		
 	}
 
-	//Ball vs Laser
-	//if(BoundingBoxIntersect(BallBoundingBox, LaserBoundingBox))
-		//Remove laser
+	//Paddle vs PowerUp
+	//if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
+	//TODO Stuff happens
+
 }
 
 bool Level::BoundingBoxIntersect(BoundingBox p_box1, BoundingBox p_box2)
@@ -229,8 +168,12 @@ bool Level::HasPaddleDied()
 
 int Level::GetNrOfEnemies()
 {
-	//m_nrOfEnemies--; //For test purposes only
-	return m_nrOfEnemies;
+	int l_numEnemies = 0;
+	for(unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		l_numEnemies += m_squad.at(i)->GetNumOfEnemies();
+	}
+	return l_numEnemies;
 }
 
 float Level::CalculateBallOnPaddlePosX()

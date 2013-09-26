@@ -1,12 +1,11 @@
 #include "Enemy.h"
 
-void Enemy::Init(float p_posX, float p_posY, int p_width, int p_height, float p_velocity)
+void Enemy::Init(float p_posX, float p_posY, int p_width, int p_height)
 {
 	m_BoundingBox.PosX = m_posX = p_posX;
 	m_BoundingBox.PosY = m_posY = p_posY;
 	m_BoundingBox.Width = p_width;
 	m_BoundingBox.Height = p_height;
-	m_velocity = p_velocity;
 }
 
 BoundingBox Enemy::GetBoundingBox()
@@ -38,12 +37,3 @@ void Enemy::SetRenderComponentInterface(RenderComponentInterface* p_RenderComp)
 	m_RenderComp = p_RenderComp;
 }
 
-float Enemy::GetVelocity()
-{
-	return m_velocity;
-}
-
-void Enemy::SetVelocity(float p_velocity)
-{
-	m_velocity = p_velocity;
-}
