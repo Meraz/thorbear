@@ -144,3 +144,5 @@ App_Data/*.ldf
 
 #unignore model .obj files
 !resources/models/*.obj
+!resources/models/*/*.obj
+!object/*/*.obj
