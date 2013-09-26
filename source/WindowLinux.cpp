@@ -3,6 +3,8 @@
 #include <cstdio>
 #include <cstdlib>
 
+extern inline std::string stringf( const char *p_fmt, ... );
+
 WindowLinux* WindowLinux::m_windowLinux = NULL;
 
 WindowLinux::WindowLinux()
