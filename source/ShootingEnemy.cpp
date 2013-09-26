@@ -7,7 +7,7 @@ ShootingEnemy::ShootingEnemy(void)
 	m_enemyType = ENEMY1;
 	m_wantsToFire = false;
 	m_tick = 0;
-	m_shootIntervall = 3 +  rand() % 10;
+	m_shootIntervall = 3.0f +  rand() % 10;
 }
 
 
@@ -27,7 +27,7 @@ void ShootingEnemy::Update(float p_velocity, EnemyDirection p_direction, float p
 	if(m_tick >= m_shootIntervall)
 	{
 		m_tick = 0.0f;
-		m_shootIntervall = 3 +  rand() % 10;
+		m_shootIntervall = 3.0f +  rand() % 10;
 		int l_chanceToFire = rand() % 100;
 		if(l_chanceToFire > 40)
 			m_wantsToFire = true;
