@@ -1,7 +1,7 @@
 #ifndef SOUNDHANDLER_H
 #define SOUNDHANDLER_H
-#include "Fmod/inc/fmod.hpp"
-#include "Fmod/inc/fmod_errors.h"
+#include "fmod.hpp"
+#include "fmod_errors.h"
 //#include "windows.h"
 #include "stdio.h"
 #include <string>
