@@ -109,8 +109,10 @@ void WindowLinux::Update()
   
   int l_mousePositionX, l_mousePositionY;
   glfwGetMousePos( &l_mousePositionX, &l_mousePositionY );
+  
+  bool l_clicked = (glfwGetMouseButton( GLFW_MOUSE_BUTTON_LEFT ) == GLFW_PRESS);
 
-	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY, false);
+	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY, l_clicked);
   
   glfwSleep( 1. / 60. - l_deltaTime - .01 ); // Limit UPS
 }
