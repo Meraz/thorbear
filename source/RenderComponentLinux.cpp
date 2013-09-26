@@ -124,27 +124,27 @@ bool RenderComponentLinux::Init()
   glm::vec3 l_fwd = glm::vec3(0.f, 0.f, -1.f) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
   printf( "Debug info: Forward is towards %f, %f, %f\n", l_fwd[0], l_fwd[1], l_fwd[2] );
   
-  int errCount = 0;
+  int l_errCount = 0;
   for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
   {
     //Do something with `currError`.
     printf( "OpenGL error #%d.\n", currError );
-    ++errCount;
+    ++l_errCount;
   }
-  if( errCount > 0 )
-    printf( "RenderComponentLinux::Init: Total of %d OpenGL errors.\n", errCount );
+  if( l_errCount > 0 )
+    printf( "RenderComponentLinux::Init: Total of %d OpenGL errors.\n", l_errCount );
   
   m_modelManager.LoadModels();
   
-  errCount = 0;
+  l_errCount = 0;
   for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
   {
     //Do something with `currError`.
     printf( "OpenGL error #%d.\n", currError );
-    ++errCount;
+    ++l_errCount;
   }
-  if( errCount > 0 )
-    printf( "RenderComponentLinux::m_modelManager.LoadModels: Total of %d OpenGL errors.\n", errCount );
+  if( l_errCount > 0 )
+    printf( "RenderComponentLinux::m_modelManager.LoadModels: Total of %d OpenGL errors.\n", l_errCount );
   
   return true;
 }
@@ -188,15 +188,15 @@ void RenderComponentLinux::Render()
   
   if( g_renderfirsttime )
   {
-    int errCount = 0;
+    int l_errCount = 0;
     for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
     {
       //Do something with `currError`.
       printf( "OpenGL error #%d.\n", currError );
-      ++errCount;
+      ++l_errCount;
     }
-    if( errCount > 0 )
-      printf( "RenderComponentLinux::Render: Total of %d OpenGL errors.\n", errCount );
+    if( l_errCount > 0 )
+      printf( "RenderComponentLinux::Render: Total of %d OpenGL errors.\n", l_errCount );
     g_renderfirsttime = false;
   }
 }

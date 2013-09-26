@@ -119,15 +119,6 @@ void WindowLinux::Render()
 {
 	WindowBaseClass::Render();
   
-  BoundingBox l_bb;
-  l_bb.PosX = 0;
-  l_bb.PosY = 20;
-  l_bb.Width = 0;
-  l_bb.Height = 0;
-  
-  ((RenderComponentLinux*)m_renderComponentInterface)->RenderObject( l_bb, ENEMY1 );
-  l_bb.PosY = -20;
-  ((RenderComponentLinux*)m_renderComponentInterface)->RenderObject( l_bb, ENEMY2 );
   ((RenderComponentLinux*)m_renderComponentInterface)->Render();
 }
 
