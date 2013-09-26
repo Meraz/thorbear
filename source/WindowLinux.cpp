@@ -107,6 +107,14 @@ void WindowLinux::Update()
 	double l_deltaTime     = l_newTime - m_oldTime;
   m_oldTime              = l_newTime;
   
+  m_countFps++;
+  if( l_newTime - m_lastFpsUpdate >= 1 )
+  {
+    glfwSetWindowTitle( stringf( "SpaceOut: Linux Edition. Current FPS: %d.", m_countFps ).c_str() );
+    m_lastFpsUpdate = l_newTime;
+    m_countFps = 0;
+  }
+  
   int l_mousePositionX, l_mousePositionY;
   glfwGetMousePos( &l_mousePositionX, &l_mousePositionY );
   
