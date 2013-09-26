@@ -37,7 +37,7 @@ int RenderComponentWin::Initialize()
 	m_camera = new Camera();
 	m_camera->SetLens(MathHelper::PI * 0.25f, (float)m_clientWidth/m_clientHeight, 0.5f, 1000.0f);
 
-	m_camera->SetPos(300, 200, -900);
+	m_camera->SetPos(300, 200, -600);
 
 	Load();
 	CreateTemplates();
@@ -52,16 +52,30 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 
 	m_camera->RebuildView();
 
-	float l_xScaleFactor = 1.0f/(l_model->m_topBoundingCorner.x - l_model->m_bottomBoundingCorner.x);
-	float l_yScaleFactor = 1.0f/(l_model->m_topBoundingCorner.y - l_model->m_bottomBoundingCorner.y);
-
-	l_xScaleFactor *= p_boundingBox.Width;
-	l_yScaleFactor *= p_boundingBox.Height;
-
-	// Scale matrix
 	D3DXMATRIX l_scaleMat;
-	D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, l_yScaleFactor, 1.0f);
+	if(p_boundingBox.Height == -1 || p_boundingBox.Width == -1)
+	{
+		D3DXMatrixScaling(&l_scaleMat, 1.0f, 1.0f, 1.0f);
+	}
+	else
+	{
+		float l_xScaleFactor = 1.0f/(l_model->m_topBoundingCorner.x - l_model->m_bottomBoundingCorner.x);
+		float l_yScaleFactor = 1.0f/(l_model->m_topBoundingCorner.y - l_model->m_bottomBoundingCorner.y);
+		l_xScaleFactor *= p_boundingBox.Width;
+		l_yScaleFactor *= p_boundingBox.Height;
 
+		if(p_boundingBox.Depth == -1)
+		{
+			D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, l_yScaleFactor, 1.0f);
+		}
+		else
+		{
+			float l_zScaleFactor = 1.0f/(l_model->m_topBoundingCorner.z - l_model->m_bottomBoundingCorner.z);
+			l_zScaleFactor *= p_boundingBox.Depth;
+			D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, l_yScaleFactor, l_zScaleFactor);
+		}
+	}
+	
 	// Translation matrix
 	D3DXMATRIX l_translateMat;
 	D3DXMatrixTranslation(&l_translateMat, p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), 0);	// Create translation matrix

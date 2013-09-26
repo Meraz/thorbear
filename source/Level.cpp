@@ -26,7 +26,7 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentI
 	m_mapEdges.Height = p_lvlHeight; 
 	string tmpString = "level"+to_string(p_lvlNr); 
 	m_map = LevelImporter::LoadLevel(tmpString);	
-	m_paddle = new Paddle(p_lvlWidth/2.0f, 50.0f, 50, 50, p_lvlWidth); //example values
+	m_paddle = new Paddle(p_lvlWidth/2.0f, 10.0f, 50, 20, p_lvlWidth); //example values
 	m_paddle->Initialize(p_renderComp);
 
 	m_ball = new Ball();
@@ -184,8 +184,8 @@ float Level::CalculateBallOnPaddlePosX()
 
 void Level::ShootBallFromPaddle()
 {
-	
-	float l_diff = m_ball->GetPosX()+(m_ball->GetBoundingBox().Width/2) - m_paddle->GetPosX()+(m_paddle->GetBoundingBox().Width/2); //length between middle of ball and middle of paddle
+	//float l_diff = (m_posX+(m_width/2)) - (p_paddleBBox.PosX+(p_paddleBBox.Width/2));
+	float l_diff = m_ball->GetPosX()+(m_ball->GetBoundingBox().Width/2) - (m_paddle->GetPosX()+(m_paddle->GetBoundingBox().Width/2)); //length between middle of ball and middle of paddle
 
 	if(l_diff == 0) //if ball is in the middle of paddle
 	{
@@ -193,16 +193,16 @@ void Level::ShootBallFromPaddle()
 	}
 	else //set angle to a value between 45 and 135 (degrees)
 	{
-		m_ball->SetDirection((float)cos((l_diff / ((m_ball->GetBoundingBox().Width/2) + (m_paddle->GetBoundingBox().Width/2))) * 0.7));
+		m_ball->SetDirection((float)acos((l_diff / ((m_ball->GetBoundingBox().Width/2) + (m_paddle->GetBoundingBox().Width/2))) * 0.7));
 	}
 	m_ball->ShootBall();
 }
 
 void Level::RenderMapEdges()
 {
-	BoundingBox l_leftSide = BoundingBox(m_mapEdges.PosX - m_mapBorderThickness, m_mapEdges.PosY, m_mapBorderThickness, m_mapEdges.Height + m_mapBorderThickness);
-	BoundingBox l_rightSide = BoundingBox(m_mapEdges.PosX + m_mapEdges.Width, m_mapEdges.PosY, m_mapBorderThickness, m_mapEdges.Height + m_mapBorderThickness);
-	BoundingBox l_topSide = BoundingBox(m_mapEdges.PosX + m_mapBorderThickness/2, m_mapEdges.PosY + m_mapEdges.Height, m_mapEdges.Width + m_mapBorderThickness, m_mapBorderThickness);
+	BoundingBox l_leftSide = BoundingBox(m_mapEdges.PosX - m_mapBorderThickness, m_mapEdges.PosY, m_mapBorderThickness, m_mapEdges.Height + m_mapBorderThickness, 40);
+	BoundingBox l_rightSide = BoundingBox(m_mapEdges.PosX + m_mapEdges.Width, m_mapEdges.PosY, m_mapBorderThickness, m_mapEdges.Height + m_mapBorderThickness, 40);
+	BoundingBox l_topSide = BoundingBox(m_mapEdges.PosX + m_mapBorderThickness/2, m_mapEdges.PosY + m_mapEdges.Height, m_mapEdges.Width + m_mapBorderThickness, m_mapBorderThickness, 40);
 
 	m_renderComp->RenderObject(l_leftSide, BALL);
 	m_renderComp->RenderObject(l_rightSide, BALL);

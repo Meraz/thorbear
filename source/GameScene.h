@@ -11,7 +11,7 @@ public:
 	~GameScene(void);
 
 	void Initialize(RenderComponentInterface* p_renderComponentInterface);
-	void Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY /* add keyboard parameters here*/); // TODO add vector with keyclicks here
+	void Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked /* add keyboard parameters here*/); // TODO add vector with keyclicks here
 	void Render();
 
 private:

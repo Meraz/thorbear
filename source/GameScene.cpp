@@ -26,11 +26,11 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 	//create and init user interface
 }
 
-void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY /* add keyboard parameters here*/)
+void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked /* add keyboard parameters here*/)
 {
 	// TODO : delta time.
 
-	m_level->Update(p_mousePositionX, false, (float)p_deltaTime); // TODO : NO hardcoded booleans
+	m_level->Update(p_mousePositionX, p_lMouseClicked, (float)p_deltaTime); // TODO : NO hardcoded booleans
 
 	CheckPaddleDeath();
 	CheckEnemyNr();
