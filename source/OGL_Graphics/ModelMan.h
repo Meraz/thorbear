@@ -6,7 +6,7 @@
 
 #include <string>
 
-#define MODEL_DIR std::string("objects/")
+#define MODEL_DIR std::string("object/")
 
 class ModelMan
 {
