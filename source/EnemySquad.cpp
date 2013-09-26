@@ -1,10 +1,9 @@
 #include "EnemySquad.h"
-
+#include <cmath>
 //DEBUGGING ONLY
 /*#include <windows.h>
 #include <sstream>
 #include <iostream>*/
-
 EnemySquad::EnemySquad()
 {
 	m_velocity = 0;

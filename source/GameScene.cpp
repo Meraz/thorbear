@@ -73,6 +73,6 @@ void GameScene::CheckEnemyNr()
 		if(m_currentLevel > m_maxNrOfLevels)
 			m_currentLevel = 1;
 		m_level = new Level();
-		m_level->Init(m_currentLevel, 600, 800, m_renderComponentInterface); // TODO : HARDCODED
+		m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : HARDCODED
 	}
 }
