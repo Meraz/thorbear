@@ -5,6 +5,8 @@
 
 #include <string>
 
+#define TEXTURE_EXT ".tga"
+
 class Model
 {
 public:

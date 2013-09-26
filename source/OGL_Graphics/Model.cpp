@@ -167,7 +167,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 					mtlf >> tmpstr;
 					printf( "Ambient texture: " );
 
-					tga_data_t* l_mapAmbient = tga_data_load( ( dir + tmpstr ).c_str( ) );
+					tga_data_t* l_mapAmbient = tga_data_load( ( dir + tmpstr + TEXTURE_EXT).c_str( ) );
           model.m_mtl->m_coefficientAmbient = glm::vec3(0);
           
           glGenTextures( 1, &model.m_mtl->m_mapAmbient );
@@ -184,7 +184,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 					mtlf >> tmpstr;
 					printf( "Diffuse texture: " );
 
-					tga_data_t* l_mapDiffuse = tga_data_load( ( dir + tmpstr ).c_str( ) );
+					tga_data_t* l_mapDiffuse = tga_data_load( ( dir + tmpstr + TEXTURE_EXT ).c_str( ) );
           model.m_mtl->m_coefficientDiffuse = glm::vec3(0);
           
           glGenTextures( 1, &model.m_mtl->m_mapDiffuse );
@@ -201,7 +201,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 					mtlf >> tmpstr;
 					printf( "Specular texture: " );
 
-					tga_data_t* l_mapSpecular = tga_data_load( ( dir + tmpstr ).c_str( ) );
+					tga_data_t* l_mapSpecular = tga_data_load( ( dir + tmpstr + TEXTURE_EXT ).c_str( ) );
           model.m_mtl->m_coefficientSpecular = glm::vec3(0);
           
           glGenTextures( 1, &model.m_mtl->m_mapSpecular );
