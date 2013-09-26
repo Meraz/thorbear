@@ -74,7 +74,8 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 	glm::vec3 tmpv3;
 	glm::vec2 tmpv2;
   
-  glm::vec3 l_min_val, l_max_val;
+  glm::vec3 l_min_val = glm::vec3(0);
+  glm::vec3 l_max_val = glm::vec3(0);
 
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> verticeUV;
