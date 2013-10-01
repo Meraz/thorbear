@@ -6,6 +6,9 @@
 #include "EnemySquad.h"
 #include "LevelImporter.h"
 #include "Ball.h"
+#include "LargerPaddlePowerup.h"
+#include "SmallerPaddlePowerup.h"
+#include "AddBallPowerup.h"
 
 #include "SoundHandler.h"
 
@@ -24,9 +27,11 @@ public:
 	int		GetNrOfBalls();
 	void	AddBall();
 
+
 private:
 	vector<EnemySquad*> m_squad;
 	vector<Ball*>		m_ball;
+	vector<Powerup*>	m_powerup;
 	BoundingBox			m_mapEdges;
 	Paddle*				m_paddle;
 	//Ball*				m_ball;
@@ -50,6 +55,7 @@ private:
 	void	ShootBallFromPaddle(int p_ballVectorPos);
 	void	CreateEnemies();
 	void	RenderMapEdges();
+	void	SpawnPowerup(float p_posX, float p_posY);
 };
 
 #endif LEVEL_H

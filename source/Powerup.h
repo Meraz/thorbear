@@ -12,12 +12,12 @@ enum PowerupType
 class Powerup
 {
 public:
-	void			init(float p_posX, float p_posY, int p_width, int p_height);
+	void			init(float p_posX, float p_posY, int p_width, int p_height, RenderComponentInterface* p_renderComp);
 	virtual void	Update(float p_deltaTime) = 0;
 	virtual void	Render() = 0;
 	BoundingBox		GetBoundingBox();
 	PowerupType		GetPowerUpType();
-	void			SetRenderComponentInterface(RenderComponentInterface* p_renderComp);
+
 		
 
 protected:

@@ -85,6 +85,19 @@ void Level::AddBall()
 	m_ball.back()->Init(CalculateBallOnPaddlePosX(), m_paddle->GetBoundingBox().PosY+m_paddle->GetBoundingBox().Height, m_ballWidth, m_ballHeight, m_ballSpeed, m_mapEdges, m_renderComp);
 	ShootBallFromPaddle(m_ball.size()-1);
 }
+void Level::SpawnPowerup(float p_posX, float p_posY)
+{
+	int l_random = rand() % 3;
+	if(l_random == 0)
+		m_powerup.push_back(new LargerPaddlePowerup());
+	else if(l_random == 1)
+		m_powerup.push_back(new SmallerPaddlePowerUp());
+	else if(l_random == 2)
+		m_powerup.push_back(new AddBallPowerup());
+
+	m_powerup.back()->init(p_posX, p_posY, 10, 10 , m_renderComp);
+	//m_powerup.p
+}
 
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
@@ -127,6 +140,10 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 	{
 		m_squad.at(i)->Update(p_deltaTime);
 	}
+	for(unsigned int i = 0; i < m_powerup.size(); i++)
+	{
+		m_powerup.at(i)->Update(p_deltaTime);
+	}
 
 	CheckAllCollisions();
 
@@ -149,6 +166,11 @@ void Level::Render()
 		m_squad.at(i)->Render();
 	}
 	//TODO powerups. 
+	for( unsigned int i = 0; i < m_powerup.size(); i++)
+	{
+		m_powerup.at(i)->Render();
+	}
+	
 }
 
 void Level::CheckAllCollisions()
@@ -181,6 +203,9 @@ void Level::CheckAllCollisions()
 					m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
 					if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
 					{
+						int l_random = rand() % 100;
+						if(l_random > 30)
+							SpawnPowerup(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosX, m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosY);
 						m_squad.at(i)->EraseMember(ENEMY1, j);
 						m_soundHandler->PlayGameSound(ENEMYDEATH);
 					}
@@ -212,6 +237,36 @@ void Level::CheckAllCollisions()
 	}
 
 	// Paddle vs PowerUp
+	for(unsigned int i = 0; i < m_powerup.size(); i++)
+	{
+		if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_powerup.at(i)->GetBoundingBox()))
+		{
+			if(m_powerup.at(i)->GetPowerUpType() ==  LARGERPADDLE)
+			{
+				m_paddle->SetWidth(m_paddle->GetBoundingBox().Width + 20);
+				if(m_paddle->GetBoundingBox().Width > 100)
+					m_paddle->SetWidth(100);
+			}	
+			else if(m_powerup.at(i)->GetPowerUpType() ==  SMALLERPADDLE)
+			{
+				m_paddle->SetWidth(m_paddle->GetBoundingBox().Width - 20);
+				if(m_paddle->GetBoundingBox().Width < 30)
+					m_paddle->SetWidth(30);
+			}
+			else if(m_powerup.at(i)->GetPowerUpType() ==  ADDBALL)
+			{
+				AddBall();
+			}
+			else if(m_powerup.at(i)->GetPowerUpType() ==  ADDLIFE)
+			{
+				//implement somekind of bool that gamescene checks, simiilar to the lose life one
+			}
+			m_powerup.erase(m_powerup.begin() + i);
+		}
+		else if(m_powerup.at(i)->GetBoundingBox().PosY <= 0)
+				m_powerup.erase(m_powerup.begin() + i);
+	}
+	
 	// if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
 	// TODO Stuff happens
 
