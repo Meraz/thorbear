@@ -26,7 +26,7 @@ void DefensiveEnemy::Update( float p_velocity, EnemyDirection p_direction, float
 
 void DefensiveEnemy::Render()
 {
-	m_RenderComp->RenderObject(GetBoundingBox(), ENEMY1, Vect3(1.0f)*(m_numOfLives*0.5f)); //TODO change to ENEMY2 once we have a model for it
+	m_RenderComp->RenderObject(GetBoundingBox(), ENEMY2, Vect3(1.0f)*(m_numOfLives*0.5f)); //TODO change to ENEMY2 once we have a model for it
 }
 
 bool DefensiveEnemy::WantsToFire()
