@@ -162,7 +162,7 @@ void RenderComponentLinux::SetHints()
 	//glfwOpenWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE ); // force current version of spec
 }
 
-void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)
+void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color)
 {
   // Create an object based on p_objectType (p_textureType)
   ModelInstance* l_modelInstance = m_modelManager.CreateInstance( p_boundingBox, p_textureType );

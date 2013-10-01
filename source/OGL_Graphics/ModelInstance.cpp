@@ -27,6 +27,14 @@ void ModelInstance::Render( Shader& p_shader )
     firsttime = false;
   }
   p_shader.UpdateUniform( m_modelMatrix );
+  p_shader.SetUniformVector( "intensityDiffuse", m_tint );
 
   m_model->Render( p_shader );
+}
+
+void ModelInstance::SetTint( Vect3 p_color )
+{
+  m_tint.r = p_color.r;
+  m_tint.g = p_color.g;
+  m_tint.b = p_color.b;
 }
