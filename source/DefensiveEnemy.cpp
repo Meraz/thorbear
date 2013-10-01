@@ -1,5 +1,7 @@
 #include "DefensiveEnemy.h"
 #include <cstdlib>
+#include <climits>
+#include <cmath>
 
 DefensiveEnemy::DefensiveEnemy(void)
 {

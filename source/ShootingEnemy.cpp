@@ -1,5 +1,7 @@
 #include "ShootingEnemy.h"
 #include <cstdlib>
+#include <climits>
+#include <cmath>
 
 ShootingEnemy::ShootingEnemy(void)
 {
