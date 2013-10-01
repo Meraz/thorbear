@@ -33,3 +33,8 @@ void Button::ExecuteCommand()
 {
 	((m_scene)->*(m_function))(m_sceneState, m_gameType);
 }
+
+void Button::Render()
+{
+	//m_renderComponentInterface->RenderObject(BoundingBox(m_boundingBox.PosX, m_boundingBox.PosY, m_boundingBox.Width, m_boundingBox.Height), ENEMY1); // IT DOES NOT RENDER CORRECTLY
+}
