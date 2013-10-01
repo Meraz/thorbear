@@ -10,8 +10,9 @@ Level::Level(void)
 	m_mapEdges.PosY = 0;
 	m_PaddleHasDied = false;
 	m_map = NULL;
-
+	m_prevLMouseClickStatus = false;
 	m_mapBorderThickness = 10;
+	m_ballSpeed = 200.0f;
 }
 
 
@@ -28,18 +29,18 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentI
 	m_mapEdges.Width = p_lvlWidth; 
 	m_mapEdges.Height = p_lvlHeight; 
 
-  std::stringstream l_ss;
-  l_ss << p_lvlNr;
-  std::string tmpString( "level" + l_ss.str() );
+	std::stringstream l_ss;
+	l_ss << p_lvlNr;
+	std::string tmpString( "level" + l_ss.str() );
 
 	m_map = LevelImporter::LoadLevel(tmpString);	
 	m_paddle = new Paddle(p_lvlWidth/2.0f, 10.0f, 50, 10, p_lvlWidth); //example values
 	m_paddle->Initialize(p_renderComp);
 
-	m_ball = new Ball();
-	int l_ballHeight = 5; //TEST ONLY
-	int l_ballWidth = 5; //TEST ONLY
-	m_ball->Init(CalculateBallOnPaddlePosX(), (float)m_paddle->GetPosY()-m_paddle->GetBoundingBox().Height-l_ballHeight, l_ballWidth, l_ballHeight, 200.0f, m_mapEdges, m_renderComp); //SPEED?!
+	m_ball.push_back(new Ball());
+	m_ballHeight = 5; //TEST ONLY
+	m_ballWidth = 5; //TEST ONLY
+	m_ball.front()->Init(CalculateBallOnPaddlePosX(), (float)m_paddle->GetPosY()+m_paddle->GetBoundingBox().Height, m_ballWidth, m_ballHeight, m_ballSpeed, m_mapEdges, m_renderComp); //SPEED?!
 
 	CreateEnemies();
 	m_soundHandler = new SoundHandler();
@@ -78,18 +79,49 @@ void Level::CreateEnemies()
 	m_squad.push_back(tempSquad);
 }
 
+void Level::AddBall()
+{
+	m_ball.push_back(new Ball());
+	m_ball.back()->Init(CalculateBallOnPaddlePosX(), m_paddle->GetBoundingBox().PosY+m_paddle->GetBoundingBox().Height, m_ballWidth, m_ballHeight, m_ballSpeed, m_mapEdges, m_renderComp);
+	ShootBallFromPaddle(m_ball.size()-1);
+}
+
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
-	if(m_ball->IsBallDead())
+	for (unsigned int i = 0; i < m_ball.size(); i++)
 	{
-		m_ball->SetPosX(CalculateBallOnPaddlePosX());
-		m_ball->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height));
-		if(p_isMouseClicked)
-			ShootBallFromPaddle();
-	}
+		m_ball.at(i)->Update(p_deltaTime);
+
+		if(m_ball.at(i)->IsBallDead())
+		{
+			if (m_ball.size() == 1)
+			{
+				m_ball.at(i)->SetPosX(CalculateBallOnPaddlePosX());
+				m_ball.at(i)->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height) + 20);
+				if(p_isMouseClicked && !m_prevLMouseClickStatus)
+				{
+					ShootBallFromPaddle(i);
+				}
+			}
+			else
+			{
+				m_ball.erase(m_ball.begin() + i);
+				i--; // ?
+			}
+		}
+		// TEST
+		/*else
+		{
+			if(p_isMouseClicked && !m_prevLMouseClickStatus)
+			{
+				AddBall();
+				i++;
+			}
+		}*/
+		// END TEST
+	} 
+	m_prevLMouseClickStatus = p_isMouseClicked;
 	m_paddle->Update(p_mousePosX);
-  
-	m_ball->Update(p_deltaTime);
 
 	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
@@ -107,64 +139,81 @@ void Level::Render()
 {
 	RenderMapEdges();
 	m_paddle->Render();
-	m_ball->Render();
+	for (unsigned int i = 0; i < m_ball.size(); i++)
+	{
+		m_ball.at(i)->Render();
+	}
 	
 	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
 		m_squad.at(i)->Render();
 	}
 	//TODO powerups. 
-	//m_renderComp->RenderObject(m_bBox, OUTERBOUNDS) Render maps outer bounds/edges
 }
 
 void Level::CheckAllCollisions()
 {
-	
-	//Paddle vs Laser and Ball vs Laser
-	for(unsigned int i = 0; i < m_squad.size(); i++)
+	for (unsigned int k = 0; k < m_ball.size(); k++) // Ball vs...
 	{
+		//... Laser
+		for(unsigned int i = 0; i < m_squad.size(); i++)
+		{
 			for(unsigned int j = 0; j < m_squad.at(i)->GetLasers().size(); j++)
 			{
-				if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
-				{
-					m_PaddleHasDied = true;
+				if(BoundingBoxIntersect(m_ball.at(k)->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
 					m_squad.at(i)->EraseMember(BALL, j); //TODO Change to LASER once this define is implemented
-				}
-				else if(BoundingBoxIntersect(m_ball->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
-					m_squad.at(i)->EraseMember(BALL, j); //TODO Change to LASER once this define is implemented
-			}
-	}
-	
-	//Paddle vs Ball
-	if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_ball->GetBoundingBox()))
-	{
-		m_ball->BallBounceAgainstPaddle(m_paddle->GetBoundingBox());
-		m_soundHandler->PlayGameSound(BALLBOUNCE);
-	}
-
-	for(unsigned int i = 0; i < m_squad.size(); i++)
-	{
-		for(unsigned int j = 0; j < m_squad.at(i)->GetEnemies().size(); j++)
-		{
-			//Ball vs Enemy
-			if(BoundingBoxIntersect(m_ball->GetBoundingBox(), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox()))
-			{
-				m_ball->BallBounceAgainstEnemy(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox());
-				m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
-				if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
-				{
-					m_squad.at(i)->EraseMember(ENEMY1, j);
-					m_soundHandler->PlayGameSound(ENEMYDEATH);
-				}
-				m_soundHandler->PlayGameSound(BALLBOUNCE);
 			}
 		}
-		
+		//... Paddle
+		if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_ball.at(k)->GetBoundingBox()))
+		{
+			m_ball.at(k)->BallBounceAgainstPaddle(m_paddle->GetBoundingBox());
+			m_soundHandler->PlayGameSound(BALLBOUNCE);
+		}
+		//... Enemy
+		for(unsigned int i = 0; i < m_squad.size(); i++)
+		{
+			for(unsigned int j = 0; j < m_squad.at(i)->GetEnemies().size(); j++)
+			{
+				if(BoundingBoxIntersect(m_ball.at(k)->GetBoundingBox(), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox()))
+				{
+					m_ball.at(k)->BallBounceAgainstEnemy(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox());
+					m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
+					if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
+					{
+						m_squad.at(i)->EraseMember(ENEMY1, j);
+						m_soundHandler->PlayGameSound(ENEMYDEATH);
+					}
+					m_soundHandler->PlayGameSound(BALLBOUNCE);
+				}
+			}
+		}
+		//... Ball
+		for (unsigned int i = 0; i < m_ball.size(); i++)
+		{
+			if(BoundingBoxIntersect(m_ball.at(k)->GetBoundingBox(), m_ball.at(i)->GetBoundingBox()))
+			{
+				if(m_ball.at(k) != m_ball.at(i))
+					m_ball.at(k)->BallBounceAgainstBall(m_ball.at(i)->GetBoundingBox());
+			}
+		}
+	}
+	// Paddle vs Laser
+	for(unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		for(unsigned int j = 0; j < m_squad.at(i)->GetLasers().size(); j++)
+		{
+			if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
+			{
+				m_PaddleHasDied = true;
+				m_squad.at(i)->EraseMember(BALL, j); //TODO Change to LASER once this define is implemented
+			}
+		}
 	}
 
-	//Paddle vs PowerUp
-	//if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
-	//TODO Stuff happens
+	// Paddle vs PowerUp
+	// if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
+	// TODO Stuff happens
 
 }
 
@@ -198,23 +247,23 @@ int Level::GetNrOfEnemies()
 float Level::CalculateBallOnPaddlePosX()
 {
 	
-	return ((m_paddle->GetPosX()/(m_mapEdges.Width-m_paddle->GetBoundingBox().Width)) * (m_mapEdges.Width - (2 * m_paddle->GetBoundingBox().Width))) + m_paddle->GetBoundingBox().Width - (m_ball->GetBoundingBox().Width/2.0f);
+	return ((m_paddle->GetPosX()/(m_mapEdges.Width-m_paddle->GetBoundingBox().Width)) * (m_mapEdges.Width - (2 * m_paddle->GetBoundingBox().Width))) + m_paddle->GetBoundingBox().Width - (m_ball.front()->GetBoundingBox().Width/2.0f);
 }
 
-void Level::ShootBallFromPaddle()
+void Level::ShootBallFromPaddle(int p_ballVectorPos)
 {
 	//float l_diff = (m_posX+(m_width/2)) - (p_paddleBBox.PosX+(p_paddleBBox.Width/2));
-	float l_diff = m_ball->GetPosX()+(m_ball->GetBoundingBox().Width/2) - (m_paddle->GetPosX()+(m_paddle->GetBoundingBox().Width/2)); //length between middle of ball and middle of paddle
+	float l_diff = m_ball.at(p_ballVectorPos)->GetPosX()+(m_ball.at(p_ballVectorPos)->GetBoundingBox().Width/2) - (m_paddle->GetPosX()+(m_paddle->GetBoundingBox().Width/2)); //length between middle of ball and middle of paddle
 
 	if(l_diff == 0) //if ball is in the middle of paddle
 	{
-		m_ball->SetDirection((float)cos(0));
+		m_ball.at(p_ballVectorPos)->SetDirection((float)cos(0));
 	}
 	else //set angle to a value between 45 and 135 (degrees)
 	{
-		m_ball->SetDirection((float)acos((l_diff / ((m_ball->GetBoundingBox().Width/2) + (m_paddle->GetBoundingBox().Width/2))) * 0.7));
+		m_ball.at(p_ballVectorPos)->SetDirection((float)acos((l_diff / ((m_ball.at(p_ballVectorPos)->GetBoundingBox().Width/2) + (m_paddle->GetBoundingBox().Width/2))) * 0.7));
 	}
-	m_ball->ShootBall();
+	m_ball.at(p_ballVectorPos)->ShootBall();
 }
 
 void Level::RenderMapEdges()
@@ -226,4 +275,9 @@ void Level::RenderMapEdges()
 	m_renderComp->RenderObject(l_leftSide, BALL);
 	m_renderComp->RenderObject(l_rightSide, BALL);
 	m_renderComp->RenderObject(l_topSide, BALL);
+}
+
+int Level::GetNrOfBalls()
+{
+	return m_ball.size();
 }
