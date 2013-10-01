@@ -5,6 +5,7 @@
 #include "DefensiveEnemy.h"
 #include "Laser.h"
 #include <vector>
+#include <algorithm>
 
 class EnemySquad
 {
@@ -34,8 +35,8 @@ private:
 private:
 
 	void	MoveEnemies(float p_deltaTime);
-	float	FindLowestEnemyRow();
 	void	HandleLaserFiring();
+	vector<int>	CheckLowestEnemiesInSquad();
 	void	CalculateBoundingBox();
 };
 
