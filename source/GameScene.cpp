@@ -28,9 +28,9 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 
 void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked /* add keyboard parameters here*/)
 {
-	m_level->Update(p_mousePositionX, p_lMouseClicked, (float)p_deltaTime); // TODO : NO hardcoded booleans
+	m_level->Update(p_mousePositionX, p_lMouseClicked, (float)p_deltaTime); 
 
-	CheckPaddleDeath();
+	CheckPaddleLife();
 	CheckEnemyNr();
 	//cout << "Level: " << m_currentLevel << ", lives: " << m_nrOfLives << ", score: " << m_score << endl;
 }
@@ -47,20 +47,18 @@ void GameScene::Render()
 	//render UI(lives, m_score)
 }
 
-void GameScene::CheckPaddleDeath()
+void GameScene::CheckPaddleLife()
 {
-	if(m_level->HasPaddleDied())
-		DecrementLife();
-}
-
-void GameScene::DecrementLife()
-{
-	m_nrOfLives--;
+	if(m_level->GetLifeChanged() != 0)
+		int hej = m_level->GetLifeChanged();
+	m_nrOfLives += m_level->GetLifeChanged();
 	if(m_nrOfLives < 0)
 	{
-		//Trigger game over stuff. 
+		//GAME OVER STUFF GOES HERE
 	}
 }
+
+
 
 void GameScene::CheckEnemyNr()
 {

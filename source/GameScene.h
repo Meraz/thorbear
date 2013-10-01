@@ -28,8 +28,7 @@ private:
 private:
 	void NewLevel();
 	void CheckEnemyNr();
-	void CheckPaddleDeath();
-	void DecrementLife();
+	void CheckPaddleLife();
 };
 
 #endif
