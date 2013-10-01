@@ -45,6 +45,7 @@ public:
 
 	void	BallBounceAgainstEnemy(BoundingBox p_enemyBBox);
 	void	BallBounceAgainstPaddle(BoundingBox p_paddleBBox);
+	void	BallBounceAgainstBall (BoundingBox p_ballBBox);
 	int		CalculateBounceSide(BoundingBox p_objectBBox);
 
 private:
@@ -69,7 +70,6 @@ private:
 private:
 
 	void CheckCollisionAgainstWalls();
-
 };
 
 #endif BALL_H

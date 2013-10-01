@@ -4,6 +4,8 @@
 #include "GameInterface.h"
 #include "RenderComponentInterface.h"
 #include "Level.h"
+#include <iostream>
+using namespace std;
 class GameScene : public GameInterface
 {
 public:
@@ -26,8 +28,7 @@ private:
 private:
 	void NewLevel();
 	void CheckEnemyNr();
-	void CheckPaddleDeath();
-	void DecrementLife();
+	void CheckPaddleLife();
 };
 
 #endif
