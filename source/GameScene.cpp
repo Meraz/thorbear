@@ -44,8 +44,6 @@ void GameScene::Render()
 
 void GameScene::CheckPaddleLife()
 {
-	if(m_level->GetLifeChanged() != 0)
-		int hej = m_level->GetLifeChanged();
 	m_nrOfLives += m_level->GetLifeChanged();
 	if(m_nrOfLives < 0)
 	{
