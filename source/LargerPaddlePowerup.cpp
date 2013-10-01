@@ -16,5 +16,5 @@ void LargerPaddlePowerup::Update(float p_deltaTime)
 }
 void LargerPaddlePowerup::Render()
 {
-	m_renderComp->RenderObject(GetBoundingBox(), BALL);
+	m_renderComp->RenderObject(GetBoundingBox(), LARGERPADDLEPOWERUP);
 }

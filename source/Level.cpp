@@ -97,7 +97,7 @@ void Level::SpawnPowerup(float p_posX, float p_posY)
 	else
 		m_powerup.push_back(new AddLifePowerup());
 
-	m_powerup.back()->init(p_posX, p_posY, 10, 10 , m_renderComp);
+	m_powerup.back()->init(p_posX, p_posY, 20, 20 , m_renderComp);
 	//m_powerup.p
 }
 

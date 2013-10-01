@@ -16,5 +16,5 @@ void AddLifePowerup::Update(float p_deltaTime)
 }
 void AddLifePowerup::Render()
 {
-	m_renderComp->RenderObject(GetBoundingBox(), BALL);
+	m_renderComp->RenderObject(GetBoundingBox(), ADDLIFEPOWERUP);
 }
