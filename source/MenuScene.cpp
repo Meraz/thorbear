@@ -13,7 +13,7 @@ MenuScene::~MenuScene(void)
 void MenuScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 {
 	BaseScene::Initialize(p_renderComponentInterface);
-	m_sceneState = SceneState::Menu;
+	m_sceneState = Menu;
 }
 
 
