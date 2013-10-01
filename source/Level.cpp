@@ -8,7 +8,7 @@ Level::Level(void)
 {
 	m_mapEdges.PosX = 0;
 	m_mapEdges.PosY = 0;
-	m_PaddleHasDied = false;
+	m_changesInLife = 0;
 	m_map = NULL;
 	m_prevLMouseClickStatus = false;
 	m_mapBorderThickness = 10;
@@ -85,9 +85,25 @@ void Level::AddBall()
 	m_ball.back()->Init(CalculateBallOnPaddlePosX(), m_paddle->GetBoundingBox().PosY+m_paddle->GetBoundingBox().Height, m_ballWidth, m_ballHeight, m_ballSpeed, m_mapEdges, m_renderComp);
 	ShootBallFromPaddle(m_ball.size()-1);
 }
+void Level::SpawnPowerup(float p_posX, float p_posY)
+{
+	int l_random = rand() % 10;
+	if(l_random < 3) // 0,1,2
+		m_powerup.push_back(new LargerPaddlePowerup());
+	else if(l_random < 6) // 3,4,5
+		m_powerup.push_back(new SmallerPaddlePowerUp());
+	else if(l_random <9) // 6,7,8
+		m_powerup.push_back(new AddBallPowerup());
+	else
+		m_powerup.push_back(new AddLifePowerup());
+
+	m_powerup.back()->init(p_posX, p_posY, 10, 10 , m_renderComp);
+	//m_powerup.p
+}
 
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
+	m_changesInLife = 0;
 	for (unsigned int i = 0; i < m_ball.size(); i++)
 	{
 		m_ball.at(i)->Update(p_deltaTime);
@@ -96,6 +112,7 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 		{
 			if (m_ball.size() == 1)
 			{
+				
 				m_ball.at(i)->SetPosX(CalculateBallOnPaddlePosX());
 				m_ball.at(i)->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height));
 				if(p_isMouseClicked && !m_prevLMouseClickStatus)
@@ -115,6 +132,10 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
 		m_squad.at(i)->Update(p_deltaTime);
+	}
+	for(unsigned int i = 0; i < m_powerup.size(); i++)
+	{
+		m_powerup.at(i)->Update(p_deltaTime);
 	}
 
 	CheckAllCollisions(p_deltaTime);
@@ -139,6 +160,11 @@ void Level::Render()
 		m_squad.at(i)->Render();
 	}
 	//TODO powerups. 
+	for( unsigned int i = 0; i < m_powerup.size(); i++)
+	{
+		m_powerup.at(i)->Render();
+	}
+	
 }
 
 void Level::CheckAllCollisions(float p_deltaTime)
@@ -171,6 +197,9 @@ void Level::CheckAllCollisions(float p_deltaTime)
 					m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
 					if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
 					{
+						int l_random = rand() % 100;
+						if(l_random > 30)
+							SpawnPowerup(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosX, m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosY);
 						m_squad.at(i)->EraseMember(ENEMY1, j);
 						m_soundHandler->PlayGameSound(ENEMYDEATH);
 					}
@@ -195,13 +224,43 @@ void Level::CheckAllCollisions(float p_deltaTime)
 		{
 			if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
 			{
-				m_PaddleHasDied = true;
+				m_changesInLife--;
 				m_squad.at(i)->EraseMember(BALL, j); //TODO Change to LASER once this define is implemented
 			}
 		}
 	}
 
 	// Paddle vs PowerUp
+	for(unsigned int i = 0; i < m_powerup.size(); i++)
+	{
+		if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_powerup.at(i)->GetBoundingBox()))
+		{
+			if(m_powerup.at(i)->GetPowerUpType() ==  LARGERPADDLE)
+			{
+				m_paddle->SetWidth(m_paddle->GetBoundingBox().Width + 20);
+				if(m_paddle->GetBoundingBox().Width > 100)
+					m_paddle->SetWidth(100);
+			}	
+			else if(m_powerup.at(i)->GetPowerUpType() ==  SMALLERPADDLE)
+			{
+				m_paddle->SetWidth(m_paddle->GetBoundingBox().Width - 20);
+				if(m_paddle->GetBoundingBox().Width < 30)
+					m_paddle->SetWidth(30);
+			}
+			else if(m_powerup.at(i)->GetPowerUpType() ==  ADDBALL)
+			{
+				AddBall();
+			}
+			else if(m_powerup.at(i)->GetPowerUpType() ==  ADDLIFE)
+			{
+				m_changesInLife++;
+			}
+			m_powerup.erase(m_powerup.begin() + i);
+		}
+		else if(m_powerup.at(i)->GetBoundingBox().PosY <= 0)
+				m_powerup.erase(m_powerup.begin() + i);
+	}
+	
 	// if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
 	// TODO Stuff happens
 
@@ -262,12 +321,9 @@ bool Level::BoundingBoxIntersect(BoundingBox p_box1, BoundingBox p_box2)
 		return false;
 }
 
-bool Level::HasPaddleDied()
+int Level::GetLifeChanged()
 {
-	bool temp = m_PaddleHasDied;
-	m_PaddleHasDied = false;
-
-	return temp;
+	return m_changesInLife;
 }
 
 int Level::GetNrOfEnemies()

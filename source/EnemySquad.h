@@ -36,6 +36,7 @@ private:
 	void	MoveEnemies(float p_deltaTime);
 	float	FindLowestEnemyRow();
 	void	HandleLaserFiring();
+	void	CalculateBoundingBox();
 };
 
 #endif
