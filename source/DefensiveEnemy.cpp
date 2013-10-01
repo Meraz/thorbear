@@ -5,7 +5,7 @@ DefensiveEnemy::DefensiveEnemy(void)
 {
 	m_numOfLives = 2;
 	m_enemyType = ENEMY2;
-	m_phaseZ = ((float)rand())/INT_MAX;
+	m_phaseZ = ((float)rand());
 	m_BoundingBox.Depth = 9;
 }
 
