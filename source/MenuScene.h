@@ -3,7 +3,6 @@
 
 #include "BaseScene.h"
 
-
 class MenuScene : public BaseScene
 {
 public:

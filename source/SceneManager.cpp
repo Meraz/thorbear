@@ -18,7 +18,7 @@ void SceneManager::Initialize(RenderComponentInterface* p_renderComponentInterfa
 	SwapSceneState(GAME);
 }
 
-void SceneManager::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked)
+bool SceneManager::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked)
 {
 	m_currentScene->Update(p_deltaTime, p_mousePositionX, p_mousePositionY, p_lMouseClicked);
 	
@@ -26,7 +26,9 @@ void SceneManager::Update(double p_deltaTime, int p_mousePositionX, int p_mouseP
 	if(l_sceneState != m_currentSceneState)
 	{
 		SwapSceneState(l_sceneState);
+		return false;
 	}
+	return true;
 }
 
 void SceneManager::Render()
@@ -43,7 +45,7 @@ bool SceneManager::CheckIfExit()
 
 void SceneManager::SwapSceneState(SceneState p_sceneState)
 {	
-	if (p_sceneState == Menu)
+	if (p_sceneState == MENU)
 	{
 		SafeDelete(m_currentScene);
 		m_currentScene = new MenuScene();

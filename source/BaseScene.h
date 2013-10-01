@@ -3,7 +3,7 @@
 
 enum SceneState
 {
-	Menu,
+	MENU,
 	GAME,
 	HIGHSCORE,
 	EXIT

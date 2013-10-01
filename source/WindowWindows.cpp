@@ -175,9 +175,7 @@ LRESULT WindowWindows::MsgProc(HWND p_hwnd, UINT p_msg, WPARAM p_wParam, LPARAM 
 		//OnMouseMove(p_wParam, GET_X_LPARAM(p_lParam), GET_Y_LPARAM(p_lParam));
 		m_mousePositionX = GET_X_LPARAM(p_lParam); 
 		m_mousePositionY = GET_Y_LPARAM(p_lParam);
-		return 0;
-	
-	
+		return 0;	
 	}
 	return DefWindowProc(p_hwnd, p_msg, p_wParam, p_lParam);
 }

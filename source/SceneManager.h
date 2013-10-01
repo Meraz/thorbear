@@ -15,7 +15,7 @@ public:
 	~SceneManager();
 
 	void Initialize(RenderComponentInterface* p_renderComponentInterface);
-	void Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked);
+	bool Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked);
 	void Render();
 	bool CheckIfExit();
 

@@ -1,19 +1,21 @@
 #include "MenuScene.h"
 
 
-MenuScene::MenuScene(void)
+MenuScene::MenuScene()
 {
 }
 
 
-MenuScene::~MenuScene(void)
+MenuScene::~MenuScene()
 {
+
 }
 
 void MenuScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 {
 	BaseScene::Initialize(p_renderComponentInterface);
-	m_sceneState = Menu;
+	m_sceneState = MENU;
+
 }
 
 
