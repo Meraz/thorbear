@@ -35,5 +35,4 @@ struct BoundingBox
 	int Width, Height, Depth;
 };
 
-
 #endif

@@ -4,7 +4,8 @@
 #include "GameInterface.h"
 #include "BaseScene.h"
 #include "GameScene.h"
-#include "MenuScene.h"
+#include "MainMenuScene.h"
+#include "GameModeMenuScene.h"
 #include "HighScoreScene.h"
 #include "MemoryMacro.h"
 
@@ -20,17 +21,14 @@ public:
 	bool CheckIfExit();
 
 private:
-	void SwapSceneState(SceneState p_sceneState);
+	void SwapSceneState(SceneState::State p_sceneState);
 
 
 private:
 	RenderComponentInterface* m_renderComponentInterface;
 
-	SceneState m_currentSceneState;
+	SceneState::State m_currentSceneState;
 	BaseScene* m_currentScene;
-	GameScene* m_gameScene;
-	MenuScene* m_menuScene;
-	HighScoreScene* m_highScoreScene;
 
 	bool m_Exit;
 

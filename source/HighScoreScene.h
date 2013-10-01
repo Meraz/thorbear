@@ -1,8 +1,10 @@
 #ifndef HIGHSCORESCENE_H
 #define HIGHSCORESCENE_H
 
-#include "BaseScene.h"
+#include <vector>
 
+#include "BaseScene.h"
+#include "Button.h"
 
 class HighScoreScene : public BaseScene
 {
@@ -14,6 +16,8 @@ public:
 	void Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked);
 	void Render();
 
+private:
+	std::vector<Button*> m_button;
 };
 
 #endif

@@ -19,7 +19,7 @@ GameScene::~GameScene()
 void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 {
 	BaseScene::Initialize(p_renderComponentInterface);
-	m_sceneState = GAME;
+	m_sceneState = SceneState::GAME;
 
 	m_level = new Level();
 	m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : Don't hard code this
@@ -51,7 +51,6 @@ void GameScene::CheckPaddleDeath()
 
 void GameScene::DecrementLife()
 {
-	m_sceneState = MENU;
 	m_nrOfLives--;
 	if(m_nrOfLives < 0)
 	{
