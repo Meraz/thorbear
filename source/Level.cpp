@@ -208,7 +208,7 @@ void Level::CheckAllCollisions()
 					if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
 					{
 						int l_random = rand() % 100;
-						if(l_random > 30)
+						if(l_random < POWERUPDROPRATIO)
 							SpawnPowerup(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosX, m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosY);
 						m_squad.at(i)->EraseMember(ENEMY1, j);
 						m_soundHandler->PlayGameSound(ENEMYDEATH);
