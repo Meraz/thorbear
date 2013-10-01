@@ -24,7 +24,7 @@ public:
   // Sets the hints for window, such as required version of the OpenGL
   void SetHints();
 
-	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color);
+	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f));
 	void RenderParticleSystem(ParticleSystem p_particleSystem);
 	void Render();
   

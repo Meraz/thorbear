@@ -189,6 +189,8 @@ void RenderComponentLinux::Render()
   glfwSwapBuffers();
   
   // Clear the render object list for next frame
+  for( int i = 0; i < m_objectList.size(); i++ )
+    delete m_objectList[i];
   m_objectList.clear();
   
   if( g_renderfirsttime )
