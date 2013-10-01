@@ -106,19 +106,9 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 			else
 			{
 				m_ball.erase(m_ball.begin() + i);
-				i--; // ?
+				i--; 
 			}
 		}
-		// TEST
-		/*else
-		{
-			if(p_isMouseClicked && !m_prevLMouseClickStatus)
-			{
-				AddBall();
-				i++;
-			}
-		}*/
-		// END TEST
 	} 
 	m_paddle->Update(p_mousePosX);
 
@@ -177,7 +167,6 @@ void Level::CheckAllCollisions(float p_deltaTime)
 			{
 				if(BoundingBoxIntersect(m_ball.at(k)->GetBoundingBox(), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox()))
 				{
-					//m_ball.at(k)->BallBounceAgainstEnemy(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox());
 					CheckIncrementalCollisions(m_ball.at(k), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox(), true, p_deltaTime);
 					m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
 					if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
@@ -196,7 +185,6 @@ void Level::CheckAllCollisions(float p_deltaTime)
 			{
 				if(m_ball.at(k) != m_ball.at(i))
 					CheckIncrementalCollisionsWithBall(m_ball.at(k), m_ball.at(i), p_deltaTime);
-					//m_ball.at(k)->BallBounceAgainstBall(m_ball.at(i)->GetBoundingBox());
 			}
 		}
 	}
@@ -221,6 +209,7 @@ void Level::CheckAllCollisions(float p_deltaTime)
 
 void Level::CheckIncrementalCollisions(Ball* p_ball, BoundingBox p_bBox, bool p_isEnemy, float p_dt)
 {
+	//Increment the balls position to find out exactly where it hit the other object, for more accurate collisions
 	float l_incTime = 0.0f;
 	float l_increment = 0.0001f;
 
@@ -243,6 +232,7 @@ void Level::CheckIncrementalCollisions(Ball* p_ball, BoundingBox p_bBox, bool p_
 
 void Level::CheckIncrementalCollisionsWithBall(Ball* p_ball1, Ball* p_ball2, float p_dt)
 {
+	//Increment the balls position to find out exactly where it hit the other ball, for more accurate collisions
 	float l_incTime = 0.0f;
 	float l_increment = 0.0001f;
 
@@ -298,7 +288,6 @@ float Level::CalculateBallOnPaddlePosX()
 
 void Level::ShootBallFromPaddle(int p_ballVectorPos)
 {
-	//float l_diff = (m_posX+(m_width/2)) - (p_paddleBBox.PosX+(p_paddleBBox.Width/2));
 	float l_diff = m_ball.at(p_ballVectorPos)->GetPosX()+(m_ball.at(p_ballVectorPos)->GetBoundingBox().Width/2) - (m_paddle->GetPosX()+(m_paddle->GetBoundingBox().Width/2)); //length between middle of ball and middle of paddle
 
 	if(l_diff == 0) //if ball is in the middle of paddle
