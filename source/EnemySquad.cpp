@@ -96,7 +96,7 @@ void EnemySquad::HandleLaserFiring()
 		if(m_enemy.at(l_fireIndex.at(i))->WantsToFire())
 		{
 			Laser* temp = new Laser();
-			BoundingBox box(m_enemy.at(i)->GetBoundingBox().PosX, m_enemy.at(i)->GetBoundingBox().PosY);
+			BoundingBox box(m_enemy.at(l_fireIndex.at(i))->GetBoundingBox().PosX, m_enemy.at(l_fireIndex.at(i))->GetBoundingBox().PosY);
 			box.Height = 10;
 			box.Width = 1;
 			temp->Init(m_renderComp, 200, box); //TODO Don't hard code velocity in the end
@@ -187,7 +187,7 @@ vector<int> EnemySquad::CheckLowestEnemiesInSquad()
 		for(unsigned int j = 0; j < m_enemy.size(); j++)
 		{
 			if(m_enemy.at(i)->GetBoundingBox().PosX == m_enemy.at(j)->GetBoundingBox().PosX &&
-				m_enemy.at(i)->GetBoundingBox().PosY < m_enemy.at(j)->GetBoundingBox().PosY)
+				m_enemy.at(i)->GetBoundingBox().PosY > m_enemy.at(j)->GetBoundingBox().PosY)
 				l_currentEnemyIndex = j;
 		}
 		l_validToFireIndex.push_back(l_currentEnemyIndex);

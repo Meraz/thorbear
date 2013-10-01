@@ -3,7 +3,7 @@
 
 GameScene::GameScene(void)
 {
-	m_currentLevel = 2;
+	m_currentLevel = 3;
 	m_maxNrOfLevels = 3;
 	m_score = 0;
 	m_nrOfLives = 3;
