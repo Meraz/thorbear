@@ -7,7 +7,7 @@ void Powerup::init(float p_posX, float p_posY, int p_width, int p_height, Render
 	m_boundingBox.PosY = m_posY = p_posY;
 	m_boundingBox.Width = p_width;
 	m_boundingBox.Height = p_height;
-	m_boundingBox.Depth	 = 2;   //Hardcoded for glory
+	m_boundingBox.Depth	 = 9;   //Hardcoded for glory
 	m_velocity			 = 100;
 	m_renderComp = p_renderComp;
 

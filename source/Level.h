@@ -1,6 +1,8 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
+#define POWERUPDROPRATIO 20
+
 #include <vector>
 #include "Paddle.h"
 #include "EnemySquad.h"

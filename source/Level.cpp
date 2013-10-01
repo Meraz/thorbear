@@ -97,7 +97,7 @@ void Level::SpawnPowerup(float p_posX, float p_posY)
 	else
 		m_powerup.push_back(new AddLifePowerup());
 
-	m_powerup.back()->init(p_posX, p_posY, 10, 10 , m_renderComp);
+	m_powerup.back()->init(p_posX, p_posY, 20, 20 , m_renderComp);
 	//m_powerup.p
 }
 
@@ -198,7 +198,7 @@ void Level::CheckAllCollisions(float p_deltaTime)
 					if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
 					{
 						int l_random = rand() % 100;
-						if(l_random > 30)
+						if(l_random < POWERUPDROPRATIO)
 							SpawnPowerup(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosX, m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosY);
 						m_squad.at(i)->EraseMember(ENEMY1, j);
 						m_soundHandler->PlayGameSound(ENEMYDEATH);
