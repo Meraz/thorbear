@@ -58,15 +58,14 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 		if(m_BoundingBox.PosX <= m_mapEdges.PosX || 
 			m_BoundingBox.PosX + m_BoundingBox.Width >= m_mapEdges.PosX + m_mapEdges.Width)
 		{
-			m_velocity *= -1;
-			m_currentEnemyDirection = VERTICAL;
-			m_currentEnemyY = m_BoundingBox.PosY; //Use the lowest row so that we can use the same variable for laser firing checks
-			m_targetY = m_currentEnemyY - m_enemy.at(0)->GetBoundingBox().Height;
-
 			for(unsigned int i = 0; i < m_enemy.size(); i++)
 			{
 				m_enemy.at(i)->Update(m_velocity * (-p_deltaTime), m_currentEnemyDirection, p_deltaTime);
 			}
+			m_velocity *= -1;
+			m_currentEnemyDirection = VERTICAL;
+			m_currentEnemyY = m_BoundingBox.PosY;
+			m_targetY = m_currentEnemyY - m_enemy.at(0)->GetBoundingBox().Height;
 
 			break;
 		}
@@ -76,7 +75,7 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 		m_currentEnemyY -= abs(m_velocity * p_deltaTime);
 		if(m_currentEnemyY < m_targetY)
 		{
-			m_currentEnemyY = m_targetY; //Helps for checking which enemies will fire lasers
+			m_currentEnemyY = m_targetY;
 			m_currentEnemyDirection = HORIZONTAL;
 			break;
 		}
