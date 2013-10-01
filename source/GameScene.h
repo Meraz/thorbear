@@ -4,6 +4,8 @@
 #include "GameInterface.h"
 #include "RenderComponentInterface.h"
 #include "Level.h"
+#include <iostream>
+using namespace std;
 class GameScene : public GameInterface
 {
 public:

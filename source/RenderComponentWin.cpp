@@ -4,7 +4,7 @@
 RenderComponentWin::RenderComponentWin(HWND p_hMainWnd)
 {	
 	m_hMainWnd = p_hMainWnd;
-	m_objVec = std::vector<ObjTemplate>();	
+	m_objVec = std::vector<ObjTemplate>();
 }
 
 RenderComponentWin::~RenderComponentWin()
@@ -12,7 +12,8 @@ RenderComponentWin::~RenderComponentWin()
 	delete m_modelManager;
 	delete m_shaderManager;
 	delete m_camera;
-	
+	delete m_fontRenderer;
+
 	ReleaseCOM(m_d3dDevice);
 	ReleaseCOM( m_d3dImmediateContext);
 	ReleaseCOM( m_swapChain);
@@ -41,7 +42,8 @@ int RenderComponentWin::Initialize()
 
 	Load();
 	CreateTemplates();
-
+	m_fontRenderer = new FontRenderWin();
+	m_fontRenderer->Init(m_d3dDevice, L"Arial", m_d3dImmediateContext);
 	return 0;
 }
 
@@ -259,3 +261,8 @@ void RenderComponentWin::CreateTemplates()
 
 
 
+
+void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+{
+	m_fontRenderer->RenderText(p_text.c_str(), p_size, p_posX, p_posY, p_color);
+}

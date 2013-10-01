@@ -3,7 +3,7 @@
 
 GameScene::GameScene(void)
 {
-	m_currentLevel = 2;
+	m_currentLevel = 1;
 	m_maxNrOfLevels = 3;
 	m_score = 0;
 	m_nrOfLives = 3;
@@ -39,6 +39,11 @@ void GameScene::Render()
 {
 	m_level->Render();
 
+
+	wstring l_lives = to_wstring(m_nrOfLives);
+	wstring l_score = to_wstring(m_score);
+	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff);
+	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff);
 	//render UI(lives, m_score)
 }
 
