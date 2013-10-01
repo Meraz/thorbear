@@ -51,6 +51,7 @@ void GameScene::CheckPaddleDeath()
 
 void GameScene::DecrementLife()
 {
+	m_sceneState = SceneState::HIGHSCORE;
 	m_nrOfLives--;
 	if(m_nrOfLives < 0)
 	{
