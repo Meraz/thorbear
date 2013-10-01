@@ -2,6 +2,7 @@
 #define RENDERCOMPONENTINTERFACE_H
 
 #include "BoundingBox.h"
+#include "Vect3.h"
 
 struct ParticleSystem
 {
@@ -22,7 +23,7 @@ class RenderComponentInterface
 {
 public:
 	/* Add this object to be drawn this update. */
-	virtual void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType) = 0;
+	virtual void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f)) = 0;
 
 	/* Add this particle system to be drawn this update */
 	virtual void RenderParticleSystem(ParticleSystem p_particleSystem) = 0;																												

@@ -9,6 +9,7 @@ Paddle::Paddle(float p_posX, float p_posY, int p_width, int p_height, int p_scre
 	m_height = p_height;
 	m_screenWidth = p_screenWidth;
 	m_prevMousePosX = 0;
+	
 }
 
 Paddle::~Paddle()
@@ -28,13 +29,13 @@ void Paddle::Update(int p_mousePosX)
 		m_posX = (float)(m_screenWidth - m_width);
 	else if (m_posX < 0)
 		m_posX = 0;
-
+	
 	m_prevMousePosX = p_mousePosX;
 }
 
 void Paddle::Render()
 {
-	m_renderComp->RenderObject(GetBoundingBox(), PADDLE); //PADDLE == enum OH REALLY?!
+	m_renderComp->RenderObject(GetBoundingBox(), PADDLE, Vect3(1.0f, 1.0f, 0.0f)); //PADDLE == enum OH REALLY?!
 }
 
 float Paddle::GetPosX()
@@ -54,6 +55,7 @@ BoundingBox Paddle::GetBoundingBox()
 	l_bBox.Height = m_height;
 	l_bBox.PosX = m_posX;
 	l_bBox.PosY = m_posY;
+	l_bBox.Depth = 9;
 
 	return l_bBox;
 }

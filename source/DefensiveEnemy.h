@@ -11,7 +11,7 @@ public:
 	void Render();
 	bool WantsToFire();
 private:
-
+	float m_phaseZ;
 };
 
 #endif

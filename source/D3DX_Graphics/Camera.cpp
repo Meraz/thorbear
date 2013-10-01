@@ -4,8 +4,8 @@ Camera::Camera()
 {
 	m_position = D3DXVECTOR3(0.0f, 10.0f, 0.0f);
 	m_right    = D3DXVECTOR3(1.0f, 0.0f, 0.0f);
-	m_up       = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	m_look     = D3DXVECTOR3(0.0f, 0.0f, 1.0f);
+	m_up       = D3DXVECTOR3(0.0f, 1.0f, -0.2f);
+	m_look     = D3DXVECTOR3(0.0f, 0.2f, 1.0f);
 
 	D3DXMatrixIdentity(&m_view);
 	D3DXMatrixIdentity(&m_proj);

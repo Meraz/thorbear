@@ -7,6 +7,7 @@
 #include "D3DX_Graphics\ModelManager.h"
 #include "D3DX_Graphics\ShaderManager.h"
 #include "D3DX_Graphics\Camera.h"
+#include "Vect3.h"
 
 struct ObjTemplate
 {
@@ -34,7 +35,7 @@ public:
 
 	int Initialize();
 
-	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType);
+	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f));
 	void RenderParticleSystem(ParticleSystem p_particleSystem);
 
 	void PreRender();

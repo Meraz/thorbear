@@ -70,8 +70,8 @@ bool WindowWindows::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, PST
 		MessageBox(0, L"CreateWindow Failed.", 0, 0);
 		return false;
 	}
-
-	ShowWindow(m_hMainWnd, SW_SHOW);
+	//SetWindowLong(m_hMainWnd, GWL_STYLE, 0);
+	ShowWindow(m_hMainWnd, SW_SHOW );
 	UpdateWindow(m_hMainWnd);
 
 	m_renderComponentInterface = new RenderComponentWin(m_hMainWnd);

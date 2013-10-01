@@ -11,7 +11,7 @@ Level::Level(void)
 	m_PaddleHasDied = false;
 	m_map = NULL;
 
-	m_mapBorderThickness = 10;
+	m_mapBorderThickness = 9;
 }
 
 
@@ -219,9 +219,9 @@ void Level::ShootBallFromPaddle()
 
 void Level::RenderMapEdges()
 {
-	BoundingBox l_leftSide = BoundingBox(m_mapEdges.PosX - m_mapBorderThickness, m_mapEdges.PosY, m_mapBorderThickness, m_mapEdges.Height + m_mapBorderThickness, 40);
-	BoundingBox l_rightSide = BoundingBox(m_mapEdges.PosX + m_mapEdges.Width, m_mapEdges.PosY, m_mapBorderThickness, m_mapEdges.Height + m_mapBorderThickness, 40);
-	BoundingBox l_topSide = BoundingBox(m_mapEdges.PosX + m_mapBorderThickness/2, m_mapEdges.PosY + m_mapEdges.Height, m_mapEdges.Width + m_mapBorderThickness, m_mapBorderThickness, 40);
+	BoundingBox l_leftSide = BoundingBox(m_mapEdges.PosX - m_mapBorderThickness, m_mapEdges.PosY, m_mapBorderThickness, m_mapEdges.Height + m_mapBorderThickness, 9);
+	BoundingBox l_rightSide = BoundingBox(m_mapEdges.PosX + m_mapEdges.Width, m_mapEdges.PosY, m_mapBorderThickness, m_mapEdges.Height + m_mapBorderThickness, 9);
+	BoundingBox l_topSide = BoundingBox(m_mapEdges.PosX + m_mapBorderThickness/2, m_mapEdges.PosY + m_mapEdges.Height, m_mapEdges.Width + m_mapBorderThickness, m_mapBorderThickness, 9);
 
 	m_renderComp->RenderObject(l_leftSide, BALL);
 	m_renderComp->RenderObject(l_rightSide, BALL);

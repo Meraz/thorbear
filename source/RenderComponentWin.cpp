@@ -25,8 +25,8 @@ RenderComponentWin::~RenderComponentWin()
 
 int RenderComponentWin::Initialize()
 {	
-	m_clientWidth = 800;
-	m_clientHeight = 600;
+	m_clientWidth = 1920;
+	m_clientHeight = 1080;
 	InitializeDirect3D();
 
 	m_d3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -37,15 +37,16 @@ int RenderComponentWin::Initialize()
 	m_camera = new Camera();
 	m_camera->SetLens(MathHelper::PI * 0.25f, (float)m_clientWidth/m_clientHeight, 0.5f, 1000.0f);
 
-	m_camera->SetPos(300, 200, -600);
+	m_camera->SetPos(300, 90, -500);
 
 	Load();
 	CreateTemplates();
-
+	ShowCursor(false);
+	
 	return 0;
 }
 
-void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)
+void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color)
 {
 	Shader* l_shader = m_objVec.at((int)p_textureType).shader;
 	Model*	l_model = m_objVec.at((int)p_textureType).model;
@@ -78,7 +79,7 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 	
 	// Translation matrix
 	D3DXMATRIX l_translateMat;
-	D3DXMatrixTranslation(&l_translateMat, p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), 0);	// Create translation matrix
+	D3DXMatrixTranslation(&l_translateMat, p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), p_boundingBox.PosZ);	// Create translation matrix
 
 	D3DXMATRIX l_worldMat	= l_scaleMat *  l_translateMat;												// 
 	D3DXMATRIX l_WVP		= l_worldMat * m_camera->GetViewMatrix() *  m_camera->GetProjMatrix();
@@ -89,6 +90,7 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 	l_shader->SetMatrix("gWorld", l_worldMat);
 	l_shader->SetMatrix("gWVP", l_WVP);
 	l_shader->SetResource("gTexture", l_model->m_material->m_textureResource);
+	l_shader->SetFloat4("gColor", D3DXVECTOR4(p_color.r, p_color.g, p_color.b, 1.0f));
 
 
 	D3DX11_TECHNIQUE_DESC techDesc;
@@ -107,7 +109,7 @@ void RenderComponentWin::RenderParticleSystem(ParticleSystem p_particleSystem)
 
 void RenderComponentWin::PreRender()
 {
-	m_d3dImmediateContext->ClearRenderTargetView(m_renderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
+	m_d3dImmediateContext->ClearRenderTargetView(m_renderTargetView, reinterpret_cast<const float*>(&Colors::Black));
 	m_d3dImmediateContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
@@ -150,6 +152,9 @@ bool RenderComponentWin::InitializeDirect3D()
 		return false;
 	}
 
+	unsigned int test = 0;
+	m_d3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &test);
+
 	DXGI_SWAP_CHAIN_DESC l_sd;
 	l_sd.BufferDesc.Width  = m_clientWidth;//m_clientWidth;
 	l_sd.BufferDesc.Height = m_clientHeight;//m_clientHeight;
@@ -158,13 +163,13 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	l_sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	l_sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	l_sd.SampleDesc.Count   = 1;
-	l_sd.SampleDesc.Quality = 0;
+	l_sd.SampleDesc.Count   = 4;
+	l_sd.SampleDesc.Quality = test-1;
 
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = true;
+	l_sd.Windowed     = false;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -212,8 +217,8 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_depthStencilDesc.MipLevels = 1;
 	l_depthStencilDesc.ArraySize = 1;
 	l_depthStencilDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	l_depthStencilDesc.SampleDesc.Count   = 1;
-	l_depthStencilDesc.SampleDesc.Quality = 0;
+	l_depthStencilDesc.SampleDesc.Count   = 4;
+	l_depthStencilDesc.SampleDesc.Quality = test-1;
 	l_depthStencilDesc.Usage          = D3D11_USAGE_DEFAULT;
 	l_depthStencilDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
 	l_depthStencilDesc.CPUAccessFlags = 0; 

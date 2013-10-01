@@ -1,5 +1,5 @@
 #include "ShootingEnemy.h"
-
+#include <cstdlib>
 
 ShootingEnemy::ShootingEnemy(void)
 {
@@ -8,6 +8,8 @@ ShootingEnemy::ShootingEnemy(void)
 	m_wantsToFire = false;
 	m_tick = 0;
 	m_shootIntervall = 3.0f +  rand() % 10;
+	m_phaseZ = rand();
+	m_BoundingBox.Depth = 9;
 }
 
 
@@ -24,6 +26,9 @@ void ShootingEnemy::Update(float p_velocity, EnemyDirection p_direction, float p
 
 	m_tick += p_deltaTime;
 
+	m_phaseZ += p_deltaTime*4;
+	m_BoundingBox.PosZ = 3*sin(m_phaseZ);
+
 	if(m_tick >= m_shootIntervall)
 	{
 		m_tick = 0.0f;
@@ -36,7 +41,7 @@ void ShootingEnemy::Update(float p_velocity, EnemyDirection p_direction, float p
 
 void ShootingEnemy::Render()
 {
-	m_RenderComp->RenderObject(GetBoundingBox(), ENEMY1);
+	m_RenderComp->RenderObject(GetBoundingBox(), ENEMY1, Vect3(1.0f, 0.0f, 0.0f));
 }
 
 bool ShootingEnemy::WantsToFire()

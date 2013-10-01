@@ -107,6 +107,7 @@ BoundingBox Ball::GetBoundingBox()
 	l_bBox.Height = m_height;
 	l_bBox.PosX = m_posX;
 	l_bBox.PosY = m_posY;
+	l_bBox.Depth = 9;
 
 	return l_bBox;
 }
