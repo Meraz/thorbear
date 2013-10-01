@@ -4,7 +4,7 @@
 RenderComponentWin::RenderComponentWin(HWND p_hMainWnd)
 {	
 	m_hMainWnd = p_hMainWnd;
-	m_objVec = std::vector<ObjTemplate>();	
+	m_objVec = std::vector<ObjTemplate>();
 }
 
 RenderComponentWin::~RenderComponentWin()
@@ -12,7 +12,8 @@ RenderComponentWin::~RenderComponentWin()
 	delete m_modelManager;
 	delete m_shaderManager;
 	delete m_camera;
-	
+	delete m_fontRenderer;
+
 	ReleaseCOM(m_d3dDevice);
 	ReleaseCOM( m_d3dImmediateContext);
 	ReleaseCOM( m_swapChain);
@@ -42,7 +43,9 @@ int RenderComponentWin::Initialize()
 	Load();
 	CreateTemplates();
 	ShowCursor(false);
-	
+
+	m_fontRenderer = new FontRenderWin();
+	m_fontRenderer->Init(m_d3dDevice, L"Arial", m_d3dImmediateContext);
 	return 0;
 }
 
@@ -250,6 +253,10 @@ void RenderComponentWin::Load()
 	m_modelManager->CreateModel("cube.obj",		"object\\cube");
 	m_modelManager->CreateModel("cube1.obj",	"object\\colorcube");
 
+	m_modelManager->CreateModel("AddLifePowerup.obj",	"object\\AddLifePowerup");
+	m_modelManager->CreateModel("AddBallPowerup.obj",	"object\\AddBallPowerup");
+	m_modelManager->CreateModel("LargerPaddlePowerup.obj",	"object\\LargerPaddlePowerup");
+	m_modelManager->CreateModel("SmallerPaddlePowerup.obj",	"object\\SmallerPaddlePowerup");
 	m_shaderManager->AddShader("effect\\object.fx", 12);	
 }
 
@@ -259,8 +266,18 @@ void RenderComponentWin::CreateTemplates()
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("bth.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube.obj"),	 m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube1.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("AddLifePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("AddBallPowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("LargerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("SmallerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 }
 
 
 
 
+
+void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+{
+	m_fontRenderer->RenderText(p_text.c_str(), p_size, p_posX, p_posY, p_color);
+}
