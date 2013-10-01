@@ -14,6 +14,7 @@ Ball::Ball(void)
 	m_maxBallAngle = 170;
 	m_minBallAngle = 10;
 	m_isBallDead = true;
+	m_hasBallBouncedAgainstEnemy = false;
 }
 
 
@@ -168,6 +169,16 @@ void Ball::BallBounceAgainstPaddle( BoundingBox p_paddleBBox )
 
 		m_posY = p_paddleBBox.PosY + p_paddleBBox.Height;
 	}
+}
+
+void Ball::BallBounceAgainstBall (BoundingBox p_ballBBox )
+{
+	int l_bounceSide = CalculateBounceSide(p_ballBBox);
+
+	if((l_bounceSide == TOP && m_direction.Y < 0)|| (l_bounceSide == BOTTOM && m_direction.Y > 0))
+		m_direction.Y *= -1;
+	else if((l_bounceSide == LEFT && m_direction.X > 0) || (l_bounceSide == RIGHT && m_direction.X < 0))
+		m_direction.X *= -1;
 }
 
 int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
