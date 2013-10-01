@@ -43,6 +43,11 @@ public:
 
 	BoundingBox GetBoundingBox();
 
+	BoundingBox GetIncBBox();
+	float		GetIncDirAngle();
+	void		SetActualPosAndDir();
+	void		IncUpdate(float p_deltaTime);
+
 	void	BallBounceAgainstEnemy(BoundingBox p_enemyBBox);
 	void	BallBounceAgainstPaddle(BoundingBox p_paddleBBox);
 	void	BallBounceAgainstBall (BoundingBox p_ballBBox);
@@ -53,6 +58,10 @@ private:
 	float	m_posY;
 	int		m_width;
 	int		m_height;
+
+	float	m_incPosX;
+	float	m_incPosY;
+	Vector2 m_incDirection;
 
 	int		m_maxBallAngle;
 	int		m_minBallAngle;

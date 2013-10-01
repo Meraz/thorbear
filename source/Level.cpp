@@ -97,7 +97,7 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 			if (m_ball.size() == 1)
 			{
 				m_ball.at(i)->SetPosX(CalculateBallOnPaddlePosX());
-				m_ball.at(i)->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height) + 20);
+				m_ball.at(i)->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height));
 				if(p_isMouseClicked && !m_prevLMouseClickStatus)
 				{
 					ShootBallFromPaddle(i);
@@ -120,7 +120,6 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 		}*/
 		// END TEST
 	} 
-	m_prevLMouseClickStatus = p_isMouseClicked;
 	m_paddle->Update(p_mousePosX);
 
 	for(unsigned int i = 0; i < m_squad.size(); i++)
@@ -128,9 +127,10 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 		m_squad.at(i)->Update(p_deltaTime);
 	}
 
-	CheckAllCollisions();
+	CheckAllCollisions(p_deltaTime);
 
 	m_soundHandler->Update();
+	m_prevLMouseClickStatus = p_isMouseClicked;
 }
 
 
@@ -151,7 +151,7 @@ void Level::Render()
 	//TODO powerups. 
 }
 
-void Level::CheckAllCollisions()
+void Level::CheckAllCollisions(float p_deltaTime)
 {
 	for (unsigned int k = 0; k < m_ball.size(); k++) // Ball vs...
 	{
@@ -167,7 +167,7 @@ void Level::CheckAllCollisions()
 		//... Paddle
 		if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_ball.at(k)->GetBoundingBox()))
 		{
-			m_ball.at(k)->BallBounceAgainstPaddle(m_paddle->GetBoundingBox());
+			CheckIncrementalCollisions(m_ball.at(k), m_paddle->GetBoundingBox(), false, p_deltaTime);
 			m_soundHandler->PlayGameSound(BALLBOUNCE);
 		}
 		//... Enemy
@@ -177,7 +177,8 @@ void Level::CheckAllCollisions()
 			{
 				if(BoundingBoxIntersect(m_ball.at(k)->GetBoundingBox(), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox()))
 				{
-					m_ball.at(k)->BallBounceAgainstEnemy(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox());
+					//m_ball.at(k)->BallBounceAgainstEnemy(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox());
+					CheckIncrementalCollisions(m_ball.at(k), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox(), true, p_deltaTime);
 					m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
 					if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
 					{
@@ -194,7 +195,8 @@ void Level::CheckAllCollisions()
 			if(BoundingBoxIntersect(m_ball.at(k)->GetBoundingBox(), m_ball.at(i)->GetBoundingBox()))
 			{
 				if(m_ball.at(k) != m_ball.at(i))
-					m_ball.at(k)->BallBounceAgainstBall(m_ball.at(i)->GetBoundingBox());
+					CheckIncrementalCollisionsWithBall(m_ball.at(k), m_ball.at(i), p_deltaTime);
+					//m_ball.at(k)->BallBounceAgainstBall(m_ball.at(i)->GetBoundingBox());
 			}
 		}
 	}
@@ -215,6 +217,50 @@ void Level::CheckAllCollisions()
 	// if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
 	// TODO Stuff happens
 
+}
+
+void Level::CheckIncrementalCollisions(Ball* p_ball, BoundingBox p_bBox, bool p_isEnemy, float p_dt)
+{
+	float l_incTime = 0.0f;
+	float l_increment = 0.0001f;
+
+	while (l_incTime < p_dt)
+	{
+		p_ball->IncUpdate(l_increment);
+		if(BoundingBoxIntersect(p_ball->GetIncBBox(), p_bBox))
+		{
+			if(p_isEnemy)
+				p_ball->BallBounceAgainstEnemy(p_bBox);
+			else
+				p_ball->BallBounceAgainstPaddle(p_bBox);
+		}
+
+		l_incTime += l_increment;
+	}
+
+	p_ball->SetActualPosAndDir();
+}
+
+void Level::CheckIncrementalCollisionsWithBall(Ball* p_ball1, Ball* p_ball2, float p_dt)
+{
+	float l_incTime = 0.0f;
+	float l_increment = 0.0001f;
+
+	while (l_incTime < p_dt)
+	{
+		p_ball1->IncUpdate(l_increment);
+		p_ball2->IncUpdate(l_increment);
+		if(BoundingBoxIntersect(p_ball1->GetIncBBox(), p_ball2->GetIncBBox()))
+		{
+			p_ball1->BallBounceAgainstBall(p_ball2->GetIncBBox());
+			p_ball2->BallBounceAgainstBall(p_ball1->GetIncBBox());
+		}
+
+		l_incTime += l_increment;
+	}
+
+	p_ball1->SetActualPosAndDir();
+	p_ball2->SetActualPosAndDir();
 }
 
 bool Level::BoundingBoxIntersect(BoundingBox p_box1, BoundingBox p_box2)
