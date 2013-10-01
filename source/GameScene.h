@@ -1,10 +1,10 @@
 #ifndef GAMESCENE_H
 #define GAMESCENE_H
 
-#include "GameInterface.h"
-#include "RenderComponentInterface.h"
+#include "BaseScene.h"
 #include "Level.h"
-class GameScene : public GameInterface
+
+class GameScene : public BaseScene
 {
 public:
 	GameScene(void);
@@ -22,7 +22,7 @@ private:
 	int		m_nrOfLives;
 	int		m_score;
 	Level*	m_level;
-	RenderComponentInterface* m_renderComponentInterface;
+
 private:
 	void NewLevel();
 	void CheckEnemyNr();

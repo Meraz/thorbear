@@ -1,7 +1,7 @@
 #include "GameScene.h"
 
 
-GameScene::GameScene(void)
+GameScene::GameScene()
 {
 	m_currentLevel = 1;
 	m_maxNrOfLevels = 3;
@@ -11,15 +11,16 @@ GameScene::GameScene(void)
 	m_enemyWorth = 100;
 }
 
-
-GameScene::~GameScene(void)
+GameScene::~GameScene()
 {
 	delete m_level;
 }
 
 void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 {
-	m_renderComponentInterface = p_renderComponentInterface;
+	BaseScene::Initialize(p_renderComponentInterface);
+	m_sceneState = SceneState::GAME;
+
 	m_level = new Level();
 	m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : Don't hard code this
 	m_lastKnownNrOfEnemies = m_level->GetNrOfEnemies();

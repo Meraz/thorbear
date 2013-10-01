@@ -1,13 +1,11 @@
 #ifndef SHADER__H
 #define SHADER__H
 
-//#include <DxErr.h>
 #include <D3Dcompiler.h>
 #include <D3DCommon.h>
 #include <D3DX11Async.h>
 #include "d3dUtil.h"
-
-
+#include "..\MemoryMacro.h"
 using namespace std;
 
 class Shader

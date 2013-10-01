@@ -3,7 +3,7 @@
 
 WindowBaseClass::WindowBaseClass()
 {
-	m_gameInterface = new GameScene();
+	m_gameInterface = new SceneManager();
 }
 
 
@@ -14,9 +14,7 @@ WindowBaseClass::~WindowBaseClass()
 
 void WindowBaseClass::Render()
 {
-	
-	m_gameInterface->Render();
-  
+	m_gameInterface->Render();  
 }
 
 void WindowBaseClass::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked)
