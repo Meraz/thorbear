@@ -22,8 +22,8 @@ void EnemySquad::Init(BoundingBox p_mapEdges, float p_velocity, vector<Enemy*> p
 	m_velocity = p_velocity;
 	m_enemy = p_enemy;
 	m_currentEnemyDirection = HORIZONTAL;
-	m_currentEnemyY = FindLowestEnemyRow();
 	CalculateBoundingBox();
+	m_currentEnemyY = m_BoundingBox.PosY;
 }
 
 void EnemySquad::Update( float p_deltaTime )
@@ -60,7 +60,7 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 		{
 			m_velocity *= -1;
 			m_currentEnemyDirection = VERTICAL;
-			m_currentEnemyY = FindLowestEnemyRow(); //Use the lowest row so that we can use the same variable for laser firing checks
+			m_currentEnemyY = m_BoundingBox.PosY; //Use the lowest row so that we can use the same variable for laser firing checks
 			m_targetY = m_currentEnemyY - m_enemy.at(0)->GetBoundingBox().Height;
 
 			for(unsigned int i = 0; i < m_enemy.size(); i++)
@@ -89,32 +89,20 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 	}
 }
 
-float EnemySquad::FindLowestEnemyRow()
-{
-	float l_lowestRow = 1000;
-	for(unsigned int i = 0; i < m_enemy.size(); i++)
-	{
-		if(m_enemy.at(i)->GetBoundingBox().PosY < l_lowestRow) //The lower the Y value, the lower the row 
-			l_lowestRow = m_enemy.at(i)->GetBoundingBox().PosY;
-	}
-
-	return l_lowestRow;
-}
-
 void EnemySquad::HandleLaserFiring()
 {
-	for(unsigned int i = 0; i < m_enemy.size(); i++)
+	vector<int> l_fireIndex = CheckLowestEnemiesInSquad();
+	for(unsigned int i = 0; i < l_fireIndex.size(); i++)
 	{
-		if(m_enemy.at(i)->WantsToFire())
-			if(m_enemy.at(i)->GetBoundingBox().PosY - (m_enemy.at(i)->GetBoundingBox().Height / 2) <= m_currentEnemyY) //Make sure that only the enemies in the lowest row gets to fire
-			{
-				Laser* temp = new Laser();
-				BoundingBox box(m_enemy.at(i)->GetBoundingBox().PosX, m_enemy.at(i)->GetBoundingBox().PosY);
-				box.Height = 10;
-				box.Width = 1;
-				temp->Init(m_renderComp, 200, box); //TODO Don't hard code velocity in the end
-				m_laser.push_back(temp);
-			}
+		if(m_enemy.at(l_fireIndex.at(i))->WantsToFire())
+		{
+			Laser* temp = new Laser();
+			BoundingBox box(m_enemy.at(i)->GetBoundingBox().PosX, m_enemy.at(i)->GetBoundingBox().PosY);
+			box.Height = 10;
+			box.Width = 1;
+			temp->Init(m_renderComp, 200, box); //TODO Don't hard code velocity in the end
+			m_laser.push_back(temp);
+		}
 	}
 }
 
@@ -186,5 +174,26 @@ void EnemySquad::CalculateBoundingBox()
 	m_BoundingBox.PosY = l_y;
 	m_BoundingBox.Width = l_width - l_x;
 	m_BoundingBox.Height = l_height + l_y;
+}
+
+vector<int> EnemySquad::CheckLowestEnemiesInSquad()
+{
+	vector<int> l_validToFireIndex;
+	int l_currentEnemyIndex;
+	for(unsigned int i = 0; i < m_enemy.size(); i++)
+	{
+		l_currentEnemyIndex = i;
+		for(unsigned int j = 0; j < m_enemy.size(); j++)
+		{
+			if(m_enemy.at(i)->GetBoundingBox().PosX == m_enemy.at(j)->GetBoundingBox().PosX &&
+				m_enemy.at(i)->GetBoundingBox().PosY < m_enemy.at(j)->GetBoundingBox().PosY)
+				l_currentEnemyIndex = j;
+		}
+		l_validToFireIndex.push_back(l_currentEnemyIndex);
+	}
+	std::sort( l_validToFireIndex.begin(), l_validToFireIndex.end() );
+	l_validToFireIndex.erase( std::unique(l_validToFireIndex.begin(), l_validToFireIndex.end()), l_validToFireIndex.end());
+
+	return l_validToFireIndex;
 }
 
