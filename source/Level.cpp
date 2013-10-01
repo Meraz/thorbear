@@ -114,7 +114,7 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 			{
 				
 				m_ball.at(i)->SetPosX(CalculateBallOnPaddlePosX());
-				m_ball.at(i)->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height) + 20);
+				m_ball.at(i)->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height));
 				if(p_isMouseClicked && !m_prevLMouseClickStatus)
 				{
 					ShootBallFromPaddle(i);
