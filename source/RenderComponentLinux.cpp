@@ -166,6 +166,7 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
 {
   // Create an object based on p_objectType (p_textureType)
   ModelInstance* l_modelInstance = m_modelManager.CreateInstance( p_boundingBox, p_textureType );
+  l_modelInstance.SetTint( p_color );
   // Add the object to the list of objects to render
   m_objectList.push_back( l_modelInstance );
 }

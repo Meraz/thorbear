@@ -6,6 +6,7 @@ ModelInstance::ModelInstance( Model* p_model, glm::mat4 p_modelMatrix )
 {
   m_model = p_model;
   m_modelMatrix = p_modelMatrix;
+  m_tint = glm::vec3(1.f);
 }
 
 ModelInstance::~ModelInstance()
