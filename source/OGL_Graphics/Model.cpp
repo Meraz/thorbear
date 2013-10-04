@@ -190,7 +190,10 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
           glGenTextures( 1, &model.m_mtl->m_mapDiffuse );
           glBindTexture( GL_TEXTURE_2D, model.m_mtl->m_mapDiffuse );
           
-          glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapDiffuse->w, l_mapDiffuse->h, 0, GL_RGB, GL_UNSIGNED_BYTE, l_mapDiffuse->data);
+          if( l_mapDiffuse->depth/8 == 3 ) // RGB
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapDiffuse->w, l_mapDiffuse->h, 0, GL_RGB, GL_UNSIGNED_BYTE, l_mapDiffuse->data);
+          else // RGBA
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapDiffuse->w, l_mapDiffuse->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, l_mapDiffuse->data);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
           
