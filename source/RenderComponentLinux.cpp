@@ -175,7 +175,7 @@ void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
 {
 }
 
-void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
 {
 }
   
