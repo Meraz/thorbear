@@ -22,7 +22,7 @@ void ShootingEnemy::Update(float p_velocity, EnemyDirection p_direction, float p
 	if(p_direction == HORIZONTAL)
 		m_posX += p_velocity;
 	else
-		m_posY -= p_velocity;
+		m_posY -= abs(p_velocity);
 
 	m_tick += p_deltaTime;
 

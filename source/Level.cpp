@@ -85,7 +85,7 @@ void Level::CreateEnemies()
 	else
 	{
 		srand(time(NULL));
-		for(int i = 0; i < 15; i++)
+		for(unsigned int i = 0; i < 15; i++)
 		{
 			if(rand() % 2 == 0)
 			{
@@ -300,29 +300,54 @@ void Level::CheckAllCollisions(float p_deltaTime)
 	// Enemy vs Enemy
 	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
-		for(unsigned int j = 0; j < m_squad.size(); j++)
+		if(!m_squad.at(i)->IsPaused())
 		{
-			if(i != j)
+			for(unsigned int j = 0; j < m_squad.size(); j++)
 			{
-				if(BoundingBoxIntersect(m_squad.at(i)->GetBoundingBox(), m_squad.at(j)->GetBoundingBox()))
+				if(i != j)
 				{
-					if(m_squad.at(i)->GetBoundingBox().PosY > m_squad.at(j)->GetBoundingBox().PosY)
-						m_squad.at(i)->PauseMovement();
-					else
-						m_squad.at(j)->PauseMovement();
-				}
-				else
-				{
-					m_squad.at(i)->StartMovement();
-					m_squad.at(j)->StartMovement();
+					if(BoundingBoxIntersect(m_squad.at(i)->GetBoundingBox(), m_squad.at(j)->GetBoundingBox()))
+					{
+						if(m_squad.at(i)->GetBoundingBox().PosY > m_squad.at(j)->GetBoundingBox().PosY)
+							m_squad.at(i)->PauseMovement();
+						else
+							m_squad.at(j)->PauseMovement();
+					}
 				}
 			}
 		}
 	}
+
+	
+	
+	for(unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		bool l_isColliding = false;
+		if(m_squad.at(i)->IsPaused())
+		{
+			for(unsigned int j = 0; j < m_squad.size(); j++)
+			{
+				if(!m_squad.at(j)->IsPaused())
+				{
+					if (i != j)
+					{
+						if(BoundingBoxIntersect(m_squad.at(i)->GetBoundingBox(), m_squad.at(j)->GetBoundingBox()))
+						{
+							l_isColliding = true;
+							break;
+						}
+					}
+				}
+			}
+			if(!l_isColliding)
+				m_squad.at(i)->StartMovement();
+		}
+
+	}
 	
 	// if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
 	// TODO Stuff happens
-
+	
 }
 
 void Level::CheckIncrementalCollisions(Ball* p_ball, BoundingBox p_bBox, bool p_isEnemy, float p_dt)
