@@ -26,6 +26,7 @@ public:
 
 	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f));
 	void RenderParticleSystem(ParticleSystem p_particleSystem);
+	void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color);
 	void Render();
   
   void UpdateViewportSize( int p_width, int p_height );

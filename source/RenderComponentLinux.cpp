@@ -175,6 +175,10 @@ void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
 {
 }
 
+void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+{
+}
+  
 bool g_renderfirsttime = true;
 void RenderComponentLinux::Render()
 {

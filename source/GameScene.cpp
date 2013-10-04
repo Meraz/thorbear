@@ -43,7 +43,7 @@ void GameScene::Render()
 	l_ss << m_nrOfLives;
 	std::wstring l_lives( l_ss.str() );
   
-  l_ss.str(""); // reset stringstream to empty
+  l_ss.str(L""); // reset stringstream to empty
 	l_ss << m_score;
 	std::wstring l_score( l_ss.str() );
   
