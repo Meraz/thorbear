@@ -128,7 +128,7 @@ void WindowLinux::Update()
 
 	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY, l_clicked);
   
-  glfwSleep( 1. / 60. - l_deltaTime - .01 ); // Limit UPS
+  //glfwSleep( 1. / 60. - l_deltaTime - .01 ); // Limit UPS
 }
 
 void WindowLinux::Render()

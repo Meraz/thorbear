@@ -53,10 +53,7 @@ void Model::Render( Shader &p_shader, glm::vec3 p_tint )
 {
   m_mtl->Apply( p_shader );
   
-  p_shader.SetUniformVector( "intensityAmbient", glm::vec3(0.01f) ); // ambient intensity
-  p_shader.SetUniformVector( "intensityDiffuse", p_tint ); // diffuse intensity
-  p_shader.SetUniformFloat( "powerSpecular", 2000.0f); // specular intensity
-  p_shader.SetUniformVector( "intensitySpecular", glm::vec3(0.5f) ); // specular intensity
+  p_shader.SetUniformVector( "intensityDiffuse", p_tint ); // override diffuse intensity with tint
 
   glBindVertexArray( m_handleVAO ); // bind VAO
   glDrawArrays( GL_TRIANGLES, 0, m_vertexCount );
@@ -173,7 +170,10 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
           glGenTextures( 1, &model.m_mtl->m_mapAmbient );
           glBindTexture( GL_TEXTURE_2D, model.m_mtl->m_mapAmbient );
           
-          glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapAmbient->w, l_mapAmbient->h, 0, GL_RGB, GL_UNSIGNED_BYTE, l_mapAmbient->data);
+          if( l_mapAmbient->depth/8 == 3 ) // RGB
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapAmbient->w, l_mapAmbient->h, 0, GL_RGB, GL_UNSIGNED_BYTE, l_mapAmbient->data);
+          else
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapAmbient->w, l_mapAmbient->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, l_mapAmbient->data);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
           
@@ -210,7 +210,10 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
           glGenTextures( 1, &model.m_mtl->m_mapSpecular );
           glBindTexture( GL_TEXTURE_2D, model.m_mtl->m_mapSpecular );
           
-          glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapSpecular->w, l_mapSpecular->h, 0, GL_RGB, GL_UNSIGNED_BYTE, l_mapSpecular->data);
+          if( l_mapSpecular->depth/8 == 3 ) // RGB
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapSpecular->w, l_mapSpecular->h, 0, GL_RGB, GL_UNSIGNED_BYTE, l_mapSpecular->data);
+          else
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, l_mapSpecular->w, l_mapSpecular->h, 0, GL_RGBA, GL_UNSIGNED_BYTE, l_mapSpecular->data);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
           

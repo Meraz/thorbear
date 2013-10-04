@@ -33,4 +33,5 @@ void Material::Apply( Shader& p_shader )
   p_shader.SetUniformVector( "coefficientAmbient", m_coefficientAmbient ); // material's ambient coefficient
   p_shader.SetUniformVector( "coefficientDiffuse", m_coefficientDiffuse ); // material's diffuse coefficient
   p_shader.SetUniformVector( "coefficientSpecular", m_coefficientSpecular ); // material's specular coefficient
+  p_shader.SetUniformFloat( "powerSpecular", 2000.0f); // specular intensity
 }
