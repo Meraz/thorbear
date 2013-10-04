@@ -14,9 +14,13 @@ ModelMan::~ModelMan( )
 void ModelMan::LoadModels( )
 {
   m_models[ ENEMY1 ].Load( MODEL_DIR+"invader/", "invader.obj");
-  m_models[ ENEMY2 ].Load( MODEL_DIR+"invader/", "invader.obj");
+  m_models[ ENEMY2 ].Load( MODEL_DIR+"invader2/", "invader2.obj");
   m_models[ BALL ].Load( MODEL_DIR+"cube/", "cube.obj");
   m_models[ PADDLE ].Load( MODEL_DIR+"cube/", "cube.obj");
+  m_models[ ADDLIFEPOWERUP ].Load( MODEL_DIR+"AddLifePowerup/", "AddLifePowerup.obj");
+  m_models[ ADDBALLPOWERUP ].Load( MODEL_DIR+"AddBallPowerup/", "AddBallPowerup.obj");
+  m_models[ LARGERPADDLEPOWERUP ].Load( MODEL_DIR+"LargerPaddlePowerup/", "LargerPaddlePowerup.obj");
+  m_models[ SMALLERPADDLEPOWERUP ].Load( MODEL_DIR+"SmallerPaddlePowerup/", "SmallerPaddlePowerup.obj");
 }
 
 ModelInstance* ModelMan::CreateInstance( BoundingBox p_boundingBox, TextureType p_textureType )

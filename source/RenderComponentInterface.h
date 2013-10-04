@@ -22,7 +22,8 @@ enum TextureType
 	ADDLIFEPOWERUP,
 	ADDBALLPOWERUP,
 	LARGERPADDLEPOWERUP,
-	SMALLERPADDLEPOWERUP
+	SMALLERPADDLEPOWERUP,
+  TTCOUNT // Leave this last, you can loop i < TTCOUNT
 };
 
 class RenderComponentInterface
