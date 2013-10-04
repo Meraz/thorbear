@@ -99,12 +99,12 @@ bool RenderComponentLinux::Init()
 	glEnable( GL_MULTISAMPLE_ARB );
 
 	// set colour to clear screen buffer to
-	glClearColor( 0.f, 0.f, 1.f, 1.f );
+	glClearColor( 0.5f, 1.f, 1.f, 1.f );
 	glFlush();
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
 	
 	glfwSetWindowTitle( "SpaceOut: OpenGL4 Test" );//l_windowTitle.c_str( ) );
-	glfwSwapInterval( 0 ); // VSync on
+	glfwSwapInterval( 1 ); // VSync on
     
   m_genericShader.Init( SHADER_DIRECTORY + "genericVertex.glsl", SHADER_DIRECTORY + "genericFragment.glsl" );
   m_genericShader.Build( );
@@ -113,7 +113,7 @@ bool RenderComponentLinux::Init()
   // Create and attach a camera
   static Camera l_cam;
   l_cam.SetPosition( glm::vec3( 300.f, 90.f, -500.f ) );
-  l_cam.SetYawPitch( 0, atan( 0.2f ) );
+  l_cam.SetYawPitch( 0, -atan( 0.2f ) );
   l_cam.UpdateViewMatrix( );
   l_cam.SetClip( 10.f, 1000.f );
   l_cam.SetFoV( 45.f );
