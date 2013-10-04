@@ -10,6 +10,7 @@ Level::Level(void)
 	m_mapEdges.PosY = 0;
 	m_changesInLife = 0;
 	m_map = NULL;
+	m_isSurvivalMode = false;
 	m_prevLMouseClickStatus = false;
 	m_mapBorderThickness = 9;
 	m_ballSpeed = 200.0f;
@@ -21,19 +22,25 @@ Level::~Level(void)
 	delete m_paddle;
 	delete m_map;
 	vector<EnemySquad*>().swap(m_squad);
+	vector<Ball*>().swap(m_ball);
 }
 
-void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentInterface* p_renderComp )
+void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, bool p_isSurvivalMode, RenderComponentInterface* p_renderComp )
 {
 	m_renderComp = p_renderComp;
 	m_mapEdges.Width = p_lvlWidth; 
 	m_mapEdges.Height = p_lvlHeight; 
+	m_isSurvivalMode = p_isSurvivalMode;
 
-	std::stringstream l_ss;
-	l_ss << p_lvlNr;
-	std::string tmpString( "level" + l_ss.str() );
+	if(!m_isSurvivalMode)
+	{
+		std::stringstream l_ss;
+		l_ss << p_lvlNr;
+		std::string tmpString( "level" + l_ss.str() );
 
-	m_map = LevelImporter::LoadLevel(tmpString);	
+		m_map = LevelImporter::LoadLevel(tmpString);	
+	}
+
 	m_paddle = new Paddle(p_lvlWidth/2.0f, 10.0f, 50, 10, p_lvlWidth); //example values
 	m_paddle->Initialize(p_renderComp);
 
@@ -54,22 +61,42 @@ void Level::CreateEnemies()
 	vector<Enemy*> l_enemy;
 	Enemy* tempEnemy;
 	EnemySquad* tempSquad;
-	for(int i = 0; i < 5; i++)
+	if(!m_isSurvivalMode)
 	{
-		for(int j = 0; j < 15; j++)
+		for(int i = 0; i < 5; i++)
 		{
-			if(m_map[i][j] == ENEMY1)
+			for(int j = 0; j < 15; j++)
+			{
+				if(m_map[i][j] == ENEMY1)
+				{
+					tempEnemy = new ShootingEnemy();
+					tempEnemy->Init(j * 20.0f, m_mapEdges.PosY + m_mapEdges.Height - ((i+1) * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
+					l_enemy.push_back(tempEnemy);
+				}
+				else if(m_map[i][j] == ENEMY2)
+				{
+					tempEnemy = new DefensiveEnemy();
+					tempEnemy->Init(j * 20.0f, m_mapEdges.PosY + m_mapEdges.Height - ((i+1) * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
+					l_enemy.push_back(tempEnemy);
+				}
+			}
+		}
+	}
+	else
+	{
+		srand(time(NULL));
+		for(int i = 0; i < 15; i++)
+		{
+			if(rand() % 2 == 0)
 			{
 				tempEnemy = new ShootingEnemy();
-				tempEnemy->Init(j * 20.0f, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
-				l_enemy.push_back(tempEnemy);
 			}
-			else if(m_map[i][j] == ENEMY2)
+			else
 			{
 				tempEnemy = new DefensiveEnemy();
-				tempEnemy->Init(j * 20.0f, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
-				l_enemy.push_back(tempEnemy);
 			}
+			tempEnemy->Init(i * 20.0f, m_mapEdges.PosY + m_mapEdges.Height - 20 /*enemy height*/, 20, 20);
+			l_enemy.push_back(tempEnemy);
 		}
 	}
 
@@ -104,6 +131,7 @@ void Level::SpawnPowerup(float p_posX, float p_posY)
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
 	m_changesInLife = 0;
+
 	for (unsigned int i = 0; i < m_ball.size(); i++)
 	{
 		m_ball.at(i)->Update(p_deltaTime);
@@ -128,6 +156,15 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 		}
 	} 
 	m_paddle->Update(p_mousePosX);
+
+	if (m_isSurvivalMode)
+	{
+		if((m_squad.back()->GetBoundingBox().PosY + m_squad.back()->GetBoundingBox().Height < m_mapEdges.PosY + m_mapEdges.Height - m_squad.back()->GetBoundingBox().Height)
+			&& m_squad.back()->GetDirection() == 1)
+		{
+			CreateEnemies();
+		}
+	}
 
 	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
@@ -260,6 +297,28 @@ void Level::CheckAllCollisions(float p_deltaTime)
 		else if(m_powerup.at(i)->GetBoundingBox().PosY <= 0)
 				m_powerup.erase(m_powerup.begin() + i);
 	}
+	// Enemy vs Enemy
+	for(unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		for(unsigned int j = 0; j < m_squad.size(); j++)
+		{
+			if(i != j)
+			{
+				if(BoundingBoxIntersect(m_squad.at(i)->GetBoundingBox(), m_squad.at(j)->GetBoundingBox()))
+				{
+					if(m_squad.at(i)->GetBoundingBox().PosY > m_squad.at(j)->GetBoundingBox().PosY)
+						m_squad.at(i)->PauseMovement();
+					else
+						m_squad.at(j)->PauseMovement();
+				}
+				else
+				{
+					m_squad.at(i)->StartMovement();
+					m_squad.at(j)->StartMovement();
+				}
+			}
+		}
+	}
 	
 	// if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
 	// TODO Stuff happens
@@ -331,7 +390,10 @@ int Level::GetNrOfEnemies()
 	int l_numEnemies = 0;
 	for(unsigned int i = 0; i < m_squad.size(); i++)
 	{
-		l_numEnemies += m_squad.at(i)->GetNumOfEnemies();
+		if(m_squad.at(i)->GetNumOfEnemies() == 0)
+			m_squad.erase(m_squad.begin()+i);
+		else
+			l_numEnemies += m_squad.at(i)->GetNumOfEnemies();
 	}
 	return l_numEnemies;
 }

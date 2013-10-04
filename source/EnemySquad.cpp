@@ -7,6 +7,7 @@
 EnemySquad::EnemySquad()
 {
 	m_velocity = 0;
+	m_prevVelocity = 0;
 	m_BoundingBox = BoundingBox(0,0,0,0);
 }
 
@@ -58,15 +59,14 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 		if(m_BoundingBox.PosX <= m_mapEdges.PosX || 
 			m_BoundingBox.PosX + m_BoundingBox.Width >= m_mapEdges.PosX + m_mapEdges.Width)
 		{
-			m_velocity *= -1;
-			m_currentEnemyDirection = VERTICAL;
-			m_currentEnemyY = FindLowestEnemyRow(); //Use the lowest row so that we can use the same variable for laser firing checks
-			m_targetY = m_currentEnemyY - m_enemy.at(0)->GetBoundingBox().Height;
-
 			for(unsigned int i = 0; i < m_enemy.size(); i++)
 			{
 				m_enemy.at(i)->Update(m_velocity * (-p_deltaTime), m_currentEnemyDirection, p_deltaTime);
 			}
+			m_velocity *= -1;
+			m_currentEnemyDirection = VERTICAL;
+			m_currentEnemyY = FindLowestEnemyRow(); //Use the lowest row so that we can use the same variable for laser firing checks
+			m_targetY = m_currentEnemyY - m_enemy.at(0)->GetBoundingBox().Height;
 
 			break;
 		}
@@ -170,7 +170,7 @@ void EnemySquad::CalculateBoundingBox()
 	int l_width, l_height;
 	l_x = 1000.0f;
 	l_y = 0.0f;
-	l_height = INT_MAX;
+	l_height = 0;
 	l_width = INT_MIN;
 	for(unsigned int i = 0; i < m_enemy.size(); i++)
 	{
@@ -180,13 +180,33 @@ void EnemySquad::CalculateBoundingBox()
 			l_y = m_enemy.at(i)->GetBoundingBox().PosY;
 		if(l_width < m_enemy.at(i)->GetBoundingBox().PosX + m_enemy.at(i)->GetBoundingBox().Width)
 			l_width = (int)m_enemy.at(i)->GetBoundingBox().PosX + m_enemy.at(i)->GetBoundingBox().Width;
-		if(l_height > m_enemy.at(i)->GetBoundingBox().PosY - m_enemy.at(i)->GetBoundingBox().Height)
-			l_height = (int)m_enemy.at(i)->GetBoundingBox().PosY - m_enemy.at(i)->GetBoundingBox().Height;
+		if(l_height < m_enemy.at(i)->GetBoundingBox().PosY + m_enemy.at(i)->GetBoundingBox().Height)
+			l_height = (int)m_enemy.at(i)->GetBoundingBox().PosY + m_enemy.at(i)->GetBoundingBox().Height;
 	}
 
 	m_BoundingBox.PosX = l_x;
 	m_BoundingBox.PosY = l_y;
 	m_BoundingBox.Width = l_width - (int)l_x;
-	m_BoundingBox.Height = l_height + (int)l_y;
+	m_BoundingBox.Height = l_height - (int)l_y;
+}
+
+int EnemySquad::GetDirection()
+{
+	if(m_velocity > 0 && m_currentEnemyDirection == HORIZONTAL)
+		return 1;
+	else 
+		return -1;
+}
+
+void EnemySquad::PauseMovement()
+{
+	if(m_velocity != 0)
+		m_prevVelocity = m_velocity;
+}
+
+void EnemySquad::StartMovement()
+{
+	if(m_prevVelocity != 0)
+		m_velocity = m_prevVelocity;
 }
 

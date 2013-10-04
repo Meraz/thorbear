@@ -3,12 +3,13 @@
 
 GameScene::GameScene(void)
 {
-	m_currentLevel = 2;
+	m_currentLevel = 1;
 	m_maxNrOfLevels = 3;
 	m_score = 0;
 	m_nrOfLives = 3;
 	m_lastKnownNrOfEnemies = 0;
 	m_enemyWorth = 100;
+	m_isSurvivalMode = true;
 }
 
 
@@ -21,7 +22,7 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 {
 	m_renderComponentInterface = p_renderComponentInterface;
 	m_level = new Level();
-	m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : Don't hard code this
+	m_level->Init(m_currentLevel, 600, 400, m_isSurvivalMode, m_renderComponentInterface); // TODO : Don't hard code this
 	m_lastKnownNrOfEnemies = m_level->GetNrOfEnemies();
 }
 
@@ -63,7 +64,7 @@ void GameScene::CheckEnemyNr()
 		m_score += m_enemyWorth * (m_lastKnownNrOfEnemies - l_nrEnemies);
 	m_lastKnownNrOfEnemies = l_nrEnemies;
 
-	if(m_lastKnownNrOfEnemies == 0)
+	if(m_lastKnownNrOfEnemies == 0 && !m_isSurvivalMode)
 	{
 		delete m_level;
 		m_currentLevel++;
@@ -71,6 +72,6 @@ void GameScene::CheckEnemyNr()
 		if(m_currentLevel > m_maxNrOfLevels)
 			m_currentLevel = 1;
 		m_level = new Level();
-		m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : HARDCODED
+		m_level->Init(m_currentLevel, 600, 400, false, m_renderComponentInterface); // TODO : HARDCODED
 	}
 }

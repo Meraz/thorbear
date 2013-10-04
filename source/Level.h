@@ -4,6 +4,7 @@
 #define POWERUPDROPRATIO 20
 
 #include <vector>
+#include <time.h>
 #include "Paddle.h"
 #include "EnemySquad.h"
 #include "LevelImporter.h"
@@ -20,7 +21,7 @@ public:
 	Level(void);
 	~Level(void);
 
-	void Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentInterface* p_renderComp);
+	void Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight, bool p_isSurvivalMode, RenderComponentInterface* p_renderComp);
 
 	void	Update(int p_mousePosX, bool p_isMouseClicked, float p_deltaTime); //Not sure if int or float
 	void	Render();
@@ -36,10 +37,10 @@ private:
 	vector<Powerup*>	m_powerup;
 	BoundingBox			m_mapEdges;
 	Paddle*				m_paddle;
-	//Ball*				m_ball;
 	int**				m_map;
 	int					m_changesInLife;
 
+	bool	m_isSurvivalMode;
 	bool	m_prevLMouseClickStatus;
 	float	m_ballSpeed;
 	int		m_ballWidth;

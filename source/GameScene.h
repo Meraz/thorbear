@@ -24,6 +24,7 @@ private:
 	int		m_nrOfLives;
 	int		m_score;
 	Level*	m_level;
+	bool	m_isSurvivalMode;
 	RenderComponentInterface* m_renderComponentInterface;
 private:
 	void NewLevel();
