@@ -22,7 +22,8 @@ enum TextureType
 	ADDLIFEPOWERUP,
 	ADDBALLPOWERUP,
 	LARGERPADDLEPOWERUP,
-	SMALLERPADDLEPOWERUP
+	SMALLERPADDLEPOWERUP,
+	LEVEL
 };
 
 class RenderComponentInterface
@@ -36,6 +37,8 @@ public:
 
 	/* Add this text to be drawn this update */
 	virtual void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color) = 0;
+
+	virtual void RenderBackground(TextureType p_textureType) = 0;
 };
 
 #endif

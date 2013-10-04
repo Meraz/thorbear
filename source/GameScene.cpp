@@ -35,6 +35,7 @@ void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePosi
 
 void GameScene::Render()
 {
+	m_renderComponentInterface->RenderBackground(LEVEL);
 	m_level->Render();
 
 
