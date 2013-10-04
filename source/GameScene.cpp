@@ -39,7 +39,7 @@ void GameScene::Render()
 {
 	m_level->Render();
 
-  std::stringstream l_ss;
+  std::wostringstream  l_ss;
 	l_ss << m_nrOfLives;
 	std::wstring l_lives( l_ss.str() );
   
