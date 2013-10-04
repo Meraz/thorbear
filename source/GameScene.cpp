@@ -9,6 +9,7 @@ GameScene::GameScene()
 	m_nrOfLives = 3;
 	m_lastKnownNrOfEnemies = 0;
 	m_enemyWorth = 100;
+	m_gameMode = MODE_CAMPAIGN;
 }
 
 GameScene::~GameScene()
@@ -22,41 +23,39 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 	m_sceneState = SceneState::GAME;
 
 	m_level = new Level();
-	m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : Don't hard code this
+	m_level->Init(m_currentLevel, 600, 400, m_gameMode, m_renderComponentInterface); // TODO : Don't hard code this
 	m_lastKnownNrOfEnemies = m_level->GetNrOfEnemies();
-	//create and init user interface
 }
 
 void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked /* add keyboard parameters here*/)
 {
-	m_level->Update(p_mousePositionX, p_lMouseClicked, (float)p_deltaTime); // TODO : NO hardcoded booleans
+	m_level->Update(p_mousePositionX, p_lMouseClicked, (float)p_deltaTime); 
 
-	CheckPaddleDeath();
+	CheckPaddleLife();
 	CheckEnemyNr();
-	//cout << "Level: " << m_currentLevel << ", lives: " << m_nrOfLives << ", score: " << m_score << endl;
 }
 
 void GameScene::Render()
 {
 	m_level->Render();
 
-	//render UI(lives, m_score)
+
+	wstring l_lives = to_wstring(m_nrOfLives);
+	wstring l_score = to_wstring(m_score);
+	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff);
+	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff);
 }
 
-void GameScene::CheckPaddleDeath()
+void GameScene::CheckPaddleLife()
 {
-	if(m_level->HasPaddleDied())
-		DecrementLife();
-}
-
-void GameScene::DecrementLife()
-{
-	m_nrOfLives--;
+	m_nrOfLives += m_level->GetLifeChanged();
 	if(m_nrOfLives < 0)
 	{
-		//Trigger game over stuff. 
+		//TODO GAME OVER STUFF GOES HERE
 	}
 }
+
+
 
 void GameScene::CheckEnemyNr()
 {
@@ -66,7 +65,7 @@ void GameScene::CheckEnemyNr()
 		m_score += m_enemyWorth * (m_lastKnownNrOfEnemies - l_nrEnemies);
 	m_lastKnownNrOfEnemies = l_nrEnemies;
 
-	if(m_lastKnownNrOfEnemies == 0)
+	if(m_lastKnownNrOfEnemies == 0 && m_gameMode == MODE_CAMPAIGN)
 	{
 		delete m_level;
 		m_currentLevel++;
@@ -74,6 +73,11 @@ void GameScene::CheckEnemyNr()
 		if(m_currentLevel > m_maxNrOfLevels)
 			m_currentLevel = 1;
 		m_level = new Level();
-		m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : HARDCODED
+		m_level->Init(m_currentLevel, 600, 400, m_gameMode, m_renderComponentInterface); // TODO : HARDCODED
 	}
+}
+
+void GameScene::SetGameMode( int p_gameMode )
+{
+	m_gameMode = p_gameMode;
 }

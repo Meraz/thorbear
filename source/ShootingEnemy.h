@@ -18,6 +18,7 @@ private:
 	bool m_wantsToFire;
 	float m_shootIntervall;
 	float m_tick;
+	float m_phaseZ;
 };
 
 #endif

@@ -58,6 +58,8 @@ void SceneManager::SwapSceneState(SceneState::State p_sceneState)
 	{
 		SafeDelete(m_currentScene);
 		m_currentScene = new GameScene();
+		GameScene* a = (GameScene*)m_currentScene;
+		a->SetGameMode(1);
 	}
 	else if (p_sceneState == SceneState::HIGHSCORE)
 	{

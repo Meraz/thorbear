@@ -2,8 +2,8 @@ cbuffer cbPerObject
 {
 	float4x4 gWVP; 
 	float4x4 gWorld;
-	float4 	gDirToSunW = float4(-4,3,-1,1);
-	float4 gColor = float4(1,1,1,1);
+	float4 	gDirToSunW = float4(0,0,-1,1);
+	float4  gColor;
 };
 
 Texture2D gTexture;
@@ -64,8 +64,10 @@ VS_OUT VS(VS_IN vIn)
 float4 PS(VS_OUT pIn) : SV_Target
 {
 	float4 C = gTexture.Sample(gTriLinearSam, pIn.stretchedUV);
-	C *= pIn.shade;
 
+	C *= pIn.shade;
+	C *= gColor;
+	
 	return C; 	
 }
 

@@ -4,7 +4,7 @@
 RenderComponentWin::RenderComponentWin(HWND p_hMainWnd)
 {	
 	m_hMainWnd = p_hMainWnd;
-	m_objVec = std::vector<ObjTemplate>();	
+	m_objVec = std::vector<ObjTemplate>();
 }
 
 RenderComponentWin::~RenderComponentWin()
@@ -12,7 +12,8 @@ RenderComponentWin::~RenderComponentWin()
 	delete m_modelManager;
 	delete m_shaderManager;
 	delete m_camera;
-	
+	delete m_fontRenderer;
+
 	ReleaseCOM(m_d3dDevice);
 	ReleaseCOM( m_d3dImmediateContext);
 	ReleaseCOM( m_swapChain);
@@ -25,8 +26,8 @@ RenderComponentWin::~RenderComponentWin()
 
 int RenderComponentWin::Initialize()
 {	
-	m_clientWidth = 800;
-	m_clientHeight = 600;
+	m_clientWidth = 1920;
+	m_clientHeight = 1080;
 	InitializeDirect3D();
 
 	m_d3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -37,15 +38,18 @@ int RenderComponentWin::Initialize()
 	m_camera = new Camera();
 	m_camera->SetLens(MathHelper::PI * 0.25f, (float)m_clientWidth/m_clientHeight, 0.5f, 1000.0f);
 
-	m_camera->SetPos(300, 200, -600);
+	m_camera->SetPos(300, 90, -500);
 
 	Load();
 	CreateTemplates();
+	ShowCursor(false);
 
+	m_fontRenderer = new FontRenderWin();
+	m_fontRenderer->Init(m_d3dDevice, L"Arial", m_d3dImmediateContext);
 	return 0;
 }
 
-void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)
+void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color)
 {
 	Shader* l_shader = m_objVec.at((int)p_textureType).shader;
 	Model*	l_model = m_objVec.at((int)p_textureType).model;
@@ -78,7 +82,7 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 	
 	// Translation matrix
 	D3DXMATRIX l_translateMat;
-	D3DXMatrixTranslation(&l_translateMat, p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), 0);	// Create translation matrix
+	D3DXMatrixTranslation(&l_translateMat, p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), p_boundingBox.PosZ);	// Create translation matrix
 
 	D3DXMATRIX l_worldMat	= l_scaleMat *  l_translateMat;												// 
 	D3DXMATRIX l_WVP		= l_worldMat * m_camera->GetViewMatrix() *  m_camera->GetProjMatrix();
@@ -89,6 +93,7 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 	l_shader->SetMatrix("gWorld", l_worldMat);
 	l_shader->SetMatrix("gWVP", l_WVP);
 	l_shader->SetResource("gTexture", l_model->m_material->m_textureResource);
+	l_shader->SetFloat4("gColor", D3DXVECTOR4(p_color.r, p_color.g, p_color.b, 1.0f));
 
 
 	D3DX11_TECHNIQUE_DESC techDesc;
@@ -107,7 +112,7 @@ void RenderComponentWin::RenderParticleSystem(ParticleSystem p_particleSystem)
 
 void RenderComponentWin::PreRender()
 {
-	m_d3dImmediateContext->ClearRenderTargetView(m_renderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
+	m_d3dImmediateContext->ClearRenderTargetView(m_renderTargetView, reinterpret_cast<const float*>(&Colors::Black));
 	m_d3dImmediateContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
@@ -150,6 +155,9 @@ bool RenderComponentWin::InitializeDirect3D()
 		return false;
 	}
 
+	unsigned int test = 0;
+	m_d3dDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_R8G8B8A8_UNORM, 4, &test);
+
 	DXGI_SWAP_CHAIN_DESC l_sd;
 	l_sd.BufferDesc.Width  = m_clientWidth;//m_clientWidth;
 	l_sd.BufferDesc.Height = m_clientHeight;//m_clientHeight;
@@ -158,8 +166,8 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	l_sd.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	l_sd.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-	l_sd.SampleDesc.Count   = 1;
-	l_sd.SampleDesc.Quality = 0;
+	l_sd.SampleDesc.Count   = 4;
+	l_sd.SampleDesc.Quality = test-1;
 
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
@@ -212,8 +220,8 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_depthStencilDesc.MipLevels = 1;
 	l_depthStencilDesc.ArraySize = 1;
 	l_depthStencilDesc.Format    = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	l_depthStencilDesc.SampleDesc.Count   = 1;
-	l_depthStencilDesc.SampleDesc.Quality = 0;
+	l_depthStencilDesc.SampleDesc.Count   = 4;
+	l_depthStencilDesc.SampleDesc.Quality = test-1;
 	l_depthStencilDesc.Usage          = D3D11_USAGE_DEFAULT;
 	l_depthStencilDesc.BindFlags      = D3D11_BIND_DEPTH_STENCIL;
 	l_depthStencilDesc.CPUAccessFlags = 0; 
@@ -241,19 +249,28 @@ bool RenderComponentWin::InitializeDirect3D()
 void RenderComponentWin::Load()
 {
 	m_modelManager->CreateModel("invader.obj",	"object\\invader");
-	m_modelManager->CreateModel("bth.obj",		"object\\bth");
+	m_modelManager->CreateModel("invader2.obj",		"object\\invader2");
 	m_modelManager->CreateModel("cube.obj",		"object\\cube");
 	m_modelManager->CreateModel("cube1.obj",	"object\\colorcube");
 
+	m_modelManager->CreateModel("AddLifePowerup.obj",	"object\\AddLifePowerup");
+	m_modelManager->CreateModel("AddBallPowerup.obj",	"object\\AddBallPowerup");
+	m_modelManager->CreateModel("LargerPaddlePowerup.obj",	"object\\LargerPaddlePowerup");
+	m_modelManager->CreateModel("SmallerPaddlePowerup.obj",	"object\\SmallerPaddlePowerup");
 	m_shaderManager->AddShader("effect\\object.fx", 12);	
 }
 
 void RenderComponentWin::CreateTemplates()
 {
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("invader.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
-	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("bth.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("invader2.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube.obj"),	 m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube1.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("AddLifePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("AddBallPowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("LargerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("SmallerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 }
 
 BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBox, TextureType p_textureType)
@@ -323,4 +340,10 @@ BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBo
 	l_boundingBox.Depth = p_boundingBox.Depth;
 
 	return l_boundingBox;
+}
+
+
+void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+{
+	m_fontRenderer->RenderText(p_text.c_str(), p_size, p_posX, p_posY, p_color);
 }

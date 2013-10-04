@@ -15,7 +15,7 @@ void Laser::Init( RenderComponentInterface* p_renderComp, int p_velocity, Boundi
 	m_renderComp = p_renderComp;
 
 	m_BoundingBox = p_boundingBox;
-
+	m_BoundingBox.Depth = 9;
 	m_velocity = p_velocity;
 }
 
