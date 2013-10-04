@@ -49,12 +49,12 @@ bool Model::Load( std::string p_dir, std::string p_fileName )
   return true;
 }
 
-void Model::Render( Shader &p_shader )
+void Model::Render( Shader &p_shader, glm::vec3 p_tint )
 {
   m_mtl->Apply( p_shader );
   
   p_shader.SetUniformVector( "intensityAmbient", glm::vec3(0.01f) ); // ambient intensity
-  p_shader.SetUniformVector( "intensityDiffuse", glm::vec3(0.8f) ); // diffuse intensity
+  p_shader.SetUniformVector( "intensityDiffuse", p_tint ); // diffuse intensity
   p_shader.SetUniformFloat( "powerSpecular", 2000.0f); // specular intensity
   p_shader.SetUniformVector( "intensitySpecular", glm::vec3(0.5f) ); // specular intensity
 

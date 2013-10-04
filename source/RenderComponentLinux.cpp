@@ -99,7 +99,7 @@ bool RenderComponentLinux::Init()
 	glEnable( GL_MULTISAMPLE_ARB );
 
 	// set colour to clear screen buffer to
-	glClearColor( 0.5f, 1.f, 1.f, 1.f );
+	glClearColor( 0.f, 0.f, 0.f, 1.f );
 	glFlush();
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
 	

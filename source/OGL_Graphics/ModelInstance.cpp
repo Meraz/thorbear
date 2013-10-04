@@ -16,9 +16,8 @@ ModelInstance::~ModelInstance()
 void ModelInstance::Render( Shader& p_shader )
 {
   p_shader.UpdateUniform( m_modelMatrix );
-  p_shader.SetUniformVector( "intensityDiffuse", m_tint );
 
-  m_model->Render( p_shader );
+  m_model->Render( p_shader, m_tint );
 }
 
 void ModelInstance::SetTint( Vect3 p_color )

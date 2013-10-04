@@ -15,7 +15,7 @@ public:
   
 	bool Load( std::string p_dir, std::string p_fileName );
   
-  void Render( Shader &p_shader );
+  void Render( Shader &p_shader, glm::vec3 p_tint );
   
   int m_vertexCount;
   
