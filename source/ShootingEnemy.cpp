@@ -10,7 +10,7 @@ ShootingEnemy::ShootingEnemy(void)
 	m_wantsToFire = false;
 	m_tick = 0;
 	m_shootIntervall = 3.0f +  rand() % 10;
-	m_phaseZ = ((float)rand())/INT_MAX;
+	m_phaseZ = ((float)rand())/INT_MAX*16.f;
 	m_BoundingBox.Depth = 9;
 }
 
