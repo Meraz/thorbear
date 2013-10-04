@@ -60,7 +60,7 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 
 			m_currentEnemyDirection = VERTICAL;
 
-			m_targetY = m_BoundingBox.PosY - m_enemy.at(0)->GetBoundingBox().Height;
+			m_targetY = m_BoundingBox.PosY - m_enemy.at(0)->GetBoundingBox().Height - 2;
 			
 		}
 		for(unsigned int i = 0; i < m_enemy.size(); i++)

@@ -2,6 +2,8 @@
 #define LEVEL_H
 
 #define POWERUPDROPRATIO 20
+#define MODE_CAMPAIGN 0
+#define MODE_SURVIVAL 1
 
 #include <vector>
 #include <time.h>
@@ -21,7 +23,7 @@ public:
 	Level(void);
 	~Level(void);
 
-	void Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight, bool p_isSurvivalMode, RenderComponentInterface* p_renderComp);
+	void Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight, int p_gameMode, RenderComponentInterface* p_renderComp);
 
 	void	Update(int p_mousePosX, bool p_isMouseClicked, float p_deltaTime); //Not sure if int or float
 	void	Render();
@@ -40,7 +42,7 @@ private:
 	int**				m_map;
 	int					m_changesInLife;
 
-	bool	m_isSurvivalMode;
+	int		m_gameMode;
 	bool	m_prevLMouseClickStatus;
 	float	m_ballSpeed;
 	int		m_ballWidth;
@@ -48,7 +50,7 @@ private:
 
 	RenderComponentInterface*	m_renderComp;
 	int		m_mapBorderThickness;
-
+	int		m_enemyDistance;
 	SoundHandler* m_soundHandler;
 
 private:

@@ -10,9 +10,10 @@ Level::Level(void)
 	m_mapEdges.PosY = 0;
 	m_changesInLife = 0;
 	m_map = NULL;
-	m_isSurvivalMode = false;
+	m_gameMode = MODE_CAMPAIGN;
 	m_prevLMouseClickStatus = false;
 	m_mapBorderThickness = 9;
+	m_enemyDistance = 2;
 	m_ballSpeed = 200.0f;
 }
 
@@ -25,14 +26,14 @@ Level::~Level(void)
 	vector<Ball*>().swap(m_ball);
 }
 
-void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, bool p_isSurvivalMode, RenderComponentInterface* p_renderComp )
+void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, int p_gameMode, RenderComponentInterface* p_renderComp )
 {
 	m_renderComp = p_renderComp;
 	m_mapEdges.Width = p_lvlWidth; 
 	m_mapEdges.Height = p_lvlHeight; 
-	m_isSurvivalMode = p_isSurvivalMode;
+	m_gameMode = p_gameMode;
 
-	if(!m_isSurvivalMode)
+	if(m_gameMode == MODE_CAMPAIGN)
 	{
 		std::stringstream l_ss;
 		l_ss << p_lvlNr;
@@ -61,7 +62,7 @@ void Level::CreateEnemies()
 	vector<Enemy*> l_enemy;
 	Enemy* tempEnemy;
 	EnemySquad* tempSquad;
-	if(!m_isSurvivalMode)
+	if(m_gameMode == MODE_CAMPAIGN)
 	{
 		for(int i = 0; i < 5; i++)
 		{
@@ -82,7 +83,7 @@ void Level::CreateEnemies()
 			}
 		}
 	}
-	else
+	else if(m_gameMode == MODE_SURVIVAL)
 	{
 		srand(time(NULL));
 		for(unsigned int i = 0; i < 15; i++)
@@ -95,7 +96,7 @@ void Level::CreateEnemies()
 			{
 				tempEnemy = new DefensiveEnemy();
 			}
-			tempEnemy->Init(i * 20.0f, m_mapEdges.PosY + m_mapEdges.Height - 20 /*enemy height*/, 20, 20);
+			tempEnemy->Init(i * 20.0f, m_mapEdges.PosY + m_mapEdges.Height - m_enemyDistance - 20 /*enemy height*/, 20, 20);
 			l_enemy.push_back(tempEnemy);
 		}
 	}
@@ -157,7 +158,7 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 	} 
 	m_paddle->Update(p_mousePosX);
 
-	if (m_isSurvivalMode)
+	if (m_gameMode == MODE_SURVIVAL)
 	{
 		if((m_squad.back()->GetBoundingBox().PosY + m_squad.back()->GetBoundingBox().Height < m_mapEdges.PosY + m_mapEdges.Height - m_squad.back()->GetBoundingBox().Height)
 			&& m_squad.back()->GetDirection() == 1)
@@ -298,51 +299,27 @@ void Level::CheckAllCollisions(float p_deltaTime)
 				m_powerup.erase(m_powerup.begin() + i);
 	}
 	// Enemy vs Enemy
-	for(unsigned int i = 0; i < m_squad.size(); i++)
+	for(unsigned int i = 1; i < m_squad.size(); i++)
 	{
 		if(!m_squad.at(i)->IsPaused())
 		{
-			for(unsigned int j = 0; j < m_squad.size(); j++)
+			if(BoundingBoxIntersect(m_squad.at(i-1)->GetBoundingBox(), m_squad.at(i)->GetBoundingBox()))
 			{
-				if(i != j)
-				{
-					if(BoundingBoxIntersect(m_squad.at(i)->GetBoundingBox(), m_squad.at(j)->GetBoundingBox()))
-					{
-						if(m_squad.at(i)->GetBoundingBox().PosY > m_squad.at(j)->GetBoundingBox().PosY)
-							m_squad.at(i)->PauseMovement();
-						else
-							m_squad.at(j)->PauseMovement();
-					}
-				}
+				if(m_squad.at(i)->GetBoundingBox().PosY > m_squad.at(i-1)->GetBoundingBox().PosY)
+					m_squad.at(i)->PauseMovement();
+				else
+					m_squad.at(i-1)->PauseMovement();
 			}
 		}
 	}
 
-	
-	
-	for(unsigned int i = 0; i < m_squad.size(); i++)
+	for(unsigned int i = 1; i < m_squad.size(); i++)
 	{
-		bool l_isColliding = false;
 		if(m_squad.at(i)->IsPaused())
 		{
-			for(unsigned int j = 0; j < m_squad.size(); j++)
-			{
-				if(!m_squad.at(j)->IsPaused())
-				{
-					if (i != j)
-					{
-						if(BoundingBoxIntersect(m_squad.at(i)->GetBoundingBox(), m_squad.at(j)->GetBoundingBox()))
-						{
-							l_isColliding = true;
-							break;
-						}
-					}
-				}
-			}
-			if(!l_isColliding)
+			if(!BoundingBoxIntersect(m_squad.at(i-1)->GetBoundingBox(), m_squad.at(i)->GetBoundingBox()))
 				m_squad.at(i)->StartMovement();
 		}
-
 	}
 	
 	// if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
