@@ -114,9 +114,21 @@ int WindowWindows::Run()
 	return (int)l_msg.wParam;
 }
 
+/*#include <stdlib.h>*/
 void WindowWindows::Update()
 {
 	WindowBaseClass::Update(m_gameTimer->DeltaTime(), m_mousePositionX, m_mousePositionY, m_lMouseClicked);
+
+	/*if(m_gameInterface->CheckIfExit())
+		PostQuitMessage(0);
+
+	wchar_t title[256];
+		swprintf_s(
+		title,
+		_countof(title),
+		L"Mouse: x:%d y:%d", m_mousePositionX, m_mousePositionY
+		);
+	SetWindowText(m_hMainWnd, title);*/
 }
 
 void WindowWindows::Render()

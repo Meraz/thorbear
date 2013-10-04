@@ -17,9 +17,9 @@ void HighScoreScene::Initialize(RenderComponentInterface* p_renderComponentInter
 	BaseScene::Initialize(p_renderComponentInterface);
 	m_sceneState = SceneState::HIGHSCORE;
 
-	m_button.push_back(new Button(BoundingBox2D(100, 100, 50, 50), this, &HighScoreScene::ChangeCurrentState, SceneState::GAME_MODE_MENU,	GameType::NOT_SPECIFIED, p_renderComponentInterface, BUTTON2));
-	m_button.push_back(new Button(BoundingBox2D(100, 75,  50, 50), this, &HighScoreScene::ChangeCurrentState, SceneState::HIGHSCORE,		GameType::NOT_SPECIFIED, p_renderComponentInterface, BUTTON2));
-	m_button.push_back(new Button(BoundingBox2D(100, 50,  50, 50), this, &HighScoreScene::ChangeCurrentState, SceneState::EXIT,				GameType::NOT_SPECIFIED, p_renderComponentInterface, BUTTON2));
+//	m_button.push_back(new Button(BoundingBox2D(100, 100, 50, 50), this, &HighScoreScene::ChangeCurrentState, SceneState::GAME_MODE_MENU,	GameType::NOT_SPECIFIED, p_renderComponentInterface, BUTTON2));
+//	m_button.push_back(new Button(BoundingBox2D(100, 75,  50, 50), this, &HighScoreScene::ChangeCurrentState, SceneState::HIGHSCORE,		GameType::NOT_SPECIFIED, p_renderComponentInterface, BUTTON2));
+//	m_button.push_back(new Button(BoundingBox2D(100, 50,  50, 50), this, &HighScoreScene::ChangeCurrentState, SceneState::EXIT,				GameType::NOT_SPECIFIED, p_renderComponentInterface, BUTTON2));
 }
 
 void HighScoreScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked)

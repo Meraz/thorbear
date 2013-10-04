@@ -8,7 +8,7 @@
 class Button
 {
 public:
-	Button(BoundingBox2D p_boundingBox, BaseScene* p_scene, void (BaseScene::*p_function)(SceneState::State, GameType::Type), SceneState::State p_sceneState, GameType::Type p_gameType, RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture);
+	Button(BoundingBox p_boundingBox, BaseScene* p_scene, void (BaseScene::*p_function)(SceneState::State, GameType::Type), SceneState::State p_sceneState, GameType::Type p_gameType, RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture);
 	~Button();
 	
 	void Render();
@@ -16,7 +16,7 @@ public:
 	void ExecuteCommand();
 
 private:
-	BoundingBox2D m_boundingBox;
+	BoundingBox m_boundingBox;
 	BaseScene* m_scene;
 	void (BaseScene::*m_function)(SceneState::State, GameType::Type);
 	SceneState::State m_sceneState;

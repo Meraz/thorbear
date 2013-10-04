@@ -2,7 +2,6 @@
 #define RENDERCOMPONENTINTERFACE_H
 
 #include "BoundingBox.h"
-#include "BoundingBox2D.h"
 
 struct ParticleSystem
 {
@@ -16,7 +15,8 @@ enum TextureType
 	ENEMY1,
 	ENEMY2,
 	BALL,
-	PADDLE
+	PADDLE,
+	TEST
 };
 
 enum ButtonTexture
@@ -39,6 +39,7 @@ public:
 	/* Add this particle system to be drawn this update */
 	virtual void RenderParticleSystem(ParticleSystem p_particleSystem) = 0;			
 
+	virtual BoundingBox ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType) = 0;
 	
 };
 

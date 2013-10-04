@@ -40,6 +40,8 @@ public:
 	void PreRender();
 	void PostRender();
 
+	BoundingBox ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType);
+
 private:
 	bool InitializeDirect3D();
 	void Load();
