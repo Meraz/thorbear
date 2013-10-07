@@ -13,6 +13,7 @@
 #include "AddBallPowerup.h"
 #include "AddLifePowerup.h"
 #include "SoundHandler.h"
+#include "ParticleEffect.h"
 
 class Level
 {

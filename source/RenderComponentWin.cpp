@@ -13,6 +13,7 @@ RenderComponentWin::~RenderComponentWin()
 	delete m_shaderManager;
 	delete m_camera;
 	delete m_fontRenderer;
+	delete m_particleSystem;
 
 	ReleaseCOM(m_d3dDevice);
 	ReleaseCOM( m_d3dImmediateContext);
@@ -46,6 +47,8 @@ int RenderComponentWin::Initialize()
 
 	m_fontRenderer = new FontRenderWin();
 	m_fontRenderer->Init(m_d3dDevice, L"Arial", m_d3dImmediateContext);
+
+	m_particleSystem = new ParticleSystem(m_d3dDevice, m_d3dImmediateContext, m_modelManager, m_shaderManager, m_camera);
 	return 0;
 }
 
@@ -105,9 +108,9 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 	}
 }
 
-void RenderComponentWin::RenderParticleSystem(ParticleSystem p_particleSystem)
+void RenderComponentWin::RenderParticleSystem(ParticleEmitterDesc p_particleDesc)
 {
-
+	m_particleSystem->CreateParticleEmitter(p_particleDesc);
 }
 
 void RenderComponentWin::PreRender()
@@ -118,6 +121,8 @@ void RenderComponentWin::PreRender()
 
 void RenderComponentWin::PostRender()
 {
+	m_particleSystem->Update(0.016f);
+	m_particleSystem->Render();
 	HR(m_swapChain->Present(1, 0));
 }
 
@@ -258,6 +263,7 @@ void RenderComponentWin::Load()
 	m_modelManager->CreateModel("LargerPaddlePowerup.obj",	"object\\LargerPaddlePowerup");
 	m_modelManager->CreateModel("SmallerPaddlePowerup.obj",	"object\\SmallerPaddlePowerup");
 	m_shaderManager->AddShader("effect\\object.fx", 12);	
+	m_shaderManager->AddShader("effect\\instanced.fx", 12);
 }
 
 void RenderComponentWin::CreateTemplates()

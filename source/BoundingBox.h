@@ -37,6 +37,15 @@ struct BoundingBox
 		Height = p_height;
 		Depth = p_depth;
 	}
+	BoundingBox(float p_posX, float p_posY, float p_posZ, int p_width, int p_height, int p_depth)
+	{
+		PosX = p_posX;
+		PosY = p_posY;
+		PosZ = p_posZ;
+		Width = p_width;
+		Height = p_height;
+		Depth = p_depth;
+	}
 	float PosX, PosY, PosZ;
 	int Width, Height, Depth;
 };

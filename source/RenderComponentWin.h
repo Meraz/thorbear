@@ -8,6 +8,7 @@
 #include "D3DX_Graphics\ShaderManager.h"
 #include "D3DX_Graphics\Camera.h"
 #include "Vect3.h"
+#include "ParticleSystem.h"
 
 #include "FontRenderWin.h"
 
@@ -38,7 +39,7 @@ public:
 	int Initialize();
 
 	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f));
-	void RenderParticleSystem(ParticleSystem p_particleSystem);
+	void RenderParticleSystem(ParticleEmitterDesc p_particleDesc);
 	void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color);
 
 	void PreRender();
@@ -54,6 +55,8 @@ private:
 	ModelManager*			m_modelManager;
 	ShaderManager*			m_shaderManager;
 	Camera*					m_camera;
+
+	ParticleSystem*			m_particleSystem;
 
 	ID3D11Device*			m_d3dDevice;
 	ID3D11DeviceContext*	m_d3dImmediateContext;

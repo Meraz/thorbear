@@ -63,7 +63,7 @@ public:
 	HRESULT			Init(	ID3D11Device* p_device, ID3D11DeviceContext* p_context,
 							BUFFER_INIT_DESC& p_initDesc);
 
-	void			Map(void** p_b);
+	void			Map(void* p_mappedData);
 	void			Unmap();
 
 	HRESULT			Apply(UINT32 p_misc = 0);

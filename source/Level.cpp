@@ -193,6 +193,17 @@ void Level::CheckAllCollisions(float p_deltaTime)
 			{
 				if(BoundingBoxIntersect(m_ball.at(k)->GetBoundingBox(), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox()))
 				{
+					ParticleEmitterDesc l_desc;
+					l_desc.position = Vect3(m_ball.at(k)->GetBoundingBox().PosX, m_ball.at(k)->GetBoundingBox().PosY, m_ball.at(k)->GetBoundingBox().PosZ);
+					l_desc.lifeTimeMin = 0.4f;
+					l_desc.lifeTimeMax = 1.5f;
+					l_desc.acceleration = Vect3(0.0f, -3.0f, 0.0f);
+					l_desc.nrOfParticles = 50;
+					l_desc.speedMin = 50.0f;
+					l_desc.speedMax = 300.0f;
+					l_desc.scale = Vect3(1.0f);
+					m_renderComp->RenderParticleSystem(l_desc);
+
 					CheckIncrementalCollisions(m_ball.at(k), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox(), true, p_deltaTime);
 					m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
 					if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)

@@ -167,7 +167,7 @@ HRESULT Buffer::Init(ID3D11Device* p_device, ID3D11DeviceContext* p_context,
 	return hr;
 }
 
-void Buffer::Map(void** p_b)
+void Buffer::Map(void* p_mappedData)
 {
 	UINT32 mapType = 0;
 
@@ -184,9 +184,7 @@ void Buffer::Map(void** p_b)
 	else 
 		mapType = D3D11_MAP_WRITE_DISCARD;
 
-	//Fix DX11 MAP
-	//m_buffer->Map( (D3D11_MAP)mapType, 0, (LPVOID*)p_b );
-	//m_context->Map()
+	
 }
 
 void Buffer::Unmap()
