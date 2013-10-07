@@ -23,7 +23,7 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 {
 	m_renderComponentInterface = p_renderComponentInterface;
 	m_level = new Level();
-	m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : Don't hard code this
+	m_level->Init(m_currentLevel, m_renderComponentInterface); // TODO : Don't hard code this
 	m_lastKnownNrOfEnemies = m_level->GetNrOfEnemies();
 }
 
@@ -37,6 +37,7 @@ void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePosi
 
 void GameScene::Render()
 {
+	m_renderComponentInterface->RenderBackground(LEVEL);
 	m_level->Render();
 
   std::wostringstream  l_ss;
@@ -78,6 +79,6 @@ void GameScene::CheckEnemyNr()
 		if(m_currentLevel > m_maxNrOfLevels)
 			m_currentLevel = 1;
 		m_level = new Level();
-		m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : HARDCODED
+		m_level->Init(m_currentLevel, m_renderComponentInterface); // TODO : HARDCODED
 	}
 }

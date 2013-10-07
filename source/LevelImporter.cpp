@@ -68,3 +68,41 @@ int** LevelImporter::LoadLevel( string p_levelName )
 	*/
 	return l_map;
 }
+
+hash_map<string, float> LevelImporter::LoadGameplayValues( string p_fileName )
+{
+	hash_map<string, float> l_values;
+
+	//Set standard values if no file can be read
+	l_values.insert(pair<string, float>("LEVELHEIGHT", 400));
+	l_values.insert(pair<string, float>("LEVELWIDTH", 600));
+	l_values.insert(pair<string, float>("LEVELBORDER", 9));
+	l_values.insert(pair<string, float>("BALLHEIGHT", 5));
+	l_values.insert(pair<string, float>("BALLWIDTH", 5));
+	l_values.insert(pair<string, float>("BALLSPEED", 200));
+	l_values.insert(pair<string, float>("PADDLEHEIGHT", 10));
+	l_values.insert(pair<string, float>("PADDLEWIDTH", 50));
+	l_values.insert(pair<string, float>("ENEMYHEIGHT", 20));
+	l_values.insert(pair<string, float>("ENEMYWIDTH", 20));
+	l_values.insert(pair<string, float>("ENEMYSPEED", 50));
+	l_values.insert(pair<string, float>("LASERSPEED", 200));
+
+	ifstream l_file;
+	l_file.open("levels/" + p_fileName + ".txt");
+
+	string l_key;
+	string l_value;
+	if(l_file.is_open())
+	{
+		while(!l_file.eof())
+		{
+			l_file >> l_key;
+			l_file >> l_value;
+			if(l_values.count(l_key))
+				l_values.at(l_key) = stof(l_value.c_str());
+		}
+	}
+
+	return l_values;
+}
+

@@ -23,7 +23,8 @@ enum TextureType
 	ADDBALLPOWERUP,
 	LARGERPADDLEPOWERUP,
 	SMALLERPADDLEPOWERUP,
-  TTCOUNT // Leave this last, you can loop i < TTCOUNT
+	LEVEL,
+	TTCOUNT // Leave this last, you can loop i < TTCOUNT
 };
 
 class RenderComponentInterface
@@ -37,6 +38,8 @@ public:
 
 	/* Add this text to be drawn this update */
 	virtual void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color) = 0;
+
+	virtual void RenderBackground(TextureType p_textureType) = 0;
 };
 
 #endif
