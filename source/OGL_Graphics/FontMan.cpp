@@ -52,6 +52,9 @@ void FontMan::Init( )
 
 void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color )
 {
+  float x = p_posX;
+  float y = p_posY;
+  
   if( m_currentSize != (int)p_size )
   {
     m_currentSize = (int)p_size;
@@ -63,7 +66,7 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
   m_fontShader.Use();
   m_fontShader.SetUniformVector( "color", glm::vec4( (p_color >> 24) & 0xFF, (p_color >> 16) & 0xFF, (p_color >> 8) & 0xFF, p_color & 0xFF ) );
   
-  for(const wchar_t* p = p_text.c_str; *p; p++)
+  for(const wchar_t* p = p_text.c_str(); *p; p++)
   {
     if(FT_Load_Char(m_arial, *p, FT_LOAD_RENDER))
         continue;
@@ -83,8 +86,8 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
     float sx = 2.0f / m_windowWidth;
     float sy = 2.0f / m_windowHeight;
     
-    float x2 = p_posX + m_arial->glyph->bitmap_left * sx;
-    float y2 = -p_posY - m_arial->glyph->bitmap_top * sy;
+    float x2 = x + m_arial->glyph->bitmap_left * sx;
+    float y2 = -y - m_arial->glyph->bitmap_top * sy;
     float w = m_arial->glyph->bitmap.width * sx;
     float h = m_arial->glyph->bitmap.rows * sy;
 
