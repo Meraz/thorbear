@@ -29,6 +29,8 @@ private:
 	void NewLevel();
 	void CheckEnemyNr();
 	void CheckPaddleLife();
+
+	wstring fps;
 };
 
 #endif

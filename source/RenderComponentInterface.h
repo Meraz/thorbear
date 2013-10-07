@@ -27,10 +27,14 @@ public:
 	virtual void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f)) = 0;
 
 	/* Add this particle system to be drawn this update */
-	virtual void RenderParticleSystem(ParticleEmitterDesc p_particleDesc) = 0;				
+	virtual void CreateParticleEmitter(ParticleEmitterDesc p_particleDesc) = 0;				
 
 	/* Add this text to be drawn this update */
 	virtual void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color) = 0;
+
+	/* Only used in the render component */
+	virtual void Update(float p_dt) = 0;
+	
 };
 
 #endif

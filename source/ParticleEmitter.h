@@ -33,6 +33,8 @@ private:
 	Shader*					m_shader;
 	Model*					m_model;
 
+	int						m_nrOfDeadParticles;
+
 };
 
 #endif 

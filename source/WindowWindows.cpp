@@ -33,8 +33,8 @@ bool WindowWindows::Initialize(HINSTANCE hInstance, HINSTANCE hPrevInstance, PST
 {
 	m_lMouseClicked = false;
 	g_win32 = this;
-	m_clientWidth  = 800; 
-	m_clientHeight = 600;
+	m_clientWidth  = 1920; 
+	m_clientHeight = 1080;
 	m_lMouseClicked = false;
 	m_gameTimer->Reset();
 
@@ -104,6 +104,15 @@ int WindowWindows::Run()
 				//CalculateFrameStats();
 				Update();
 				Render();
+
+				/*		char title[256];
+				sprintf_s(
+				title,
+				sizeof(title),
+				"%f",
+				(1.0f/m_gameTimer->DeltaTime())
+				);
+				SetWindowTextA(m_hMainWnd, title);*/
 			}
 			else
 			{
@@ -117,6 +126,7 @@ int WindowWindows::Run()
 void WindowWindows::Update()
 {
 	WindowBaseClass::Update(m_gameTimer->DeltaTime(), m_mousePositionX, m_mousePositionY, m_lMouseClicked);
+	m_renderComponent->Update(m_gameTimer->DeltaTime());
 }
 
 void WindowWindows::Render()

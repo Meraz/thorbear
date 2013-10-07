@@ -20,6 +20,7 @@ void ParticleSystem::Update( float p_dt )
 	{
 		if(m_emitterList.at(i)->Update(p_dt))
 		{
+			SafeDelete(m_emitterList.at(i));
 			m_emitterList.erase(m_emitterList.begin() + i);
 			i--;
 		}

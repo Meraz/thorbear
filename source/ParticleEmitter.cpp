@@ -3,11 +3,12 @@
 
 ParticleEmitter::ParticleEmitter(ParticleEmitterDesc p_particleDesc, ModelManager* p_modelManager, ShaderManager* p_shaderManager, ID3D11Device* p_device, ID3D11DeviceContext* p_context )
 {
-	m_particleDesc	= p_particleDesc;
-	m_modelManager	= p_modelManager;
-	m_shaderManager	= p_shaderManager;
-	m_device		= p_device;
-	m_context		= p_context;
+	m_particleDesc		= p_particleDesc;
+	m_modelManager		= p_modelManager;
+	m_shaderManager		= p_shaderManager;
+	m_device			= p_device;
+	m_context			= p_context;
+	m_nrOfDeadParticles	= 0;
 
 	for (int i = 0; i < m_particleDesc.nrOfParticles; i++)
 	{
@@ -60,6 +61,14 @@ ParticleEmitter::ParticleEmitter(ParticleEmitterDesc p_particleDesc, ModelManage
 
 ParticleEmitter::~ParticleEmitter(void)
 {
+	for (unsigned int i = 0; i < m_particleList.size(); i++)
+	{
+		SafeDelete(m_particleList.at(i));
+	}
+	m_particleList.clear();
+	m_particleList.shrink_to_fit();
+
+	SafeDelete(m_matrixBuffer);
 }
 
 
@@ -67,10 +76,11 @@ bool ParticleEmitter::Update( float p_dt )
 {
 	for (unsigned int i = 0; i < m_particleList.size(); i++)
 	{
-		m_particleList.at(i)->Update(p_dt);
+		if(m_particleList.at(i)->Update(p_dt))
+			m_nrOfDeadParticles++;
 	}
 
-	if(m_particleList.size() == 0)
+	if(m_nrOfDeadParticles == m_particleDesc.nrOfParticles)
 		return true;
 
 	return false;

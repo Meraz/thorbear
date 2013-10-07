@@ -24,7 +24,7 @@ void Particle::Init( Vect3 p_position, Vect3 p_rotation, Vect3 p_scale, Vect3 p_
 	m_dead		   = false;
 }
 
-void Particle::Update( float p_dt )
+bool Particle::Update( float p_dt )
 {
 	if (!m_dead)
 	{
@@ -35,8 +35,10 @@ void Particle::Update( float p_dt )
 		if (m_lifeTime <= 0.0f)
 		{
 			KillParticle();
+			return true;
 		}
 	}
+	return false;
 }
 
 Vect3 Particle::GetColor()

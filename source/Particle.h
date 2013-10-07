@@ -24,8 +24,8 @@ public:
 	Vect3 GetColor();
 
 	void KillParticle();
-
-	void Update(float p_dt);
+	
+	bool Update(float p_dt);
 private:
 	Vect3 m_position;
 	Vect3 m_rotation;
