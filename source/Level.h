@@ -20,7 +20,7 @@ public:
 	Level(void);
 	~Level(void);
 
-	void Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentInterface* p_renderComp);
+	void Init(int p_lvlNr, RenderComponentInterface* p_renderComp);
 
 	void	Update(int p_mousePosX, bool p_isMouseClicked, float p_deltaTime); //Not sure if int or float
 	void	Render();
@@ -41,14 +41,13 @@ private:
 	int					m_changesInLife;
 
 	bool	m_prevLMouseClickStatus;
-	float	m_ballSpeed;
-	int		m_ballWidth;
-	int		m_ballHeight;
 
 	RenderComponentInterface*	m_renderComp;
 	int		m_mapBorderThickness;
 
 	SoundHandler* m_soundHandler;
+
+	hash_map<string, float> m_levelValues;
 
 private:
 	void	CheckAllCollisions(float p_deltaTime);

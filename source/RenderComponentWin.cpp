@@ -300,7 +300,7 @@ void RenderComponentWin::RenderBackground(TextureType p_textureType)
 	l_xScaleFactor *= 1600; //TODO do not hard code this
 	l_yScaleFactor *= 1000; //TODO do not hard code this
 
-	float l_zScaleFactor = 1;
+	float l_zScaleFactor = 1.0f;
 
 	D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, -l_yScaleFactor, l_zScaleFactor);
 

@@ -11,8 +11,7 @@ Level::Level(void)
 	m_changesInLife = 0;
 	m_map = NULL;
 	m_prevLMouseClickStatus = false;
-	m_mapBorderThickness = 9;
-	m_ballSpeed = 200.0f;
+	m_mapBorderThickness = NULL;
 }
 
 
@@ -23,24 +22,28 @@ Level::~Level(void)
 	vector<EnemySquad*>().swap(m_squad);
 }
 
-void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, RenderComponentInterface* p_renderComp )
+void Level::Init( int p_lvlNr, RenderComponentInterface* p_renderComp )
 {
 	m_renderComp = p_renderComp;
-	m_mapEdges.Width = p_lvlWidth; 
-	m_mapEdges.Height = p_lvlHeight; 
 
 	std::stringstream l_ss;
 	l_ss << p_lvlNr;
 	std::string tmpString( "level" + l_ss.str() );
+	m_map = LevelImporter::LoadLevel(tmpString);
+	m_levelValues = LevelImporter::LoadGameplayValues("Gameplay Variables");
 
-	m_map = LevelImporter::LoadLevel(tmpString);	
-	m_paddle = new Paddle(p_lvlWidth/2.0f, 10.0f, 50, 10, p_lvlWidth); //example values
+	m_mapEdges.Width = (int)m_levelValues.at("LEVELWIDTH");
+	m_mapEdges.Height = (int)m_levelValues.at("LEVELHEIGHT");
+	m_mapBorderThickness = m_levelValues.at("LEVELBORDER");
+	
+
+	
+	m_paddle = new Paddle(m_mapEdges.Width/2.0f, 10, (int)m_levelValues.at("PADDLEWIDTH"), (int)m_levelValues.at("PADDLEHEIGHT"), m_mapEdges.Width);
 	m_paddle->Initialize(p_renderComp);
 
 	m_ball.push_back(new Ball());
-	m_ballHeight = 5; //TEST ONLY
-	m_ballWidth = 5; //TEST ONLY
-	m_ball.front()->Init(CalculateBallOnPaddlePosX(), (float)m_paddle->GetPosY()+m_paddle->GetBoundingBox().Height, m_ballWidth, m_ballHeight, m_ballSpeed, m_mapEdges, m_renderComp); //SPEED?!
+	m_ball.front()->Init(CalculateBallOnPaddlePosX(), (float)m_paddle->GetPosY()+m_paddle->GetBoundingBox().Height,
+		(int)m_levelValues.at("BALLWIDTH"), (int)m_levelValues.at("BALLHEIGHT"), m_levelValues.at("BALLSPEED"), m_mapEdges, m_renderComp); //SPEED?!
 
 	CreateEnemies();
 	m_soundHandler = new SoundHandler();
@@ -54,6 +57,9 @@ void Level::CreateEnemies()
 	vector<Enemy*> l_enemy;
 	Enemy* tempEnemy;
 	EnemySquad* tempSquad;
+	int l_enemyWidth = (int)m_levelValues.at("ENEMYWIDTH");
+	int l_enemyHeight = (int)m_levelValues.at("ENEMYHEIGHT");
+	float l_enemySpeed = m_levelValues.at("ENEMYSPEED");
 	for(int i = 0; i < 5; i++)
 	{
 		for(int j = 0; j < 15; j++)
@@ -61,13 +67,13 @@ void Level::CreateEnemies()
 			if(m_map[i][j] == ENEMY1)
 			{
 				tempEnemy = new ShootingEnemy();
-				tempEnemy->Init(j * 20.0f, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
+				tempEnemy->Init(j * (float)l_enemyWidth, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * (float)l_enemyHeight), l_enemyWidth, l_enemyHeight);
 				l_enemy.push_back(tempEnemy);
 			}
 			else if(m_map[i][j] == ENEMY2)
 			{
 				tempEnemy = new DefensiveEnemy();
-				tempEnemy->Init(j * 20.0f, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
+				tempEnemy->Init(j * (float)l_enemyWidth, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * (float)l_enemyHeight), l_enemyWidth, l_enemyHeight);
 				l_enemy.push_back(tempEnemy);
 			}
 		}
@@ -82,7 +88,8 @@ void Level::CreateEnemies()
 void Level::AddBall()
 {
 	m_ball.push_back(new Ball());
-	m_ball.back()->Init(CalculateBallOnPaddlePosX(), m_paddle->GetBoundingBox().PosY+m_paddle->GetBoundingBox().Height, m_ballWidth, m_ballHeight, m_ballSpeed, m_mapEdges, m_renderComp);
+	m_ball.back()->Init(CalculateBallOnPaddlePosX(), m_paddle->GetBoundingBox().PosY+m_paddle->GetBoundingBox().Height, 
+		(int)m_levelValues.at("BALLWIDTH"), (int)m_levelValues.at("BALLHEIGHT"), m_levelValues.at("BALLSPEED"), m_mapEdges, m_renderComp);
 	ShootBallFromPaddle(m_ball.size()-1);
 }
 void Level::SpawnPowerup(float p_posX, float p_posY)
@@ -159,7 +166,7 @@ void Level::Render()
 	{
 		m_squad.at(i)->Render();
 	}
-	//TODO powerups. 
+
 	for( unsigned int i = 0; i < m_powerup.size(); i++)
 	{
 		m_powerup.at(i)->Render();

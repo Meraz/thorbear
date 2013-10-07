@@ -21,7 +21,7 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 {
 	m_renderComponentInterface = p_renderComponentInterface;
 	m_level = new Level();
-	m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : Don't hard code this
+	m_level->Init(m_currentLevel, m_renderComponentInterface); // TODO : Don't hard code this
 	m_lastKnownNrOfEnemies = m_level->GetNrOfEnemies();
 }
 
@@ -72,6 +72,6 @@ void GameScene::CheckEnemyNr()
 		if(m_currentLevel > m_maxNrOfLevels)
 			m_currentLevel = 1;
 		m_level = new Level();
-		m_level->Init(m_currentLevel, 600, 400, m_renderComponentInterface); // TODO : HARDCODED
+		m_level->Init(m_currentLevel, m_renderComponentInterface); // TODO : HARDCODED
 	}
 }
