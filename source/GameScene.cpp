@@ -1,5 +1,7 @@
 #include "GameScene.h"
 
+#include <string>
+#include <sstream>
 
 GameScene::GameScene(void)
 {
@@ -38,9 +40,14 @@ void GameScene::Render()
 	m_renderComponentInterface->RenderBackground(LEVEL);
 	m_level->Render();
 
-
-	wstring l_lives = to_wstring(m_nrOfLives);
-	wstring l_score = to_wstring(m_score);
+  std::wostringstream  l_ss;
+	l_ss << m_nrOfLives;
+	std::wstring l_lives( l_ss.str() );
+  
+  l_ss.str(L""); // reset stringstream to empty
+	l_ss << m_score;
+	std::wstring l_score( l_ss.str() );
+  
 	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff);
 	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff);
 }
