@@ -1,5 +1,7 @@
 #include "ShootingEnemy.h"
 #include <cstdlib>
+#include <climits>
+#include <cmath>
 
 ShootingEnemy::ShootingEnemy(void)
 {
@@ -8,7 +10,7 @@ ShootingEnemy::ShootingEnemy(void)
 	m_wantsToFire = false;
 	m_tick = 0;
 	m_shootIntervall = 3.0f +  rand() % 10;
-	m_phaseZ = rand();
+	m_phaseZ = ((float)rand())/RAND_MAX*16.f;
 	m_BoundingBox.Depth = 9;
 }
 

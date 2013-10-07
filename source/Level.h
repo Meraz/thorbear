@@ -2,8 +2,8 @@
 #define LEVEL_H
 
 #define POWERUPDROPRATIO 20
-#define MODE_CAMPAIGN 0
-#define MODE_SURVIVAL 1
+#define MODE_CAMPAIGN 1
+#define MODE_SURVIVAL 2
 
 #include <vector>
 #include <time.h>
@@ -23,7 +23,7 @@ public:
 	Level(void);
 	~Level(void);
 
-	void Init(int p_lvlNr, int p_lvlWidth, int p_lvlHeight, int p_gameMode, RenderComponentInterface* p_renderComp);
+	void Init(int p_lvlNr, int p_gameMode, RenderComponentInterface* p_renderComp);
 
 	void	Update(int p_mousePosX, bool p_isMouseClicked, float p_deltaTime); //Not sure if int or float
 	void	Render();
@@ -46,9 +46,6 @@ private:
 	int		m_changesInLife;
 	int		m_gameMode;
 	bool	m_prevLMouseClickStatus;
-	float	m_ballSpeed;
-	int		m_ballWidth;
-	int		m_ballHeight;
 
 	bool	m_isPaddleInvulnerable;
 	float	m_invulTimer;
@@ -62,6 +59,8 @@ private:
 	int		m_mapBorderThickness;
 	int		m_enemyDistance;
 	SoundHandler* m_soundHandler;
+
+	hash_map<string, float> m_levelValues;
 
 private:
 	void	CheckAllCollisions(float p_deltaTime);

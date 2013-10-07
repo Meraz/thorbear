@@ -79,13 +79,15 @@ bool WindowLinux::Init( RenderComponentLinux *p_renderComponentLinux )
         0,
         0,
         GLFW_WINDOW
-        // GLFW_FULLSCREEN
+        //GLFW_FULLSCREEN
       )
     )
 	{
 		glfwTerminate();
 		return this->SetError( std::string( "ERROR: creating load window\n" ) );
 	}
+  
+  //glfwDisable( GLFW_MOUSE_CURSOR ); // Disable mouse cursor to prevent it from exiting screen
   
   m_oldTime = glfwGetTime();
   
@@ -126,7 +128,7 @@ void WindowLinux::Update()
 
 	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY, l_clicked);
   
-  glfwSleep( 1. / 60. - l_deltaTime - .01 ); // Limit UPS
+  //glfwSleep( 1. / 60. - l_deltaTime - .01 ); // Limit UPS
 }
 
 void WindowLinux::Render()

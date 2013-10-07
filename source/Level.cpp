@@ -10,11 +10,9 @@ Level::Level(void)
 	m_mapEdges.PosY = 0;
 	m_changesInLife = 0;
 	m_map = NULL;
-	m_gameMode = MODE_CAMPAIGN;
 	m_prevLMouseClickStatus = false;
-	m_mapBorderThickness = 9;
+
 	m_enemyDistance = 2;
-	m_ballSpeed = 200.0f;
 	m_scoreMultiplier = 1.0f;
 
 	m_isPaddleInvulnerable = false;
@@ -23,6 +21,8 @@ Level::Level(void)
 	m_blinkTime = 0.2f;
 	m_invulTimer = 0.0f;
 	m_invulTime = 1.5f;
+
+	m_mapBorderThickness = NULL;
 }
 
 
@@ -34,11 +34,9 @@ Level::~Level(void)
 	vector<Ball*>().swap(m_ball);
 }
 
-void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, int p_gameMode, RenderComponentInterface* p_renderComp )
+void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_renderComp )
 {
 	m_renderComp = p_renderComp;
-	m_mapEdges.Width = p_lvlWidth; 
-	m_mapEdges.Height = p_lvlHeight; 
 	m_gameMode = p_gameMode;
 
 	if(m_gameMode == MODE_CAMPAIGN)
@@ -50,13 +48,18 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, int p_gameMode, 
 		m_map = LevelImporter::LoadLevel(tmpString);	
 	}
 
-	m_paddle = new Paddle(p_lvlWidth/2.0f, 10.0f, 60, 10, p_lvlWidth); //example values
+	m_levelValues = LevelImporter::LoadGameplayValues("Gameplay Variables");
+
+	m_mapEdges.Width = (int)m_levelValues.at("LEVELWIDTH");
+	m_mapEdges.Height = (int)m_levelValues.at("LEVELHEIGHT");
+	m_mapBorderThickness = (int)m_levelValues.at("LEVELBORDER");
+	
+	m_paddle = new Paddle(m_mapEdges.Width/2.0f, 10, (int)m_levelValues.at("PADDLEWIDTH"), (int)m_levelValues.at("PADDLEHEIGHT"), m_mapEdges.Width);
 	m_paddle->Initialize(p_renderComp);
 
 	m_ball.push_back(new Ball());
-	m_ballHeight = 5; //TEST ONLY
-	m_ballWidth = 5; //TEST ONLY
-	m_ball.front()->Init(CalculateBallOnPaddlePosX(), (float)m_paddle->GetPosY()+m_paddle->GetBoundingBox().Height, m_ballWidth, m_ballHeight, m_ballSpeed, m_mapEdges, m_renderComp); //SPEED?!
+	m_ball.front()->Init(CalculateBallOnPaddlePosX(), (float)m_paddle->GetPosY()+m_paddle->GetBoundingBox().Height,
+		(int)m_levelValues.at("BALLWIDTH"), (int)m_levelValues.at("BALLHEIGHT"), m_levelValues.at("BALLSPEED"), m_mapEdges, m_renderComp); //SPEED?!
 
 	CreateEnemies();
 	m_soundHandler = new SoundHandler();
@@ -70,6 +73,11 @@ void Level::CreateEnemies()
 	vector<Enemy*> l_enemy;
 	Enemy* tempEnemy;
 	EnemySquad* tempSquad;
+
+	int l_enemyWidth = (int)m_levelValues.at("ENEMYWIDTH");
+	int l_enemyHeight = (int)m_levelValues.at("ENEMYHEIGHT");
+	float l_enemySpeed = m_levelValues.at("ENEMYSPEED");
+
 	if(m_gameMode == MODE_CAMPAIGN)
 	{
 		for(int i = 0; i < 5; i++)
@@ -79,13 +87,13 @@ void Level::CreateEnemies()
 				if(m_map[i][j] == ENEMY1)
 				{
 					tempEnemy = new ShootingEnemy();
-					tempEnemy->Init(j * 20.0f, m_mapEdges.PosY + m_mapEdges.Height - ((i+1) * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
+					tempEnemy->Init(j * (float)l_enemyWidth, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * (float)l_enemyHeight), l_enemyWidth, l_enemyHeight);
 					l_enemy.push_back(tempEnemy);
 				}
 				else if(m_map[i][j] == ENEMY2)
 				{
 					tempEnemy = new DefensiveEnemy();
-					tempEnemy->Init(j * 20.0f, m_mapEdges.PosY + m_mapEdges.Height - ((i+1) * 20.0f), 20, 20); //TODO Don't hard code width and height in the end
+					tempEnemy->Init(j * (float)l_enemyWidth, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * (float)l_enemyHeight), l_enemyWidth, l_enemyHeight);
 					l_enemy.push_back(tempEnemy);
 				}
 			}
@@ -99,16 +107,16 @@ void Level::CreateEnemies()
 			if(rand() % 2 == 0)
 			{
 				tempEnemy = new ShootingEnemy();
+				tempEnemy->Init(i * (float)l_enemyWidth, m_mapEdges.PosY + m_mapEdges.Height - m_enemyDistance - (float)l_enemyHeight, l_enemyWidth, l_enemyHeight);
 			}
 			else
 			{
 				tempEnemy = new DefensiveEnemy();
+				tempEnemy->Init(i * (float)l_enemyWidth, m_mapEdges.PosY + m_mapEdges.Height - m_enemyDistance - (float)l_enemyHeight, l_enemyWidth, l_enemyHeight);
 			}
-			tempEnemy->Init(i * 20.0f, m_mapEdges.PosY + m_mapEdges.Height - m_enemyDistance - 20 /*enemy height*/, 20, 20);
 			l_enemy.push_back(tempEnemy);
 		}
 	}
-
 	tempSquad = new EnemySquad();
 	tempSquad->Init(m_mapEdges, 25, l_enemy);
 	tempSquad->SetSquadRenderComponent(m_renderComp);
@@ -118,7 +126,8 @@ void Level::CreateEnemies()
 void Level::AddBall()
 {
 	m_ball.push_back(new Ball());
-	m_ball.back()->Init(CalculateBallOnPaddlePosX(), m_paddle->GetBoundingBox().PosY+m_paddle->GetBoundingBox().Height, m_ballWidth, m_ballHeight, m_ballSpeed, m_mapEdges, m_renderComp);
+	m_ball.back()->Init(CalculateBallOnPaddlePosX(), m_paddle->GetBoundingBox().PosY+m_paddle->GetBoundingBox().Height, 
+		(int)m_levelValues.at("BALLWIDTH"), (int)m_levelValues.at("BALLHEIGHT"), m_levelValues.at("BALLSPEED"), m_mapEdges, m_renderComp);
 	ShootBallFromPaddle(m_ball.size()-1);
 }
 void Level::SpawnPowerup(float p_posX, float p_posY)
@@ -226,7 +235,7 @@ void Level::Render()
 	{
 		m_squad.at(i)->Render();
 	}
-	//TODO powerups. 
+
 	for( unsigned int i = 0; i < m_powerup.size(); i++)
 	{
 		m_powerup.at(i)->Render();
@@ -310,7 +319,8 @@ void Level::CheckAllCollisions(float p_deltaTime)
 					m_paddle->SetWidth(m_paddle->GetBoundingBox().Width + 20);
 					if (m_scoreMultiplier <= 1.0f)
 					{
-						m_scoreMultiplier -= 0.25f;
+						if (m_scoreMultiplier != 0.25f)
+							m_scoreMultiplier -= 0.25f;
 					}
 					else
 					{
@@ -330,7 +340,8 @@ void Level::CheckAllCollisions(float p_deltaTime)
 					}
 					else
 					{
-						m_scoreMultiplier += 0.50f;
+						if (m_scoreMultiplier != 2.00f)
+							m_scoreMultiplier += 0.50f;
 					}
 				}
 			}

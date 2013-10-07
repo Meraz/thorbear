@@ -22,7 +22,9 @@ enum TextureType
 	ADDLIFEPOWERUP,
 	ADDBALLPOWERUP,
 	LARGERPADDLEPOWERUP,
-	SMALLERPADDLEPOWERUP
+	SMALLERPADDLEPOWERUP,
+	LEVEL,
+	TTCOUNT // Leave this last, you can loop i < TTCOUNT
 };
 
 enum ButtonTexture
@@ -49,6 +51,8 @@ public:
 	virtual void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color) = 0;	
 	
 	virtual BoundingBox ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType) = 0;
+
+	virtual void RenderBackground(TextureType p_textureType) = 0;
 };
 
 #endif

@@ -1,11 +1,13 @@
 #include "DefensiveEnemy.h"
 #include <cstdlib>
+#include <climits>
+#include <cmath>
 
 DefensiveEnemy::DefensiveEnemy(void)
 {
 	m_numOfLives = 2;
 	m_enemyType = ENEMY2;
-	m_phaseZ = ((float)rand());
+	m_phaseZ = ((float)rand())/RAND_MAX*16.0f;
 	m_BoundingBox.Depth = 9;
 }
 

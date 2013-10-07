@@ -1,5 +1,7 @@
 #include "GameScene.h"
 
+#include <string>
+#include <sstream>
 
 GameScene::GameScene()
 {
@@ -10,7 +12,7 @@ GameScene::GameScene()
 	m_lastKnownNrOfEnemies = 0;
 	m_enemyWorth = 100;
 	m_scoreMultiplier = 1.0f;
-	m_gameMode = MODE_CAMPAIGN;
+	m_gameMode = MODE_SURVIVAL;
 }
 
 GameScene::~GameScene()
@@ -24,8 +26,9 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 	m_sceneState = SceneState::GAME;
 
 	m_level = new Level();
-	m_level->Init(m_currentLevel, 600, 400, m_gameMode, m_renderComponentInterface); // TODO : Don't hard code this
+	m_level->Init(m_currentLevel, m_gameMode, p_renderComponentInterface); 
 	m_lastKnownNrOfEnemies = m_level->GetNrOfEnemies();
+	m_renderComponentInterface = p_renderComponentInterface;
 }
 
 void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked /* add keyboard parameters here*/)
@@ -38,12 +41,21 @@ void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePosi
 
 void GameScene::Render()
 {
+	m_renderComponentInterface->RenderBackground(LEVEL);
 	m_level->Render();
 
-	
-	wstring l_lives = to_wstring(m_nrOfLives);
-	wstring l_score = to_wstring(m_score);
-	wstring l_scoreMulti = to_wstring(m_scoreMultiplier).substr(0, 4);
+	std::wostringstream  l_ss;
+	l_ss << m_nrOfLives;
+	std::wstring l_lives( l_ss.str() );
+  
+	l_ss.str(L""); // reset stringstream to empty
+	l_ss << m_score;
+	std::wstring l_score( l_ss.str() );
+
+	l_ss.str(L""); // reset stringstream to empty
+	l_ss << m_scoreMultiplier;
+	std::wstring l_scoreMulti( l_ss.str().substr(0,4) );
+  
 	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff);
 	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff);
 	m_renderComponentInterface->RenderText(L"Score Multiplier: x" + l_scoreMulti, 15.0f, 10.0f, 40.0f, 0xff0099ff);
@@ -76,7 +88,8 @@ void GameScene::CheckEnemyNr()
 		if(m_currentLevel > m_maxNrOfLevels)
 			m_currentLevel = 1;
 		m_level = new Level();
-		m_level->Init(m_currentLevel, 600, 400, m_gameMode, m_renderComponentInterface); // TODO : HARDCODED
+
+		m_level->Init(m_currentLevel, m_gameMode, m_renderComponentInterface); 
 	}
 }
 

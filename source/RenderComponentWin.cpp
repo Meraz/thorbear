@@ -1,5 +1,5 @@
 #include "RenderComponentWin.h"
-
+#include <cmath>
 
 RenderComponentWin::RenderComponentWin(HWND p_hMainWnd)
 {	
@@ -257,7 +257,9 @@ void RenderComponentWin::Load()
 	m_modelManager->CreateModel("AddBallPowerup.obj",	"object\\AddBallPowerup");
 	m_modelManager->CreateModel("LargerPaddlePowerup.obj",	"object\\LargerPaddlePowerup");
 	m_modelManager->CreateModel("SmallerPaddlePowerup.obj",	"object\\SmallerPaddlePowerup");
+	m_modelManager->CreateModel("background.obj", "object\\levelBackground");
 	m_shaderManager->AddShader("effect\\object.fx", 12);	
+	m_shaderManager->AddShader("effect\\background.fx", 12);	
 }
 
 void RenderComponentWin::CreateTemplates()
@@ -271,6 +273,8 @@ void RenderComponentWin::CreateTemplates()
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("AddBallPowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("LargerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("SmallerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 }
 
 BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBox, TextureType p_textureType)
@@ -346,4 +350,51 @@ BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBo
 void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
 {
 	m_fontRenderer->RenderText(p_text.c_str(), p_size, p_posX, p_posY, p_color);
+}
+
+void RenderComponentWin::RenderBackground(TextureType p_textureType)
+{
+	Shader* l_shader = m_objVec.at((int)p_textureType).shader;
+	Model*	l_model = m_objVec.at((int)p_textureType).model;
+
+	m_camera->RebuildView();
+
+	D3DXMATRIX l_scaleMat;
+
+	float l_xScaleFactor = 1.0f/(l_model->m_topBoundingCorner.x - l_model->m_bottomBoundingCorner.x);
+	float l_yScaleFactor = 1.0f/(l_model->m_topBoundingCorner.y - l_model->m_bottomBoundingCorner.y);
+	l_xScaleFactor *= 1600; //TODO do not hard code this
+	l_yScaleFactor *= 1000; //TODO do not hard code this
+
+	float l_zScaleFactor = 1.0f;
+
+	D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, -l_yScaleFactor, l_zScaleFactor);
+
+
+	// Translation matrix
+	D3DXMATRIX l_translateMat;
+	D3DXMatrixTranslation(&l_translateMat, 330, 300, 400);	// Create translation matrix
+
+	D3DXMATRIX l_rotationMat;
+	D3DXMatrixRotationX(&l_rotationMat, atan(0.2f));
+
+	D3DXMATRIX l_worldMat	= l_rotationMat * l_scaleMat *  l_translateMat;
+	D3DXMATRIX l_WVP		= l_worldMat * m_camera->GetViewMatrix() *  m_camera->GetProjMatrix();
+
+	l_model->m_vertexBuffer->Apply(0);
+	l_model->m_indexBuffer->Apply(0);
+
+	l_shader->SetMatrix("gWorld", l_worldMat);
+	l_shader->SetMatrix("gWVP", l_WVP);
+	l_shader->SetResource("gTexture", l_model->m_material->m_textureResource);
+	l_shader->SetFloat4("gColor", D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
+
+
+	D3DX11_TECHNIQUE_DESC techDesc;
+	l_shader->GetTechnique()->GetDesc( &techDesc );
+	for(int p = 0; p < (int)techDesc.Passes; ++p)
+	{
+		l_shader->Apply(p);
+		m_d3dImmediateContext->DrawIndexed(l_model->m_size, 0, 0);
+	}
 }

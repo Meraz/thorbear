@@ -1,5 +1,6 @@
 #include "EnemySquad.h"
 #include <cmath>
+#include <climits>
 //DEBUGGING ONLY
 /*#include <windows.h>
 #include <sstream>
