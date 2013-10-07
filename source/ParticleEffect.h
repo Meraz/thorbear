@@ -10,16 +10,12 @@ struct ParticleEmitterDesc
 	{
 		lifeTimeMin = lifeTimeMax	= speedMin		= speedMax = spawnInterval = 0.0f;
 		angleMin	= angleMax		= nrOfParticles	= 0;
-		loop		= rotate		= false;
-
-		//boundingBox = BoundingBox(0.0f, 0.0f, 0.0f, 1, 1, 1);
+		loop		= false;
 	}
-
-	//BoundingBox	boundingBox;
 	Vect3		position, scale, acceleration, direction, startColor, endColor;
 	float		lifeTimeMin, lifeTimeMax, speedMin, speedMax, spawnInterval;
 	int			angleMin, angleMax, nrOfParticles;
-	bool		loop, rotate;
+	bool		loop;
 	
 };
 #endif

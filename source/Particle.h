@@ -8,7 +8,6 @@ public:
 	Particle();
 	~Particle();
 	void Init(	Vect3 p_position,
-		Vect3 p_rotation,
 		Vect3 p_scale,
 		Vect3 p_direction,
 		Vect3 p_acceleration,
@@ -20,7 +19,6 @@ public:
 	
 	Vect3 GetPosition();
 	Vect3 GetScale();
-	Vect3 GetRotation();
 	Vect3 GetColor();
 
 	void KillParticle();
@@ -28,14 +26,15 @@ public:
 	bool Update(float p_dt);
 private:
 	Vect3 m_position;
-	Vect3 m_rotation;
 	Vect3 m_scale;
 	Vect3 m_acceleration;
 	Vect3 m_color;
+	Vect3 m_diffColor;
 	Vect3 m_endColor;
 	Vect3 m_velocity;
 
 	float m_lifeTime;
+	float m_startLifeTime;
 	float m_angle;
 
 	bool m_dead;

@@ -31,5 +31,9 @@ struct Vect3
 	{
 		return Vect3(r+p_vector.r, g+p_vector.g, b+p_vector.b);
 	}
+	Vect3 operator-(Vect3 p_vector)
+	{
+		return Vect3(r-p_vector.r, g-p_vector.g, b-p_vector.b);
+	}
 };
 #endif

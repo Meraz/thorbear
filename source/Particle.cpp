@@ -10,24 +10,26 @@ Particle::~Particle(void)
 {
 }
 
-void Particle::Init( Vect3 p_position, Vect3 p_rotation, Vect3 p_scale, Vect3 p_direction, Vect3 p_acceleration, Vect3 p_color, Vect3 p_endColor, float p_lifeTime, float p_speed, float p_angle )
+void Particle::Init( Vect3 p_position, Vect3 p_scale, Vect3 p_direction, Vect3 p_acceleration, Vect3 p_color, Vect3 p_endColor, float p_lifeTime, float p_speed, float p_angle )
 {
 	m_position	   = p_position;
-	m_rotation	   = p_rotation;
 	m_scale		   = p_scale;   
 	m_velocity	   = p_direction * p_speed;   
 	m_acceleration = p_acceleration; 
 	m_color		   = p_color;   
 	m_endColor	   = p_endColor;
-	m_lifeTime	   = p_lifeTime;
+	m_lifeTime	   = m_startLifeTime = p_lifeTime;
 	m_angle		   = p_angle;   
 	m_dead		   = false;
+	
+	m_diffColor	   = m_endColor - m_color; 
 }
 
 bool Particle::Update( float p_dt )
 {
 	if (!m_dead)
 	{
+		m_color = m_color + (m_diffColor * (p_dt/m_startLifeTime));
 		m_lifeTime -= p_dt;
 		m_velocity = (m_velocity + m_acceleration);
 		m_position = m_position + (m_velocity * p_dt);
@@ -44,11 +46,6 @@ bool Particle::Update( float p_dt )
 Vect3 Particle::GetColor()
 {
 	return m_color;
-}
-
-Vect3 Particle::GetRotation()
-{
-	return m_rotation;
 }
 
 Vect3 Particle::GetScale()

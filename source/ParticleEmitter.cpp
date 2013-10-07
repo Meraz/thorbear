@@ -25,7 +25,6 @@ ParticleEmitter::ParticleEmitter(ParticleEmitterDesc p_particleDesc, ModelManage
 		double z = (double)rand()/((double)RAND_MAX/(2.0)) - 1;
 
 		//http://math.stackexchange.com/questions/44689/how-to-find-a-random-axis-or-unit-vector-in-
-		
 		double p = abs(1 - pow(2.0,z));
 		double s = sqrt(p);
 		double c = cos(a);
@@ -35,7 +34,7 @@ ParticleEmitter::ParticleEmitter(ParticleEmitterDesc p_particleDesc, ModelManage
 		Vect3 l_direction = Vect3(xx, yy, (float)z);
 
 		//TODO calculate direction depending on what angles are set
-		m_particleList.at(i)->Init(m_particleDesc.position, Vect3(0.0f), m_particleDesc.scale, l_direction, m_particleDesc.acceleration, m_particleDesc.startColor, m_particleDesc.endColor, l_lifeTime, l_speed, 0.0f);
+		m_particleList.at(i)->Init(m_particleDesc.position, m_particleDesc.scale, l_direction, m_particleDesc.acceleration, m_particleDesc.startColor, m_particleDesc.endColor, l_lifeTime, l_speed, 0.0f);
 
 		D3DXMATRIX l_matrix;
 		D3DXMatrixIdentity(&l_matrix);	
@@ -80,7 +79,7 @@ bool ParticleEmitter::Update( float p_dt )
 			m_nrOfDeadParticles++;
 	}
 
-	if(m_nrOfDeadParticles == m_particleDesc.nrOfParticles)
+	if(m_nrOfDeadParticles == m_particleDesc.nrOfParticles && !m_particleDesc.loop)
 		return true;
 
 	return false;
@@ -88,21 +87,24 @@ bool ParticleEmitter::Update( float p_dt )
 
 void ParticleEmitter::Render(D3DXMATRIX p_view, D3DXMATRIX p_proj)
 {
-	D3DXMATRIX l_scale, l_rotation, l_translation, l_world;
-	Vect3 l_scaleVect, l_rotationVect, l_posVect, l_colorVect;
+	D3DXMATRIX l_scale, l_translation, l_world;
+	Vect3 l_scaleVect, l_posVect, l_colorVect;
 
 	for (unsigned int i = 0; i < m_particleMatrixList.size(); i++)
 	{
 		l_scaleVect			= m_particleList.at(i)->GetScale();
-		l_rotationVect		= m_particleList.at(i)->GetRotation();
 		l_posVect			= m_particleList.at(i)->GetPosition();
+		l_colorVect			= m_particleList.at(i)->GetColor();
 
 		D3DXMatrixScaling(&l_scale, l_scaleVect.r, l_scaleVect.g, l_scaleVect.b);
-		D3DXMatrixRotationYawPitchRoll(&l_rotation, l_rotationVect.g, l_rotationVect.r, l_rotationVect.b);
 		D3DXMatrixTranslation(&l_translation, l_posVect.r, l_posVect.g, l_posVect.b);
 
-		l_world = l_scale * l_rotation * l_translation;
-		//TODO add color to matrix
+		l_world = l_scale * l_translation;
+		
+		//Enter color into instancematrix
+		l_world._14 = l_colorVect.r;
+		l_world._24 = l_colorVect.g;
+		l_world._34 = l_colorVect.b;
 
 		m_particleMatrixList.at(i) = l_world;
 	}

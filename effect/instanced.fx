@@ -25,13 +25,24 @@ struct VS_IN
 
 struct VS_OUT
 {
-	float4 posH         : SV_POSITION;
-	float shade			: SHADE;
+	float4 posH         	: SV_POSITION;
+	float  shade			: SHADE;
+	float4 instanceColor	: COLOR;
 };
 
 VS_OUT VS(VS_IN vIn)
 {
 	VS_OUT vOut;
+
+	float red 	= vIn.mTransform._14;
+	float green = vIn.mTransform._24;
+	float blue 	= vIn.mTransform._34;
+
+	vOut.instanceColor = float4(red, green, blue, 1.0f);
+
+	vIn.mTransform._14 = 0.0f;
+	vIn.mTransform._24 = 0.0f;
+	vIn.mTransform._34 = 0.0f;
 
 	float4x4 WVP = mul(vIn.mTransform, gVP);
 	vOut.posH = mul(float4(vIn.posL, 1.0f), WVP);
@@ -47,9 +58,7 @@ VS_OUT VS(VS_IN vIn)
 
 float4 PS(VS_OUT pIn) : SV_Target
 {
-
-	float4 C = float4(0.0f, 1.0f, 0.0f, 1.0f) * pIn.shade;
-	return C;
+	return pIn.instanceColor * pIn.shade;
 }
 
 RasterizerState Wireframe
