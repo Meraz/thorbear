@@ -16,13 +16,11 @@ public:
 	void Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked);
 	void Render();
 	void CheckButton(int p_mousePositionX, int p_mousePositionY);
-	int a; // TODO REMOVE
 
 protected:
-	//void ChangeCurrentState(SceneState::State l_sceneState);
+
 
 private:
-	//void SwapState(SceneState::State l_sceneState);
 	void SwapToGame();
 
 private:

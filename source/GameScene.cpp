@@ -1,8 +1,9 @@
 #include "GameScene.h"
 
 
-GameScene::GameScene()
+GameScene::GameScene(int p_gameMode)
 {
+	m_gameMode = p_gameMode;
 	m_currentLevel = 1;
 	m_maxNrOfLevels = 3;
 	m_score = 0;
@@ -75,9 +76,4 @@ void GameScene::CheckEnemyNr()
 		m_level = new Level();
 		m_level->Init(m_currentLevel, 600, 400, m_gameMode, m_renderComponentInterface); // TODO : HARDCODED
 	}
-}
-
-void GameScene::SetGameMode( int p_gameMode )
-{
-	m_gameMode = p_gameMode;
 }

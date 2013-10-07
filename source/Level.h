@@ -2,8 +2,8 @@
 #define LEVEL_H
 
 #define POWERUPDROPRATIO 20
-#define MODE_CAMPAIGN 0
-#define MODE_SURVIVAL 1
+#define MODE_CAMPAIGN 1
+#define MODE_SURVIVAL 2
 
 #include <vector>
 #include <time.h>
