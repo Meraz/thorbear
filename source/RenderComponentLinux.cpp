@@ -152,6 +152,8 @@ bool RenderComponentLinux::Init()
     
   m_fontManager.Init();
   
+  m_objectList.clear();
+  
   return true;
 }
 
