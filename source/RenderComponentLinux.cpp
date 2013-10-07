@@ -149,6 +149,8 @@ bool RenderComponentLinux::Init()
   }
   if( l_errCount > 0 )
     printf( "RenderComponentLinux::m_modelManager.LoadModels: Total of %d OpenGL errors.\n", l_errCount );
+    
+  m_fontManager.Init();
   
   return true;
 }
@@ -177,6 +179,7 @@ void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
 
 void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
 {
+  m_fontManager.Draw( p_text, p_size, p_posX, p_posY, p_color );
 }
   
 bool g_renderfirsttime = true;
