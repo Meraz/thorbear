@@ -9,6 +9,7 @@ GameScene::GameScene()
 	m_nrOfLives = 3;
 	m_lastKnownNrOfEnemies = 0;
 	m_enemyWorth = 100;
+	m_scoreMultiplier = 1.0f;
 	m_gameMode = MODE_CAMPAIGN;
 }
 
@@ -30,7 +31,7 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked /* add keyboard parameters here*/)
 {
 	m_level->Update(p_mousePositionX, p_lMouseClicked, (float)p_deltaTime); 
-
+	m_scoreMultiplier = m_level->GetMultiplier();
 	CheckPaddleLife();
 	CheckEnemyNr();
 }
@@ -39,11 +40,13 @@ void GameScene::Render()
 {
 	m_level->Render();
 
-
+	
 	wstring l_lives = to_wstring(m_nrOfLives);
 	wstring l_score = to_wstring(m_score);
+	wstring l_scoreMulti = to_wstring(m_scoreMultiplier).substr(0, 4);
 	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff);
 	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff);
+	m_renderComponentInterface->RenderText(L"Score Multiplier: x" + l_scoreMulti, 15.0f, 10.0f, 40.0f, 0xff0099ff);
 }
 
 void GameScene::CheckPaddleLife()
@@ -62,7 +65,7 @@ void GameScene::CheckEnemyNr()
 	int l_nrEnemies = m_level->GetNrOfEnemies();
 
 	if(l_nrEnemies < m_lastKnownNrOfEnemies)
-		m_score += m_enemyWorth * (m_lastKnownNrOfEnemies - l_nrEnemies);
+		m_score += (int)(m_scoreMultiplier * m_enemyWorth * (m_lastKnownNrOfEnemies - l_nrEnemies));
 	m_lastKnownNrOfEnemies = l_nrEnemies;
 
 	if(m_lastKnownNrOfEnemies == 0 && m_gameMode == MODE_CAMPAIGN)

@@ -25,6 +25,7 @@ private:
 	int		m_lastKnownNrOfEnemies;
 	int		m_nrOfLives;
 	int		m_score;
+	float	m_scoreMultiplier;
 	Level*	m_level;
 	int		m_gameMode;
 

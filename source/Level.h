@@ -30,6 +30,7 @@ public:
 	int		GetLifeChanged();
 	int		GetNrOfEnemies();
 	int		GetNrOfBalls();
+	float	GetMultiplier();
 	void	AddBall();
 
 
@@ -40,13 +41,22 @@ private:
 	BoundingBox			m_mapEdges;
 	Paddle*				m_paddle;
 	int**				m_map;
-	int					m_changesInLife;
 
+	
+	int		m_changesInLife;
 	int		m_gameMode;
 	bool	m_prevLMouseClickStatus;
 	float	m_ballSpeed;
 	int		m_ballWidth;
 	int		m_ballHeight;
+
+	bool	m_isPaddleInvulnerable;
+	float	m_invulTimer;
+	float	m_invulTime;
+	bool	m_isPaddleVisible;
+	float	m_blinkTimer;
+	float	m_blinkTime;
+	float	m_scoreMultiplier;
 
 	RenderComponentInterface*	m_renderComp;
 	int		m_mapBorderThickness;
@@ -62,7 +72,7 @@ private:
 	void	ShootBallFromPaddle(int p_ballVectorPos);
 	void	CreateEnemies();
 	void	RenderMapEdges();
-
+	void	SetInvulnerability();
 	void	SpawnPowerup(float p_posX, float p_posY);
 };
 

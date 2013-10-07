@@ -15,6 +15,14 @@ Level::Level(void)
 	m_mapBorderThickness = 9;
 	m_enemyDistance = 2;
 	m_ballSpeed = 200.0f;
+	m_scoreMultiplier = 1.0f;
+
+	m_isPaddleInvulnerable = false;
+	m_isPaddleVisible = true;
+	m_blinkTimer = 0.0f;
+	m_blinkTime = 0.2f;
+	m_invulTimer = 0.0f;
+	m_invulTime = 1.5f;
 }
 
 
@@ -42,7 +50,7 @@ void Level::Init( int p_lvlNr, int p_lvlWidth, int p_lvlHeight, int p_gameMode, 
 		m_map = LevelImporter::LoadLevel(tmpString);	
 	}
 
-	m_paddle = new Paddle(p_lvlWidth/2.0f, 10.0f, 50, 10, p_lvlWidth); //example values
+	m_paddle = new Paddle(p_lvlWidth/2.0f, 10.0f, 60, 10, p_lvlWidth); //example values
 	m_paddle->Initialize(p_renderComp);
 
 	m_ball.push_back(new Ball());
@@ -86,7 +94,7 @@ void Level::CreateEnemies()
 	else if(m_gameMode == MODE_SURVIVAL)
 	{
 		srand(time(NULL));
-		for(unsigned int i = 0; i < 1; i++) // NOTE TESTESTESTSETSET
+		for(unsigned int i = 0; i < 15; i++) // TODO Hardcoded number of enemies
 		{
 			if(rand() % 2 == 0)
 			{
@@ -120,13 +128,12 @@ void Level::SpawnPowerup(float p_posX, float p_posY)
 		m_powerup.push_back(new LargerPaddlePowerup());
 	else if(l_random < 6) // 3,4,5
 		m_powerup.push_back(new SmallerPaddlePowerUp());
-	else if(l_random <9) // 6,7,8
+	if(l_random < 9) // 6,7,8
 		m_powerup.push_back(new AddBallPowerup());
 	else
 		m_powerup.push_back(new AddLifePowerup());
 
 	m_powerup.back()->init(p_posX, p_posY, 20, 20 , m_renderComp);
-	//m_powerup.p
 }
 
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
@@ -156,6 +163,7 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 			}
 		}
 	} 
+
 	m_paddle->Update(p_mousePosX);
 
 	if (m_gameMode == MODE_SURVIVAL)
@@ -176,6 +184,25 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 		m_powerup.at(i)->Update(p_deltaTime);
 	}
 
+	if (m_isPaddleInvulnerable)
+	{
+		m_blinkTimer -= p_deltaTime;
+		if (m_blinkTimer < 0)
+		{
+			m_blinkTimer += m_blinkTime;
+			if(m_isPaddleVisible)
+				m_isPaddleVisible = false;
+			else
+				m_isPaddleVisible = true;
+		}
+		m_invulTimer -= p_deltaTime;
+		if (m_invulTimer < 0)
+		{
+			m_isPaddleInvulnerable = false;
+			m_isPaddleVisible = true;
+		}
+	}
+
 	CheckAllCollisions(p_deltaTime);
 
 	m_soundHandler->Update();
@@ -187,7 +214,9 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 void Level::Render()
 {
 	RenderMapEdges();
-	m_paddle->Render();
+	if(m_isPaddleVisible)
+		m_paddle->Render(); 
+
 	for (unsigned int i = 0; i < m_ball.size(); i++)
 	{
 		m_ball.at(i)->Render();
@@ -260,9 +289,10 @@ void Level::CheckAllCollisions(float p_deltaTime)
 	{
 		for(unsigned int j = 0; j < m_squad.at(i)->GetLasers().size(); j++)
 		{
-			if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
+			if(!m_isPaddleInvulnerable && BoundingBoxIntersect(m_paddle->GetBoundingBox(), m_squad.at(i)->GetLasers().at(j)->GetBoundingBox()))
 			{
 				m_changesInLife--;
+				SetInvulnerability();
 				m_squad.at(i)->EraseMember(BALL, j); //TODO Change to LASER once this define is implemented
 			}
 		}
@@ -275,15 +305,34 @@ void Level::CheckAllCollisions(float p_deltaTime)
 		{
 			if(m_powerup.at(i)->GetPowerUpType() ==  LARGERPADDLE)
 			{
-				m_paddle->SetWidth(m_paddle->GetBoundingBox().Width + 20);
-				if(m_paddle->GetBoundingBox().Width > 100)
-					m_paddle->SetWidth(100);
+				if(m_paddle->GetBoundingBox().Width < 100)
+				{
+					m_paddle->SetWidth(m_paddle->GetBoundingBox().Width + 20);
+					if (m_scoreMultiplier <= 1.0f)
+					{
+						m_scoreMultiplier -= 0.25f;
+					}
+					else
+					{
+						m_scoreMultiplier -= 0.50f;
+					}
+				}
 			}	
 			else if(m_powerup.at(i)->GetPowerUpType() ==  SMALLERPADDLE)
 			{
-				m_paddle->SetWidth(m_paddle->GetBoundingBox().Width - 20);
-				if(m_paddle->GetBoundingBox().Width < 30)
-					m_paddle->SetWidth(30);
+				
+				if(m_paddle->GetBoundingBox().Width > 20)
+				{
+					m_paddle->SetWidth(m_paddle->GetBoundingBox().Width - 20);
+					if (m_scoreMultiplier < 1.0f)
+					{
+						m_scoreMultiplier += 0.25f;
+					}
+					else
+					{
+						m_scoreMultiplier += 0.50f;
+					}
+				}
 			}
 			else if(m_powerup.at(i)->GetPowerUpType() ==  ADDBALL)
 			{
@@ -439,4 +488,15 @@ void Level::RenderMapEdges()
 int Level::GetNrOfBalls()
 {
 	return m_ball.size();
+}
+
+float Level::GetMultiplier()
+{
+	return m_scoreMultiplier;
+}
+
+void Level::SetInvulnerability()
+{
+	m_isPaddleInvulnerable = true;
+	m_invulTimer = m_invulTime;
 }
