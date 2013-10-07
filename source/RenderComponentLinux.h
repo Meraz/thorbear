@@ -10,8 +10,6 @@
 #include <string>
 #include <vector>
 
-#define SHADER_DIRECTORY std::string("effect/")
-
 class RenderComponentLinux : public RenderComponentInterface
 {
     
