@@ -1,5 +1,7 @@
 #include "FontMan.h"
 
+#include <GL/glfw.h>
+
 FontMan::FontMan()
 {
 }
@@ -17,7 +19,7 @@ void FontMan::Init( )
   
   if(FT_New_Face(m_ft, (FONT_DIRECTORY+"Arial.ttf").c_str(), 0, &m_arial)) {
     fprintf(stderr, "Could not open font\n");
-    return 1;
+    return;
   }
   
   m_fontShader.Init( SHADER_DIRECTORY + "fontVertex.glsl", SHADER_DIRECTORY + "fontFragment.glsl" );
@@ -48,7 +50,7 @@ void FontMan::Init( )
   glfwGetWindowSize( &m_windowWidth, &m_windowHeight );
 }
 
-void FontMan::Draw( wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color )
+void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color )
 {
   if( m_currentSize != (int)p_size )
   {
