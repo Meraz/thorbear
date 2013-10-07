@@ -141,7 +141,10 @@ void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const 
 
 	l_file.open( p_shaderFileName );
 	if( !l_file.is_open( ) )
+  {
 		printf( "ERROR opening shader file %s\n", p_shaderFileName );
+    return;
+  }
 
 	// Get the size of the file
   l_file.seekg(0,std::ios::end);
