@@ -1,5 +1,6 @@
 #include "FontMan.h"
 
+#include <cwchar>
 #include <GL/glfw.h>
 
 FontMan::FontMan()
@@ -60,8 +61,8 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
-  m_fontShader->Use();
-  m_fontShader->SetUniformVector( "color", glm::vec4( (p_color >> 48) & 0xFF, (p_color >> 32) & 0xFF, (p_color >> 16) & 0xFF, p_color & 0xFF ) );
+  m_fontShader.Use();
+  m_fontShader.SetUniformVector( "color", glm::vec4( (p_color >> 24) & 0xFF, (p_color >> 16) & 0xFF, (p_color >> 8) & 0xFF, p_color & 0xFF ) );
   
   for(const wchar* p = p_text.c_str; *p; p++)
   {
@@ -72,21 +73,21 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
       GL_TEXTURE_2D,
       0,
       GL_ALPHA,
-      g->bitmap.width,
-      g->bitmap.rows,
+      m_arial->glyph->bitmap.width,
+      m_arial->glyph->bitmap.rows,
       0,
       GL_ALPHA,
       GL_UNSIGNED_BYTE,
-      g->bitmap.buffer
+      m_arial->glyph->bitmap.buffer
     );
       
     float sx = 2.0f / m_windowWidth;
     float sy = 2.0f / m_windowHeight;
     
-    float x2 = x + g->bitmap_left * sx;
-    float y2 = -y - g->bitmap_top * sy;
-    float w = g->bitmap.width * sx;
-    float h = g->bitmap.rows * sy;
+    float x2 = x + m_arial->glyph->bitmap_left * sx;
+    float y2 = -y - m_arial->glyph->bitmap_top * sy;
+    float w = m_arial->glyph->bitmap.width * sx;
+    float h = m_arial->glyph->bitmap.rows * sy;
 
     GLfloat box[4][4] = {
         {x2,     -y2    , 0, 0},
@@ -99,7 +100,7 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-    x += (g->advance.x >> 6) * sx;
-    y += (g->advance.y >> 6) * sy;
+    x += (m_arial->glyph->advance.x >> 6) * sx;
+    y += (m_arial->glyph->advance.y >> 6) * sy;
   }
 }
