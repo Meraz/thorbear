@@ -25,6 +25,26 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 	m_level = new Level();
 	m_level->Init(m_currentLevel, m_renderComponentInterface); // TODO : Don't hard code this
 	m_lastKnownNrOfEnemies = m_level->GetNrOfEnemies();
+
+	//Test purpose only, to see if it increases performance
+	//-----------------------------------------------------------------------------------------------------------------------------------
+	std::wostringstream  l_ss;
+	l_ss << m_nrOfLives;
+	std::wstring l_lives( l_ss.str() );
+
+	l_ss.str(L""); // reset stringstream to empty
+	l_ss << m_score;
+	std::wstring l_score( l_ss.str() );
+
+	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff, 0);
+	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff, 0);
+
+	l_ss << 1.0f/m_deltaTime;
+	std::wstring l_fps( l_ss.str() );
+
+	m_renderComponentInterface->RenderText(L"FPS: " + l_fps, 15.0f, 10.0f, 40.0f, 0xff0099ff, 0);
+
+	//-----------------------------------------------------------------------------------------------------------------------------------
 }
 
 void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked /* add keyboard parameters here*/)
@@ -33,6 +53,8 @@ void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePosi
 
 	CheckPaddleLife();
 	CheckEnemyNr();
+
+	m_deltaTime = p_deltaTime;
 }
 
 void GameScene::Render()
@@ -48,8 +70,13 @@ void GameScene::Render()
 	l_ss << m_score;
 	std::wstring l_score( l_ss.str() );
   
-	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff);
-	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff);
+	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff, 1);
+	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff, 1);
+	
+	l_ss << 1/m_deltaTime;
+	std::wstring l_fps( l_ss.str() );
+
+	m_renderComponentInterface->RenderText(L"FPS: " + l_fps, 15.0f, 10.0f, 40.0f, 0xff0099ff, 1);
 }
 
 void GameScene::CheckPaddleLife()

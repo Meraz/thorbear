@@ -25,6 +25,8 @@ private:
 	int		m_score;
 	Level*	m_level;
 	RenderComponentInterface* m_renderComponentInterface;
+
+	double					m_deltaTime;
 private:
 	void NewLevel();
 	void CheckEnemyNr();

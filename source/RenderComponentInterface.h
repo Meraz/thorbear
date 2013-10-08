@@ -37,7 +37,7 @@ public:
 	virtual void RenderParticleSystem(ParticleSystem p_particleSystem) = 0;				
 
 	/* Add this text to be drawn this update */
-	virtual void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color) = 0;
+	virtual void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, unsigned int FLAG) = 0;
 
 	virtual void RenderBackground(TextureType p_textureType) = 0;
 };
