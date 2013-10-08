@@ -32,19 +32,18 @@ void FontMan::Init( )
   
   GLCheckErrors( "FontMan::Init - Shaders" );
   
-  m_currentSize = 48;
+  m_currentSize = 24;
   FT_Set_Pixel_Sizes(m_arial, 0, m_currentSize);
   
   glActiveTexture(GL_TEXTURE0);
   glGenTextures(1, &m_arial_texture);
   glBindTexture(GL_TEXTURE_2D, m_arial_texture);
-  m_fontShader.SetUniformInt( "tex", 0 );
   
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
    
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   
   GLCheckErrors( "FontMan::Init - TexGen" );
   
@@ -62,31 +61,38 @@ void FontMan::Init( )
   
   GLCheckErrors( "FontMan::Init - Buffer setup" );
     
-  glfwGetWindowSize( &m_windowWidth, &m_windowHeight );
 }
 
 void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color )
 {
-  char* l_text = new char[ p_text.size()*2 ];
-  wcstombs( l_text, p_text.c_str(), p_text.size() );
-  float x = p_posX;
-  float y = p_posY;
+  glfwGetWindowSize( &m_windowWidth, &m_windowHeight );
+  char* l_text = new char[ p_text.size() ];
+  int l_size = wcstombs( l_text, p_text.c_str(), p_text.size() );
+  if( l_size == p_text.size() )
+    l_text[l_size-1]='\0';
   
   if( m_currentSize != (int)p_size )
   {
     m_currentSize = (int)p_size;
     FT_Set_Pixel_Sizes(m_arial, 0, m_currentSize);
   }
+  float x = p_posX;
+  float y = p_posY + m_currentSize;
+
   glBindVertexArray( m_vao );
   
   GLCheckErrors( "FontMan::Draw" );
   
-  glActiveTexture(GL_TEXTURE0);
+  glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, m_arial_texture);
   
   m_fontShader.Use();
   m_fontShader.SetUniformVector( "color", glm::vec4( (p_color >> 24) & 0xFF, (p_color >> 16) & 0xFF, (p_color >> 8) & 0xFF, p_color & 0xFF ) );
-  m_fontShader.SetUniformInt( "tex", 2 );
+  m_fontShader.SetUniformInt( "tex", 1 );
+  
+  // For converting screenspace to clipspace [-1..1]
+  float sx = 2.0f / m_windowWidth;
+  float sy = 2.0f / m_windowHeight;
   
   for(const char* p = l_text; *p; p++)
   {
@@ -105,21 +111,19 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
       m_arial->glyph->bitmap.buffer
     );
     GLCheckErrors( "FontMan::Draw - glTexImage2D" );
-      
-    float sx = 2.0f / m_windowWidth;
-    float sy = 2.0f / m_windowHeight;
-    
+
     float x2 = -1 + (x + m_arial->glyph->bitmap_left) * sx;
-    float y2 =  1 - (y + m_arial->glyph->bitmap_top) * sy;
+    float y2 =  1 - (y - m_arial->glyph->bitmap_top) * sy;
     float w = m_arial->glyph->bitmap.width * sx;
-    float h = m_arial->glyph->bitmap.rows * sy;
+    float h = -m_arial->glyph->bitmap.rows * sy;
 
     GLfloat box[4][4] = {
-        {x2,     y2    , 0, 0},
+        {x2    , y2 + h, 0, 1},
+        {x2 + w, y2 + h, 1, 1},
+        {x2    , y2    , 0, 0},
         {x2 + w, y2    , 1, 0},
-        {x2,     y2 - h, 0, 1},
-        {x2 + w, y2 - h, 1, 1},
     };
+
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof box, box, GL_DYNAMIC_DRAW);
     GLCheckErrors( "FontMan::Draw - glBindBuffer, glBufferData" );
@@ -127,8 +131,8 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     GLCheckErrors( "FontMan::Draw - glDrawArrays" );
 
-    x += (m_arial->glyph->advance.x >> 6) * sx;
-    y += (m_arial->glyph->advance.y >> 6) * sy;
+    x += (m_arial->glyph->advance.x >> 6);
+    y += (m_arial->glyph->advance.y >> 6);
   }
   delete[] l_text;
 }

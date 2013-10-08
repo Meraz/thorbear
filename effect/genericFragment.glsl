@@ -25,7 +25,7 @@ uniform float powerSpecular;
 uniform vec3 intensitySpecular;
 uniform sampler2D mapSpecular;
 
-out vec3 fragmentColour;
+out vec4 fragmentColour;
 
 void main()
 {
@@ -45,8 +45,8 @@ void main()
   specularComponent = pow ( max( 0.0f, dot( r, v ) ), powerSpecular ) * intensitySpecular + intensityReflection;
 
 	fragmentColour = //vec3(0.0f, 1.0f, 0.0f);
-    vec3( cAmbiemt * intensityAmbient
-    + ( cDiffuse * diffuse + cSpecular * specularComponent ) );
+    vec4( cAmbiemt * intensityAmbient
+    + ( cDiffuse * diffuse + cSpecular * specularComponent ), 1 );
 
 	//fragmentColour = mKd;
 	//fragmentColour = vec4(Ka * Ia, 1.0f);

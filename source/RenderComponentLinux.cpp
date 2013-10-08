@@ -112,8 +112,8 @@ bool RenderComponentLinux::Init()
 	glCullFace( GL_BACK );
 	glFrontFace( GL_CCW );
 	glEnable( GL_MULTISAMPLE_ARB );
-  //glEnable( GL_BLEND );
-  //glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+  glEnable( GL_BLEND );
+  glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
   
   GLCheckErrors( "RenderComponentLinux::Init - Options" );
 
