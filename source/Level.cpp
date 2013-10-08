@@ -52,7 +52,6 @@ void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_rende
 		{
 			m_gameMode = MODE_SURVIVAL;
 			m_renderErrorLoadingLevel = true;
-			m_renderComp->RenderText(L"No level file found, loaded survival mode....", 15.0f, 5.0f, 70.0f, 0xff0099ff, 0);
 		}
 	}
 
@@ -255,7 +254,7 @@ void Level::Render()
 	}
 
 	if(m_renderErrorLoadingLevel == true)
-		m_renderComp->RenderText(L"No level file found, loaded survival mode....", 15.0f, 5.0f, 70.0f, 0xff0099ff, 0);
+		m_renderComp->RenderText(L"No level file found, loaded survival mode....", 15.0f, 5.0f, 70.0f, 0xff0099ff);
 	
 }
 
