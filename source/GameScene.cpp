@@ -26,7 +26,7 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 	m_level->Init(m_currentLevel, m_renderComponentInterface); // TODO : Don't hard code this
 	m_lastKnownNrOfEnemies = m_level->GetNrOfEnemies();
 
-	//Test purpose only, to see if it increases performance
+	//Render the text one with FLAG set to 0
 	//-----------------------------------------------------------------------------------------------------------------------------------
 	std::wostringstream  l_ss;
 	l_ss << m_nrOfLives;
@@ -70,6 +70,7 @@ void GameScene::Render()
 	l_ss << m_score;
 	std::wstring l_score( l_ss.str() );
   
+	//Set the FLAG to 1 to increase performance
 	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff, 1);
 	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff, 1);
 	
@@ -106,6 +107,6 @@ void GameScene::CheckEnemyNr()
 		if(m_currentLevel > m_maxNrOfLevels)
 			m_currentLevel = 1;
 		m_level = new Level();
-		m_level->Init(m_currentLevel, m_renderComponentInterface); // TODO : HARDCODED
+		m_level->Init(m_currentLevel, m_renderComponentInterface);
 	}
 }
