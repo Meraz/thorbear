@@ -9,6 +9,7 @@
 #include "glm/ext.hpp"
 
 extern inline std::string stringf( const char *p_fmt, ... );
+extern inline void GLCheckErrors( std::string p_where );
 
 void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const int& p_type );
 
@@ -46,12 +47,15 @@ void Shader::Init( const char* p_vertFileName, const char* p_fragFileName, const
 	
 	// attach shaders
 	for( unsigned i = 0; i < COUNT; i++ )
-		glAttachShader( m_handle, m_subhandles[ i ] );
+    if( m_subhandles[ i ] > 0 )
+      glAttachShader( m_handle, m_subhandles[ i ] );
+  GLCheckErrors( "Shader::Init" );
 }
 
 void Shader::Build( )
 {
 	CreateProgram( );
+  GLCheckErrors( "Shader::Build" );
 }
 
 //static Shader* tmp = 0;
@@ -75,11 +79,13 @@ void Shader::Use( )
 		glUseProgram(m_handle);
 		m_activeShader = this;
 	}
+  GLCheckErrors( "Shader::Use" );
 }
 
 void Shader::BindAttribLocation( GLuint p_location, const char* p_name )
 {
 	glBindAttribLocation( m_handle, p_location, p_name);
+  GLCheckErrors( "Shader::BindAttribLocation" );
 }
 
 void Shader::SetUniformInt( const char* p_name, int p_val )
@@ -132,6 +138,7 @@ void Shader::CreateProgram( )
 		}
 		printf( l_error.c_str() );
 	}
+  GLCheckErrors( "Shader::CreateProgram" );
 }
 
 void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const int& p_type )
@@ -192,6 +199,7 @@ void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const 
 		}
 		printf( l_error.c_str() );
 	}
+  GLCheckErrors( "Shader::CompileShader" );
 }
 
 int Shader::GetUniformLocation( const char* p_name )
@@ -204,6 +212,7 @@ int Shader::GetUniformLocation( const char* p_name )
 		printf( "Warning: Error receiving variable location '%s'\n", p_name );
 #endif
 	return l_loc;
+  GLCheckErrors( "Shader::GetUniformLocation" );
 }
 
 void Shader::UpdateUniform( glm::mat4 p_modelMatrix )
@@ -214,6 +223,7 @@ void Shader::UpdateUniform( glm::mat4 p_modelMatrix )
   SetUniformMatrix( "modelViewMatrix", m_activeCamera->GetViewMatrix( ) * p_modelMatrix );
   SetUniformMatrix( "normalMatrix", glm::inverseTranspose( glm::mat3( m_activeCamera->GetViewMatrix( ) * p_modelMatrix ) ) );
   SetUniformVector( "lightPosition", glm::vec4( m_activeCamera->GetPosition( ), 1.f ) );
+  GLCheckErrors( "Shader::UpdateUniform" );
 }
 
 void Shader::SetActiveCamera( Camera& p_cam )
