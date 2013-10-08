@@ -27,7 +27,6 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 
 void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked /* add keyboard parameters here*/)
 {
-	fps = to_wstring(1.0f/p_deltaTime);
 	m_level->Update(p_mousePositionX, p_lMouseClicked, (float)p_deltaTime); 
 
 	CheckPaddleLife();
@@ -41,10 +40,8 @@ void GameScene::Render()
 
 	wstring l_lives = to_wstring(m_nrOfLives);
 	wstring l_score = to_wstring(m_score);
-	//m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff);
-	//m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff);
-	
-	//m_renderComponentInterface->RenderText(L"FPS: " + fps, 15.0f, 10.0f, 40.0f, 0xff0099ff );
+	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff);
+	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff);
 }
 
 void GameScene::CheckPaddleLife()
