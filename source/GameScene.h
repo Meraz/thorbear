@@ -28,8 +28,11 @@ private:
 	float	m_scoreMultiplier;
 	Level*	m_level;
 	int		m_gameMode;
+	RenderComponentInterface* m_renderComponentInterface;
 
 	bool	m_isGameOver;
+
+	double	m_deltaTime;
 
 private:
 	void NewLevel();

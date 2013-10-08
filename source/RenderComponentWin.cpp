@@ -127,7 +127,7 @@ void RenderComponentWin::PreRender()
 void RenderComponentWin::PostRender()
 {
 	m_particleSystem->Render();
-	HR(m_swapChain->Present(0, 0));
+	HR(m_swapChain->Present(1, 0));
 }
 
 bool RenderComponentWin::InitializeDirect3D()
@@ -360,9 +360,9 @@ BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBo
 }
 
 
-void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
 {
-	m_fontRenderer->RenderText(p_text.c_str(), p_size, p_posX, p_posY, p_color);
+	m_fontRenderer->RenderText(p_text.c_str(), p_size, p_posX, p_posY, p_color, FLAG);
 }
 
 void RenderComponentWin::RenderBackground(TextureType p_textureType)
