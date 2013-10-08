@@ -80,6 +80,10 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
   m_fontShader.SetUniformVector( "color", glm::vec4( (p_color >> 24) & 0xFF, (p_color >> 16) & 0xFF, (p_color >> 8) & 0xFF, p_color & 0xFF ) );
   
   GLCheckErrors( "FontMan::Draw" );
+  
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, m_arial_texture);
+  
   for(const wchar_t* p = p_text.c_str(); *p; p++)
   {
     if(FT_Load_Char(m_arial, *p, FT_LOAD_RENDER))
