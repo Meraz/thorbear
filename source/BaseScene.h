@@ -22,11 +22,13 @@ public:
 	
 protected:
 	virtual void ChangeCurrentState(SceneState::State l_sceneState, int l_menuFlag);
+	void RenderParticleEffect(int p_x, int p_z);
 
 protected:
 	RenderComponentInterface* m_renderComponentInterface;
 	SceneState::State m_sceneState;
 	int m_menuFlag;		// Used to start the game with different parameters.
+	bool m_previousMouseState;
 
 };
 

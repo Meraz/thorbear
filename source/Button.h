@@ -5,6 +5,7 @@
 #include "SceneState.h"
 #include "BaseScene.h"
 #include "Highscore.h"
+#include "MemoryMacro.h"
 
 class Button
 {
@@ -19,6 +20,9 @@ public:
 	
 	~Button();
 	
+
+	void Update();
+
 	void Render();
 	bool CheckIfInside(int p_X, int p_Y);
 	void ExecuteCommand();
@@ -26,6 +30,7 @@ public:
 private:
 	BoundingBox m_boundingBox;
 	int m_constructorId;
+	bool* m_clickable;
 
 	// Change menuscenes
 	BaseScene* m_scene;

@@ -11,10 +11,10 @@ public:
 	FontRenderWin();
 	~FontRenderWin();
 	void	Init(ID3D11Device *p_device, LPCWSTR p_font, ID3D11DeviceContext *p_context);
-	void	RenderText(LPCWSTR p_text, float p_size, float p_posX, float p_posY, UINT32 p_color, UINT FLAG);
 	void	CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime);
 	void	Render();
 	void	Update(float p_dt);
+	void	RenderText(LPCWSTR p_text, float p_size, float p_posX, float p_posY, UINT32 p_color);
 private:
 	ID3D11Device			*m_device;
 	ID3D11DeviceContext		*m_context;

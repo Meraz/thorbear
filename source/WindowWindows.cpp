@@ -104,15 +104,6 @@ int WindowWindows::Run()
 				//CalculateFrameStats();
 				Update();
 				Render();
-
-				char title[256];
-				sprintf_s(
-				title,
-				sizeof(title),
-				"%f",
-				(1.0f/m_gameTimer->DeltaTime())
-				);
-				SetWindowTextA(m_hMainWnd, title);
 			}
 			else
 			{
@@ -133,7 +124,7 @@ void WindowWindows::Update()
 		PostQuitMessage(0);
 
 	
-	wchar_t title[256];
+	/*wchar_t title[256];
 		swprintf_s(
 		title,
 		_countof(title),
@@ -141,7 +132,17 @@ void WindowWindows::Update()
 		);
 
 	SetWindowText(m_hMainWnd, title); // TEST CODE : TODO REMOVE
-	
+	*/
+	/*
+	char title[256];
+	sprintf_s(
+		title,
+		sizeof(title),
+		"%f",
+		(1.0f/m_gameTimer->DeltaTime())
+		);
+	SetWindowTextA(m_hMainWnd, title);	// TEST CODE : TODO REMOVE
+	*/
 }
 
 void WindowWindows::Render()
