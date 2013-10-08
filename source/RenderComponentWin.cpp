@@ -55,6 +55,7 @@ int RenderComponentWin::Initialize()
 void RenderComponentWin::Update( float p_dt )
 {
 	m_particleSystem->Update(p_dt);
+	m_fontRenderer->Update(p_dt);
 }
 
 void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color)
@@ -127,7 +128,8 @@ void RenderComponentWin::PreRender()
 void RenderComponentWin::PostRender()
 {
 	m_particleSystem->Render();
-	HR(m_swapChain->Present(1, 0));
+	m_fontRenderer->Render();
+	HR(m_swapChain->Present(0, 0));
 }
 
 bool RenderComponentWin::InitializeDirect3D()
@@ -181,7 +183,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = false;
+	l_sd.Windowed     = true;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -317,6 +319,10 @@ BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBo
 	return l_boundingBox;
 }
 
+void RenderComponentWin::CreateSplashText( wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
+{
+	m_fontRenderer->CreateSplashText(p_text, p_size, p_posX, p_posY, p_travelTime, p_stillTime);
+}
 
 void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
 {
@@ -369,3 +375,5 @@ void RenderComponentWin::RenderBackground(TextureType p_textureType)
 		m_d3dImmediateContext->DrawIndexed(l_model->m_size, 0, 0);
 	}
 }
+
+

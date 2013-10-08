@@ -31,6 +31,8 @@ Level::~Level(void)
 {
 	delete m_paddle;
 	delete m_map;
+	delete m_soundHandler;
+	m_soundHandler = 0;
 	vector<EnemySquad*>().swap(m_squad);
 	vector<Ball*>().swap(m_ball);
 }
@@ -173,6 +175,8 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 			}
 			else
 			{
+				delete m_ball.at(i);
+				m_ball.at(i) = 0;
 				m_ball.erase(m_ball.begin() + i);
 				i--; 
 			}
@@ -298,6 +302,8 @@ void Level::CheckAllCollisions(float p_deltaTime)
 						l_desc.startColor		= Vect3(1.0f, 0.0f, 0.0f);
 						l_desc.endColor			= Vect3(1.0f, 1.0f, 0.0f);
 						m_renderComp->CreateParticleEmitter(l_desc);
+
+						m_renderComp->CreateSplashText(L"NICE!", 200.0f, 900.0f, 450.0f, 0.4f, 0.0f);
 					}
 					m_soundHandler->PlayGameSound(BALLBOUNCE);
 				}
@@ -373,10 +379,16 @@ void Level::CheckAllCollisions(float p_deltaTime)
 			{
 				m_changesInLife++;
 			}
+			delete m_powerup.at(i);
+			m_powerup.at(i) = 0;
 			m_powerup.erase(m_powerup.begin() + i);
 		}
 		else if(m_powerup.at(i)->GetBoundingBox().PosY <= 0)
+		{
+				delete m_powerup.at(i);
+				m_powerup.at(i) = 0;
 				m_powerup.erase(m_powerup.begin() + i);
+		}
 	}
 	// Enemy vs Enemy
 	for(unsigned int i = 1; i < m_squad.size(); i++)
@@ -474,6 +486,8 @@ int Level::GetNrOfEnemies()
 	{
 		if(m_squad.at(i)->GetNumOfEnemies() == 0)
 		{
+			delete m_squad.at(i);
+			m_squad.at(i) = 0;
 			m_squad.erase(m_squad.begin()+i);
 			if(m_squad.size() == 0 && m_gameMode == MODE_SURVIVAL)
 				CreateEnemies();
