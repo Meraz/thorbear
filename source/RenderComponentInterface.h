@@ -19,6 +19,7 @@ enum TextureType
 	LARGERPADDLEPOWERUP,
 	SMALLERPADDLEPOWERUP,
 	LEVEL,
+	MAINMENU,
 	TTCOUNT // Leave this last, you can loop i < TTCOUNT
 };
 

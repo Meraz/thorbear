@@ -103,7 +103,6 @@ void GameScene::Render()
 
 	std::ostringstream  l_ss;
 
-
 	// Lives
 	l_ss << "Extra Lives: " << m_nrOfLives;
 	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 0.0f, 0xff0099ff, 1);

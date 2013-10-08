@@ -133,7 +133,7 @@ void WindowWindows::Update()
 		PostQuitMessage(0);
 
 	
-	wchar_t title[256];
+	/*wchar_t title[256];
 		swprintf_s(
 		title,
 		_countof(title),
@@ -141,6 +141,7 @@ void WindowWindows::Update()
 		);
 
 	SetWindowText(m_hMainWnd, title); // TEST CODE : TODO REMOVE
+	*/
 	
 }
 

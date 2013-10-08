@@ -30,6 +30,7 @@ void MainMenuScene::Update(double p_deltaTime, int p_mousePositionX, int p_mouse
 
 void MainMenuScene::Render()
 {
+	m_renderComponentInterface->RenderBackground(MAINMENU);
 	for(int i = 0; i < m_button.size(); i++)
 		m_button.at(i)->Render();
 }
