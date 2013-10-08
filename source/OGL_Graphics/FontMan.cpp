@@ -88,11 +88,11 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
     glTexImage2D(
       GL_TEXTURE_2D,
       0,
-      GL_ALPHA,
+      GL_RED,
       m_arial->glyph->bitmap.width,
       m_arial->glyph->bitmap.rows,
       0,
-      GL_ALPHA,
+      GL_RED,
       GL_UNSIGNED_BYTE,
       m_arial->glyph->bitmap.buffer
     );
