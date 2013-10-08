@@ -54,16 +54,16 @@ int RenderComponentWin::Initialize()
 
 void RenderComponentWin::Update( float p_dt )
 {
+	m_camera->RebuildView();
 	m_particleSystem->Update(p_dt);
 	m_fontRenderer->Update(p_dt);
+
 }
 
 void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color)
 {
 	Shader* l_shader = m_objVec.at((int)p_textureType).shader;
 	Model*	l_model = m_objVec.at((int)p_textureType).model;
-
-	m_camera->RebuildView();
 
 	D3DXMATRIX l_scaleMat;
 	if(p_boundingBox.Height == -1 || p_boundingBox.Width == -1)
@@ -320,7 +320,6 @@ BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBo
 	return l_boundingBox;
 }
 
-
 void RenderComponentWin::CreateSplashText( wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
 {
 	m_fontRenderer->CreateSplashText(p_text, p_size, p_posX, p_posY, p_travelTime, p_stillTime);
@@ -339,9 +338,10 @@ std::wstring s2ws(const std::string& s)
 	return r;
 }
 
-void RenderComponentWin::RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
+void RenderComponentWin::RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
 {
-	m_fontRenderer->RenderText(s2ws(p_text).c_str(), p_size, p_posX, p_posY, p_color, FLAG);
+
+	m_fontRenderer->RenderText(s2ws(p_text).c_str(), p_size, p_posX, p_posY, p_color);
 }
 
 void RenderComponentWin::RenderBackground(TextureType p_textureType)
