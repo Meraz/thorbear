@@ -318,7 +318,7 @@ void Level::CheckAllCollisions(float p_deltaTime)
 						l_desc.endColor			= Vect3(0.0f, 0.4f, 0.0f);
 						m_renderComp->CreateParticleEmitter(l_desc);
 
-						m_renderComp->CreateSplashText(L"NICE!", 200.0f, 900.0f, 450.0f, 0.4f, 0.0f);
+						//m_renderComp->CreateSplashText(L"NICE!", 200.0f, 900.0f, 450.0f, 0.4f, 0.0f);
 					}
 					m_soundHandler->PlayGameSound(BALLBOUNCE);
 				}
@@ -405,6 +405,14 @@ void Level::CheckAllCollisions(float p_deltaTime)
 				m_powerup.erase(m_powerup.begin() + i);
 		}
 	}
+
+	// Paddle vs Enemy
+	for (unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		if(BoundingBoxIntersect(m_squad.at(i)->GetBoundingBox(), m_paddle->GetBoundingBox()))
+			m_changesInLife -= INT_MAX;
+	}
+
 	// Enemy vs Enemy
 	for(unsigned int i = 1; i < m_squad.size(); i++)
 	{
@@ -428,10 +436,6 @@ void Level::CheckAllCollisions(float p_deltaTime)
 				m_squad.at(i)->StartMovement();
 		}
 	}
-	
-	// if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
-	// TODO Stuff happens
-	
 }
 
 void Level::CheckIncrementalCollisions(Ball* p_ball, BoundingBox p_bBox, bool p_isEnemy, float p_dt)

@@ -13,7 +13,7 @@ GameScene::GameScene(int p_gameMode)
 	m_lastKnownNrOfEnemies = 0;
 	m_enemyWorth = 100;
 	m_scoreMultiplier = 1.0f;
-	m_gameMode = MODE_SURVIVAL;
+	m_gameMode = p_gameMode;
 	m_isGameOver = false;
 }
 
