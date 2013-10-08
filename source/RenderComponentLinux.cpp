@@ -102,6 +102,7 @@ bool RenderComponentLinux::Init()
 		glfwTerminate();
 		return this->SetError( stringf( "ERROR: GL Version not supported: %d\n", l_major ) );
   }
+  GLCheckErrors( "RenderComponentLinux::Init - Glew" );
 		
 	// enable some useful GL behaviours
 	glEnable( GL_DEPTH_TEST );
@@ -110,11 +111,15 @@ bool RenderComponentLinux::Init()
 	glCullFace( GL_BACK );
 	glFrontFace( GL_CCW );
 	glEnable( GL_MULTISAMPLE_ARB );
+  
+  GLCheckErrors( "RenderComponentLinux::Init - Options" );
 
 	// set colour to clear screen buffer to
 	glClearColor( 0.f, 0.f, 0.f, 1.f );
 	glFlush();
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
+  
+  GLCheckErrors( "RenderComponentLinux::Init - Clear" );
 	
 	glfwSetWindowTitle( "SpaceOut: OpenGL4 Test" );//l_windowTitle.c_str( ) );
 	glfwSwapInterval( 1 ); // 0: VSync off, 1: on
@@ -170,7 +175,23 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
   l_modelInstance->SetTint( p_color );
   
   // Add the object to the list of objects to render
-  m_objectList.push_back( l_modelInstance );
+  //m_objectList.push_back( l_modelInstance );
+  
+  m_genericShader.Use( );
+  if( g_renderfirsttime )
+  {
+    GLCheckErrors( "RenderComponentLinux::RenderObject - m_genericShader.Use" );
+    g_renderfirsttime = false;
+  }
+  
+  l_modelInstance->Render( m_genericShader );
+    
+  if( g_renderfirsttime )
+  {
+    GLCheckErrors( "RenderComponentLinux::RenderObject - l_modelInstance.Render" );
+    g_renderfirsttime = false;
+  }
+    
 }
 
 void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
@@ -179,28 +200,28 @@ void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
 
 void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
 {
-  //m_fontManager.Draw( p_text, p_size, p_posX, p_posY, p_color );
+  m_fontManager.Draw( p_text, p_size, p_posX, p_posY, p_color );
 }
   
 bool g_renderfirsttime = true;
 void RenderComponentLinux::Render()
 {
-  m_genericShader.Use( );
-  if( g_renderfirsttime )
-  {
-    GLCheckErrors( "RenderComponentLinux::m_genericShader.Use" );
-    g_renderfirsttime = false;
-  }
+  // m_genericShader.Use( );
+  // if( g_renderfirsttime )
+  // {
+    // GLCheckErrors( "RenderComponentLinux::m_genericShader.Use" );
+    // g_renderfirsttime = false;
+  // }
   
   // Render all objects
-  for( int i = 0; i < m_objectList.size(); i++ )
-    m_objectList[i]->Render( m_genericShader );
+  //for( int i = 0; i < m_objectList.size(); i++ )
+  //  m_objectList[i]->Render( m_genericShader );
     
-  if( g_renderfirsttime )
-  {
-    GLCheckErrors( "RenderComponentLinux::m_objectList[].Render" );
-    g_renderfirsttime = false;
-  }
+  //if( g_renderfirsttime )
+  //{
+  //  GLCheckErrors( "RenderComponentLinux::m_objectList[].Render" );
+  //  g_renderfirsttime = false;
+  //}
     
   // Text rendering here
   
@@ -208,9 +229,9 @@ void RenderComponentLinux::Render()
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
   
   // Clear the render object list for next frame
-  for( int i = 0; i < m_objectList.size(); i++ )
-    delete m_objectList[i];
-  m_objectList.clear();
+  //for( int i = 0; i < m_objectList.size(); i++ )
+  //  delete m_objectList[i];
+  //m_objectList.clear();
   
   if( g_renderfirsttime )
   {

@@ -24,21 +24,32 @@ void Shader::Init( const char* p_vertFileName, const char* p_fragFileName, const
 		printf( "Shader error: Shader must have a vertex shader" );
 	
 	CompileShader( m_subhandles[ VertShader ], p_vertFileName, GL_VERTEX_SHADER );
+  GLCheckErrors( "Shader::Init - GL_VERTEX_SHADER" );
 
 	if( p_gsFileName != NULL )
+  {
 		CompileShader( m_subhandles[ GeomShader ], p_gsFileName, GL_GEOMETRY_SHADER );
+    GLCheckErrors( "Shader::Init - GL_GEOMETRY_SHADER" );
+  }
 
 	if( p_tessConFileName != NULL )
 	{
 		glPatchParameteri( GL_PATCH_VERTICES, 3 );
 		CompileShader( m_subhandles[ TConShader ], p_tessConFileName, GL_TESS_CONTROL_SHADER );
+    GLCheckErrors( "Shader::Init - GL_TESS_CONTROL_SHADER" );
 	}
 
 	if( p_tessEvalFileName != NULL )
+  {
 		CompileShader( m_subhandles[ TEvalShader ], p_tessEvalFileName, GL_TESS_EVALUATION_SHADER );
+    GLCheckErrors( "Shader::Init - GL_TESS_EVALUATION_SHADER" );
+  }
 	
 	if( p_fragFileName != NULL )
+  {
 		CompileShader( m_subhandles[ FragShader ], p_fragFileName, GL_FRAGMENT_SHADER );
+    GLCheckErrors( "Shader::Init - GL_FRAGMENT_SHADER" );
+  }
 
 	m_handle = glCreateProgram( );
 
