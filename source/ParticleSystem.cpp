@@ -11,7 +11,13 @@ ParticleSystem::ParticleSystem( ID3D11Device* p_d3dDevice, ID3D11DeviceContext* 
 
 ParticleSystem::~ParticleSystem()
 {
-
+	for (unsigned int i = 0; i < m_emitterList.size(); i++)
+	{
+		delete m_emitterList.at(i);
+		m_emitterList.at(i) = 0;
+	}
+	m_emitterList.clear();
+	m_emitterList.shrink_to_fit();
 }
 
 void ParticleSystem::Update( float p_dt )
