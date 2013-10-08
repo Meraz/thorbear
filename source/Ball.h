@@ -81,4 +81,4 @@ private:
 	void CheckCollisionAgainstWalls();
 };
 
-#endif BALL_H
+#endif
