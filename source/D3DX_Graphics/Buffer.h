@@ -1,9 +1,8 @@
 #ifndef BUFFER__H
 #define BUFFER__H
 
-//#include "stdafx.h"
 #include "d3dUtil.h"
-
+#include "..\MemoryMacro.h"
 
 enum BUFFER_TYPE
 {

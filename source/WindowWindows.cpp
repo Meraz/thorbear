@@ -123,10 +123,23 @@ int WindowWindows::Run()
 	return (int)l_msg.wParam;
 }
 
+/*#include <stdlib.h>*/
 void WindowWindows::Update()
 {
 	WindowBaseClass::Update(m_gameTimer->DeltaTime(), m_mousePositionX, m_mousePositionY, m_lMouseClicked);
 	m_renderComponent->Update(m_gameTimer->DeltaTime());
+
+	/*if(m_gameInterface->CheckIfExit())
+		PostQuitMessage(0);
+
+	wchar_t title[256];
+		swprintf_s(
+		title,
+		_countof(title),
+		L"Mouse: x:%d y:%d", m_mousePositionX, m_mousePositionY
+		);
+	SetWindowText(m_hMainWnd, title);*/
+
 }
 
 void WindowWindows::Render()
@@ -160,7 +173,15 @@ LRESULT WindowWindows::MsgProc(HWND p_hwnd, UINT p_msg, WPARAM p_wParam, LPARAM 
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		return 0;
-	
+
+	case WM_KEYDOWN:
+		switch(p_wParam)
+		{
+		case VK_ESCAPE:
+			PostQuitMessage(0);
+			break;
+		}
+		break;
 	// The WM_MENUCHAR message is sent when a menu is active and the user presses 
 	// a key that does not correspond to any mnemonic or accelerator key. 
 	case WM_MENUCHAR:
@@ -177,9 +198,7 @@ LRESULT WindowWindows::MsgProc(HWND p_hwnd, UINT p_msg, WPARAM p_wParam, LPARAM 
 		//OnMouseMove(p_wParam, GET_X_LPARAM(p_lParam), GET_Y_LPARAM(p_lParam));
 		m_mousePositionX = GET_X_LPARAM(p_lParam); 
 		m_mousePositionY = GET_Y_LPARAM(p_lParam);
-		return 0;
-	
-	
+		return 0;	
 	}
 	return DefWindowProc(p_hwnd, p_msg, p_wParam, p_lParam);
 }

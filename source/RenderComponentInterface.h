@@ -17,14 +17,27 @@ enum TextureType
 	ADDLIFEPOWERUP,
 	ADDBALLPOWERUP,
 	LARGERPADDLEPOWERUP,
-	SMALLERPADDLEPOWERUP
+	SMALLERPADDLEPOWERUP,
+	LEVEL,
+	TTCOUNT // Leave this last, you can loop i < TTCOUNT
+};
+
+enum ButtonTexture
+{
+	BUTTON1,
+	BUTTON2,
+	BUTTON3,
+	BUTTON4
 };
 
 class RenderComponentInterface
 {
 public:
-	/* Add this object to be drawn this update. */
+
 	virtual void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f)) = 0;
+	
+	/* Button texture thingy */
+	//virtual void RenderMenuButton(BoundingBox2D p_boundingBox, ButtonTexture p_buttonTexture) = 0;	// Not in the code for the moment.
 
 	/* Add this particle system to be drawn this update */
 	virtual void CreateParticleEmitter(ParticleEmitterDesc p_particleDesc) = 0;				
@@ -35,6 +48,10 @@ public:
 	/* Only used in the render component */
 	virtual void Update(float p_dt) = 0;
 	
+	virtual BoundingBox ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType) = 0;
+
+	virtual void RenderBackground(TextureType p_textureType) = 0;
+
 };
 
 #endif

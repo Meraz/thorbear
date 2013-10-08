@@ -1,6 +1,7 @@
 #include "Ball.h"
 
 #include <cstdlib>
+#include <cmath>
 
 Ball::Ball(void)
 {
@@ -197,7 +198,7 @@ int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
 	else if(m_incPosX+(m_width/2) > p_objectBBox.PosX+p_objectBBox.Width) //if the middle of the ball is to the right of the object
 		l_insideX = p_objectBBox.PosX + p_objectBBox.Width - m_incPosX;
 	else //the middle of the ball is inside the objects width
-		l_insideX = (p_objectBBox.Width/2) - abs(p_objectBBox.PosX+(p_objectBBox.Width/2) - (m_incPosX+m_width/2));
+		l_insideX = (p_objectBBox.Width/2) - fabs(p_objectBBox.PosX+(p_objectBBox.Width/2) - (m_incPosX+m_width/2));
 
 	//Same as above but with height
 	if(m_incPosY+(m_height/2) < p_objectBBox.PosY)
@@ -205,7 +206,7 @@ int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
 	else if(m_incPosY+(m_height/2) > p_objectBBox.PosY+p_objectBBox.Height)
 		l_insideY = p_objectBBox.PosY + p_objectBBox.Height - m_incPosY;
 	else
-		l_insideY = (p_objectBBox.Height/2) - abs(p_objectBBox.PosY+(p_objectBBox.Height/2) - (m_incPosY+m_height/2));
+		l_insideY = (p_objectBBox.Height/2) - fabs(p_objectBBox.PosY+(p_objectBBox.Height/2) - (m_incPosY+m_height/2));
 
 	//Compare the results
 	if(l_insideX > l_insideY) //if more inside x-wise

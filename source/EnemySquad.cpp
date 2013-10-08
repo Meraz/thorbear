@@ -1,5 +1,6 @@
 #include "EnemySquad.h"
 #include <cmath>
+#include <climits>
 //DEBUGGING ONLY
 /*#include <windows.h>
 #include <sstream>
@@ -7,6 +8,8 @@
 EnemySquad::EnemySquad()
 {
 	m_velocity = 0;
+	m_prevVelocity = 0;
+	m_isPaused = false;
 	m_BoundingBox = BoundingBox(0,0,0,0);
 }
 
@@ -23,7 +26,6 @@ void EnemySquad::Init(BoundingBox p_mapEdges, float p_velocity, vector<Enemy*> p
 	m_enemy = p_enemy;
 	m_currentEnemyDirection = HORIZONTAL;
 	CalculateBoundingBox();
-	m_currentEnemyY = m_BoundingBox.PosY;
 }
 
 void EnemySquad::Update( float p_deltaTime )
@@ -47,43 +49,36 @@ void EnemySquad::Update( float p_deltaTime )
 
 void EnemySquad::MoveEnemies( float p_deltaTime)
 {
+	CalculateBoundingBox();
 	switch(m_currentEnemyDirection)
 	{
 	case HORIZONTAL:
+		
+		if(m_BoundingBox.PosX + (m_velocity * p_deltaTime) <= m_mapEdges.PosX || 
+			m_BoundingBox.PosX + m_BoundingBox.Width + (m_velocity * p_deltaTime) >= m_mapEdges.PosX + m_mapEdges.Width)
+		{
+			m_velocity *= -1;
+
+			m_currentEnemyDirection = VERTICAL;
+
+			m_targetY = m_BoundingBox.PosY - m_enemy.at(0)->GetBoundingBox().Height - 2;
+			
+		}
 		for(unsigned int i = 0; i < m_enemy.size(); i++)
 		{
 			m_enemy.at(i)->Update(m_velocity * p_deltaTime, m_currentEnemyDirection, p_deltaTime);
 		}
-		CalculateBoundingBox();
-		if(m_BoundingBox.PosX <= m_mapEdges.PosX || 
-			m_BoundingBox.PosX + m_BoundingBox.Width >= m_mapEdges.PosX + m_mapEdges.Width)
-		{
-			for(unsigned int i = 0; i < m_enemy.size(); i++)
-			{
-				m_enemy.at(i)->Update(m_velocity * (-p_deltaTime), m_currentEnemyDirection, p_deltaTime);
-			}
-			m_velocity *= -1;
-			m_currentEnemyDirection = VERTICAL;
-			m_currentEnemyY = m_BoundingBox.PosY;
-			m_targetY = m_currentEnemyY - m_enemy.at(0)->GetBoundingBox().Height;
-
-			break;
-		}
-
 		break;
 	case VERTICAL:
-		m_currentEnemyY -= abs(m_velocity * p_deltaTime);
-		if(m_currentEnemyY < m_targetY)
+		if(m_BoundingBox.PosY <= m_targetY)
 		{
-			m_currentEnemyY = m_targetY;
 			m_currentEnemyDirection = HORIZONTAL;
-			break;
+			
 		}
 		for(unsigned int i = 0; i < m_enemy.size(); i++)
 		{
-			m_enemy.at(i)->Update(abs(m_velocity * p_deltaTime), m_currentEnemyDirection, p_deltaTime);
+			m_enemy.at(i)->Update(m_velocity * p_deltaTime, m_currentEnemyDirection, p_deltaTime);
 		}
-		CalculateBoundingBox();
 		break;
 	}
 }
@@ -157,7 +152,7 @@ void EnemySquad::CalculateBoundingBox()
 	int l_width, l_height;
 	l_x = 1000.0f;
 	l_y = 0.0f;
-	l_height = INT_MAX;
+	l_height = 0;
 	l_width = INT_MIN;
 	for(unsigned int i = 0; i < m_enemy.size(); i++)
 	{
@@ -167,14 +162,41 @@ void EnemySquad::CalculateBoundingBox()
 			l_y = m_enemy.at(i)->GetBoundingBox().PosY;
 		if(l_width < m_enemy.at(i)->GetBoundingBox().PosX + m_enemy.at(i)->GetBoundingBox().Width)
 			l_width = (int)m_enemy.at(i)->GetBoundingBox().PosX + m_enemy.at(i)->GetBoundingBox().Width;
-		if(l_height > m_enemy.at(i)->GetBoundingBox().PosY - m_enemy.at(i)->GetBoundingBox().Height)
-			l_height = (int)m_enemy.at(i)->GetBoundingBox().PosY - m_enemy.at(i)->GetBoundingBox().Height;
+		if(l_height < m_enemy.at(i)->GetBoundingBox().PosY + m_enemy.at(i)->GetBoundingBox().Height)
+			l_height = (int)m_enemy.at(i)->GetBoundingBox().PosY + m_enemy.at(i)->GetBoundingBox().Height;
 	}
 
 	m_BoundingBox.PosX = l_x;
 	m_BoundingBox.PosY = l_y;
 	m_BoundingBox.Width = l_width - (int)l_x;
-	m_BoundingBox.Height = l_height + (int)l_y;
+	m_BoundingBox.Height = l_height - (int)l_y;
+}
+
+int EnemySquad::GetDirection()
+{
+	if(m_velocity > 0 && m_currentEnemyDirection == HORIZONTAL)
+		return 1;
+	else 
+		return -1;
+}
+
+void EnemySquad::PauseMovement()
+{
+	if(!m_isPaused)
+	{
+		m_isPaused = true;
+		m_prevVelocity = m_velocity;
+		m_velocity = 0;
+	}
+}
+
+void EnemySquad::StartMovement()
+{
+	if(m_isPaused)
+	{
+		m_velocity = m_prevVelocity;
+		m_isPaused = false;
+	}
 }
 
 vector<int> EnemySquad::CheckLowestEnemiesInSquad()
@@ -196,5 +218,10 @@ vector<int> EnemySquad::CheckLowestEnemiesInSquad()
 	l_validToFireIndex.erase( std::unique(l_validToFireIndex.begin(), l_validToFireIndex.end()), l_validToFireIndex.end());
 
 	return l_validToFireIndex;
+}
+
+bool EnemySquad::IsPaused()
+{
+	return m_isPaused;
 }
 

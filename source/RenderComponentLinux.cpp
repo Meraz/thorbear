@@ -7,8 +7,8 @@
 #include <cstdio>
 #include <cmath>
 
-#define SCREEN_UNITS_X 800
-#define SCREEN_UNITS_Y 600
+#define SCREEN_UNITS_X 1920
+#define SCREEN_UNITS_Y 1080
 
 #include "OGL_Graphics/glm/ext.hpp"
 
@@ -99,12 +99,12 @@ bool RenderComponentLinux::Init()
 	glEnable( GL_MULTISAMPLE_ARB );
 
 	// set colour to clear screen buffer to
-	glClearColor( 0.f, 0.f, 1.f, 1.f );
+	glClearColor( 0.f, 0.f, 0.f, 1.f );
 	glFlush();
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
 	
 	glfwSetWindowTitle( "SpaceOut: OpenGL4 Test" );//l_windowTitle.c_str( ) );
-	glfwSwapInterval( 1 ); // VSync on
+	glfwSwapInterval( 0 ); // 0: VSync off, 1: on
     
   m_genericShader.Init( SHADER_DIRECTORY + "genericVertex.glsl", SHADER_DIRECTORY + "genericFragment.glsl" );
   m_genericShader.Build( );
@@ -112,10 +112,10 @@ bool RenderComponentLinux::Init()
   
   // Create and attach a camera
   static Camera l_cam;
-  l_cam.SetPosition( glm::vec3( SCREEN_UNITS_X*0.5f, SCREEN_UNITS_Y*0.5f, (float)(SCREEN_UNITS_Y*0.5f/tan( 45*0.5*3.1415/180 )) ) );
-  l_cam.SetYawPitch( 0, 0 );
+  l_cam.SetPosition( glm::vec3( 300.f, 90.f, 500.f ) );
+  l_cam.SetYawPitch( 0, 11.31f );
   l_cam.UpdateViewMatrix( );
-  l_cam.SetClip( 5.f, 1000.f );
+  l_cam.SetClip( 10.f, 1000.f );
   l_cam.SetFoV( 45.f );
   //l_cam.UpdateProjectionMatrix( );
   m_genericShader.SetActiveCamera( l_cam );
@@ -158,14 +158,15 @@ void RenderComponentLinux::SetHints()
 	glfwOpenWindowHint( GLFW_OPENGL_VERSION_MAJOR, 4 ); // set version of OpenGL to 4.0
 	glfwOpenWindowHint( GLFW_OPENGL_VERSION_MINOR, 0 );
 	glfwOpenWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // do not allow deprecated
-	//glfwOpenWindowHint( GLFW_FSAA_SAMPLES, 16 ); // Multisampling, yay!
+	glfwOpenWindowHint( GLFW_FSAA_SAMPLES, 16 ); // Multisampling, yay!
 	//glfwOpenWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE ); // force current version of spec
 }
 
-void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType)
+void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color)
 {
   // Create an object based on p_objectType (p_textureType)
   ModelInstance* l_modelInstance = m_modelManager.CreateInstance( p_boundingBox, p_textureType );
+  l_modelInstance->SetTint( p_color );
   // Add the object to the list of objects to render
   m_objectList.push_back( l_modelInstance );
 }
@@ -174,6 +175,10 @@ void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
 {
 }
 
+void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+{
+}
+  
 bool g_renderfirsttime = true;
 void RenderComponentLinux::Render()
 {
@@ -188,6 +193,8 @@ void RenderComponentLinux::Render()
   glfwSwapBuffers();
   
   // Clear the render object list for next frame
+  for( int i = 0; i < m_objectList.size(); i++ )
+    delete m_objectList[i];
   m_objectList.clear();
   
   if( g_renderfirsttime )
