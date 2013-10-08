@@ -58,7 +58,7 @@ inline std::string stringf( const char *p_fmt, ... )
 
 inline void GLCheckErrors( std::string p_where )
 {
-  l_errCount = 0;
+  int l_errCount = 0;
   for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
   {
     //Do something with `currError`.
