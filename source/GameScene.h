@@ -28,7 +28,9 @@ private:
 	float	m_scoreMultiplier;
 	Level*	m_level;
 	int		m_gameMode;
+	RenderComponentInterface* m_renderComponentInterface;
 
+	double					m_deltaTime;
 private:
 	void NewLevel();
 	void CheckEnemyNr();
