@@ -6,7 +6,8 @@
 #include "GameScene.h"
 #include "MainMenuScene.h"
 #include "GameModeMenuScene.h"
-#include "HighScoreScene.h"
+#include "CampaignHighScoreScene.h"
+#include "SurvivalHighscoreScene.h"
 #include "MemoryMacro.h"
 
 class SceneManager : public GameInterface 
@@ -16,13 +17,12 @@ public:
 	~SceneManager();
 
 	void Initialize(RenderComponentInterface* p_renderComponentInterface);
-	bool Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked);
+	void Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_mouseClicked);
 	void Render();
 	bool CheckIfExit();
 
 private:
 	void SwapSceneState(SceneState::State p_sceneState);
-
 
 private:
 	RenderComponentInterface* m_renderComponentInterface;

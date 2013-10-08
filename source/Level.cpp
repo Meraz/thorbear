@@ -15,6 +15,7 @@ Level::Level(void)
 	m_enemyDistance = 2;
 	m_scoreMultiplier = 1.0f;
 
+	m_isBeginningOfGame = true;
 	m_isPaddleInvulnerable = false;
 	m_isPaddleVisible = true;
 	m_blinkTimer = 0.0f;
@@ -139,7 +140,7 @@ void Level::SpawnPowerup(float p_posX, float p_posY)
 		m_powerup.push_back(new LargerPaddlePowerup());
 	else if(l_random < 6) // 3,4,5
 		m_powerup.push_back(new SmallerPaddlePowerUp());
-	if(l_random < 9) // 6,7,8
+	else if(l_random < 9) // 6,7,8
 		m_powerup.push_back(new AddBallPowerup());
 	else
 		m_powerup.push_back(new AddLifePowerup());
@@ -164,7 +165,12 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 				m_ball.at(i)->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height));
 				if(p_isMouseClicked && !m_prevLMouseClickStatus)
 				{
+					if(m_isBeginningOfGame)
+					{
+						m_isBeginningOfGame = false;
+					}
 					ShootBallFromPaddle(i);
+
 				}
 			}
 			else
@@ -187,35 +193,36 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 			CreateEnemies();
 		}
 	}
-
-	for(unsigned int i = 0; i < m_squad.size(); i++)
+	if(!m_isBeginningOfGame)
 	{
-		m_squad.at(i)->Update(p_deltaTime);
-	}
-	for(unsigned int i = 0; i < m_powerup.size(); i++)
-	{
-		m_powerup.at(i)->Update(p_deltaTime);
-	}
-
-	if (m_isPaddleInvulnerable)
-	{
-		m_blinkTimer -= p_deltaTime;
-		if (m_blinkTimer < 0)
+		for(unsigned int i = 0; i < m_squad.size(); i++)
 		{
-			m_blinkTimer += m_blinkTime;
-			if(m_isPaddleVisible)
-				m_isPaddleVisible = false;
-			else
+			m_squad.at(i)->Update(p_deltaTime);
+		}
+		for(unsigned int i = 0; i < m_powerup.size(); i++)
+		{
+			m_powerup.at(i)->Update(p_deltaTime);
+		}
+
+		if (m_isPaddleInvulnerable)
+		{
+			m_blinkTimer -= p_deltaTime;
+			if (m_blinkTimer < 0)
+			{
+				m_blinkTimer += m_blinkTime;
+				if(m_isPaddleVisible)
+					m_isPaddleVisible = false;
+				else
+					m_isPaddleVisible = true;
+			}
+			m_invulTimer -= p_deltaTime;
+			if (m_invulTimer < 0)
+			{
+				m_isPaddleInvulnerable = false;
 				m_isPaddleVisible = true;
-		}
-		m_invulTimer -= p_deltaTime;
-		if (m_invulTimer < 0)
-		{
-			m_isPaddleInvulnerable = false;
-			m_isPaddleVisible = true;
+			}
 		}
 	}
-
 	CheckAllCollisions(p_deltaTime);
 
 	m_soundHandler->Update();
@@ -290,10 +297,10 @@ void Level::CheckAllCollisions(float p_deltaTime)
 						l_desc.acceleration		= Vect3(0.0f, -1.0f, 0.0f);
 						l_desc.nrOfParticles	= 100;
 						l_desc.speedMin			= 50.0f;
-						l_desc.speedMax			= 400.0f;
+						l_desc.speedMax			= 300.0f;
 						l_desc.scale			= Vect3(0.7f, 0.7f, 2.5f);
 						l_desc.startColor		= Vect3(1.0f, 0.0f, 0.0f);
-						l_desc.endColor			= Vect3(0.0f, 1.0f, 0.0f);
+						l_desc.endColor			= Vect3(1.0f, 1.0f, 0.0f);
 						m_renderComp->CreateParticleEmitter(l_desc);
 
 						m_renderComp->CreateSplashText(L"NICE!", 200.0f, 900.0f, 450.0f, 0.4f, 0.0f);
