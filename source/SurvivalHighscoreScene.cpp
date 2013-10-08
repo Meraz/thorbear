@@ -19,7 +19,7 @@ void SurvivalHighscoreScene::Initialize(RenderComponentInterface* p_renderCompon
 	BaseScene::Initialize(p_renderComponentInterface);
 	m_sceneState = SceneState::SURVIVALHIGHSCORE;
 	m_highScore = new Highscore(m_renderComponentInterface);
-	m_highScore->Init(60001, false);
+	m_highScore->Init(m_score, false);
 
 	bool l_newAdditionToHighscore = m_highScore->GetnewAdditionToHighscore();
 	//if(l_newAdditionToHighscore)
