@@ -23,7 +23,6 @@ public:
 protected:
 	virtual void ChangeCurrentState(SceneState::State l_sceneState, int l_menuFlag);
 
-
 protected:
 	RenderComponentInterface* m_renderComponentInterface;
 	SceneState::State m_sceneState;

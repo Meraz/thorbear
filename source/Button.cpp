@@ -41,6 +41,4 @@ void Button::ExecuteCommand()
 void Button::Render()
 {
 	m_renderComponentInterface->RenderObject(m_boundingBox, ENEMY1); 
-	//m_renderComponentInterface->RenderObject(BoundingBox(m_boundingBox.PosX, m_boundingBox.PosY, m_boundingBox.Width, m_boundingBox.Height), ENEMY1); 
-	//m_renderComponentInterface->RenderObject(BoundingBox(m_boundingBox.PosX, m_boundingBox.PosY, m_boundingBox.PosZ, m_boundingBox.Width, m_boundingBox.Height), ENEMY1); // with z
 }

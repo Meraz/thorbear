@@ -23,7 +23,6 @@ public:
 private:
 	void SwapSceneState(SceneState::State p_sceneState);
 
-
 private:
 	RenderComponentInterface* m_renderComponentInterface;
 
