@@ -39,7 +39,10 @@ void Highscore::Render()
 		m_renderComponentInterface->RenderText(m_playerName.substr(1,1), 15.0f, 650.0f, 200.0f, 0xffffffff, 0);
 		m_renderComponentInterface->RenderText(m_playerName.substr(2,1), 15.0f, 900.0f, 200.0f, 0xffffffff, 0);
 	}
+	std::stringstream l_tempstream;
+	l_tempstream << "Your Score: " << m_playerScore;
 
+	m_renderComponentInterface->RenderText(l_tempstream.str(), 50.0f, 400.0f, 900.0f, 0xff00ffff, 0);
 	//Render the highscore
 	m_renderComponentInterface->RenderText("HighScore", 15.0f, 1115.0f, 350.0f, 0xffffffff, 0);
 	for(int i = 0; i < MAX_HIGHSCORE_ENTRIES; i++)
