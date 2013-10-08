@@ -105,14 +105,14 @@ int WindowWindows::Run()
 				Update();
 				Render();
 
-				/*		char title[256];
+				char title[256];
 				sprintf_s(
 				title,
 				sizeof(title),
 				"%f",
 				(1.0f/m_gameTimer->DeltaTime())
 				);
-				SetWindowTextA(m_hMainWnd, title);*/
+				SetWindowTextA(m_hMainWnd, title);
 			}
 			else
 			{
