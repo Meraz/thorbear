@@ -172,7 +172,9 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
   ModelInstance* l_modelInstance = m_modelManager.CreateInstance( p_boundingBox, p_textureType );
   l_modelInstance->SetTint( p_color );
   // Add the object to the list of objects to render
-  m_objectList.push_back( l_modelInstance );
+  m_genericShader.Use( );
+  l_modelInstance->Render( m_genericShader );
+  //m_objectList.push_back( l_modelInstance );
 }
 
 void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
@@ -187,20 +189,21 @@ void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX
 bool g_renderfirsttime = true;
 void RenderComponentLinux::Render()
 {
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
   
-  m_genericShader.Use( );
   
   // Render all objects
-  for( int i = 0; i < m_objectList.size(); i++ )
-    m_objectList[i]->Render( m_genericShader );
+  //for( int i = 0; i < m_objectList.size(); i++ )
+  //  m_objectList[i]->Render( m_genericShader );
+    
+  // Text rendering here
   
   glfwSwapBuffers();
+	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
   
   // Clear the render object list for next frame
-  for( int i = 0; i < m_objectList.size(); i++ )
-    delete m_objectList[i];
-  m_objectList.clear();
+  //for( int i = 0; i < m_objectList.size(); i++ )
+  //  delete m_objectList[i];
+  //m_objectList.clear();
   
   if( g_renderfirsttime )
   {
