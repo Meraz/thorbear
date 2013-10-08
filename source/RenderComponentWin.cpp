@@ -269,12 +269,11 @@ void RenderComponentWin::Load()
 	m_modelManager->CreateModel("LargerPaddlePowerup.obj",	"object\\LargerPaddlePowerup");
 	m_modelManager->CreateModel("SmallerPaddlePowerup.obj",	"object\\SmallerPaddlePowerup");
 	m_modelManager->CreateModel("background.obj", "object\\levelBackground");
+	m_modelManager->CreateModel("mainmenu.obj", "object\\mainmenu_background");
+
 	m_shaderManager->AddShader("effect\\object.fx", 12);	
 	m_shaderManager->AddShader("effect\\background.fx", 12);
 	m_shaderManager->AddShader("effect\\instanced.fx", 12);
-
-		
-
 }
 
 void RenderComponentWin::CreateTemplates()
@@ -290,6 +289,8 @@ void RenderComponentWin::CreateTemplates()
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("SmallerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("mainmenu.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 }
 
 BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBox, TextureType p_textureType)
@@ -319,14 +320,28 @@ BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBo
 	return l_boundingBox;
 }
 
+
 void RenderComponentWin::CreateSplashText( wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
 {
 	m_fontRenderer->CreateSplashText(p_text, p_size, p_posX, p_posY, p_travelTime, p_stillTime);
 }
 
-void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
+// External method found on ze Internet that converts strings to wstrings
+std::wstring s2ws(const std::string& s)
 {
-	m_fontRenderer->RenderText(p_text.c_str(), p_size, p_posX, p_posY, p_color, FLAG);
+	int len;
+	int slength = (int)s.length() + 1;
+	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0); 
+	wchar_t* buf = new wchar_t[len];
+	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
+	std::wstring r(buf);
+	delete[] buf;
+	return r;
+}
+
+void RenderComponentWin::RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
+{
+	m_fontRenderer->RenderText(s2ws(p_text).c_str(), p_size, p_posX, p_posY, p_color, FLAG);
 }
 
 void RenderComponentWin::RenderBackground(TextureType p_textureType)

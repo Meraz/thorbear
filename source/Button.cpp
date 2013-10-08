@@ -17,6 +17,7 @@ Button::Button(
 	m_renderComponentInterface = p_renderComponentInterface;
 	m_buttonTexture = p_buttonTexture;
 	m_constructorId = 0;
+	m_clickable = new bool(true);
 }
 
 Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(int), int p_buttonId, RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture )
@@ -28,6 +29,7 @@ Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highsco
 	m_renderComponentInterface = p_renderComponentInterface;
 	m_buttonTexture = p_buttonTexture;
 	m_constructorId = 1;
+	m_clickable = p_highscore->GetnewAdditionToHighscorePointer();
 }
 
 Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(), RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture )
@@ -38,14 +40,20 @@ Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highsco
 	m_renderComponentInterface = p_renderComponentInterface;
 	m_buttonTexture = p_buttonTexture;
 	m_constructorId = 2;
+	m_clickable = p_highscore->GetnewAdditionToHighscorePointer();
 }
 
 Button::~Button()
 {
+	if(m_constructorId == 0)
+		 SafeDelete(m_clickable);
 }
 
 bool Button::CheckIfInside(int p_X, int p_Y)
 {
+	if(*m_clickable == false)
+		return false;
+
 	BoundingBox l_boundingBox = m_renderComponentInterface->ConvertIntoScreenSpace(m_boundingBox, ENEMY1);
 	
 	if(	p_X > l_boundingBox.PosX && p_X < l_boundingBox.PosX + l_boundingBox.Width &&
@@ -67,5 +75,6 @@ void Button::ExecuteCommand()
 
 void Button::Render()
 {
-	m_renderComponentInterface->RenderObject(m_boundingBox, ENEMY1); 
+	if(*m_clickable == true)
+			m_renderComponentInterface->RenderObject(m_boundingBox, ENEMY1); 
 }

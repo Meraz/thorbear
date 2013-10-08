@@ -195,7 +195,6 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 						m_isBeginningOfGame = false;
 					}
 					ShootBallFromPaddle(i);
-
 				}
 			}
 			else
@@ -253,8 +252,6 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 	m_soundHandler->Update();
 	m_prevLMouseClickStatus = p_isMouseClicked;
 }
-
-
 
 void Level::Render()
 {
