@@ -36,37 +36,26 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 	//Render the text one with FLAG set to 0
 	//-----------------------------------------------------------------------------------------------------------------------------------
 	std::ostringstream  l_ss;
-	
+	std::ostringstream  l_ss2;
+
 	// Lives
-	l_ss << "Extra Lives: " << m_nrOfLives;
+	l_ss << "Extra Lives: " << m_nrOfLives << "\n";
+	l_ss << "Score: " << m_score  << "\n";
+
+	l_ss2 << 1.0f/m_deltaTime;
+	std::string l_fps( l_ss2.str() );
+	l_ss2.clear();
+	l_ss2.str("");
+
+
+	l_ss << "FPS: " << l_fps  << "\n";
+
+	l_ss2 << m_scoreMultiplier;
+	std::string l_scoreMulti = l_ss2.str().substr(0,4);
+
+	l_ss << "Score Multiplier: x" << l_scoreMulti;
+
 	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 0.0f, 0xff0099ff, 0);
-	
-	// Score
-	l_ss.clear();
-	l_ss.seekp(0);
-	l_ss << "Score: " << m_score;
-	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 20.0f, 0xff0099ff, 0);
-
-	// FPS
-	l_ss.clear();
-	l_ss.seekp(0);
-	l_ss << 1.0f/m_deltaTime;
-	std::string l_fps( l_ss.str() );
-	l_ss.clear();
-	l_ss.seekp(0);
-	l_ss << "FPS: " << l_fps;
-	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 60.0f, 0xff0099ff, 0);
-
-	// Multiplier
-	l_ss.clear();
-	l_ss.seekp(0);
-	l_ss << m_scoreMultiplier;
-
-	std::string l_scoreMulti = l_ss.str().substr(0,4);
-	l_ss.clear();
-	l_ss.seekp(0);
-	l_ss << "Score Multiplier: " << l_scoreMulti;
-	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 40.0f, 0xff0099ff, 0);
 
 	// Game over
 	m_renderComponentInterface->RenderText("GAME OVER", 100.0f, 650.0f, 500.0f, 0xff0099ff, 0);
@@ -103,37 +92,26 @@ void GameScene::Render()
 	m_level->Render();
 
 	std::ostringstream  l_ss;
-
+	std::ostringstream  l_ss2;
+	
 	// Lives
-	l_ss << "Extra Lives: " << m_nrOfLives;
+	l_ss << "Extra Lives: " << m_nrOfLives << "\n";
+	l_ss << "Score: " << m_score  << "\n";
+
+	l_ss2 << 1.0f/m_deltaTime;
+	std::string l_fps( l_ss2.str() );
+	l_ss2.clear();
+	l_ss2.str("");
+
+
+	l_ss << "FPS: " << l_fps  << "\n";
+
+	l_ss2 << m_scoreMultiplier;
+	std::string l_scoreMulti = l_ss2.str().substr(0,4);
+
+	l_ss << "Score Multiplier: x" << l_scoreMulti;
+
 	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 0.0f, 0xff0099ff, 1);
-
-	// Score
-	l_ss.clear();
-	l_ss.str("");
-	l_ss << "Score: " << m_score;
-	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 20.0f, 0xff0099ff, 1);
-
-	// FPS
-	l_ss.clear();
-	l_ss.str("");
-
-	l_ss << 1.0f/m_deltaTime;
-	std::string l_fps( l_ss.str() );
-	l_ss.clear();
-	l_ss.seekp(0);
-	l_ss << "FPS: " << l_fps;
-	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 60.0f, 0xff0099ff, 1);
-
-	// Multiplier
-	l_ss.clear();
-	l_ss.str("");
-	l_ss << m_scoreMultiplier;
-	std::string l_scoreMulti = l_ss.str().substr(0,4);
-	l_ss.clear();
-	l_ss.str("");
-	l_ss << "Score Multiplier: x" << l_scoreMulti ;
-	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 40.0f, 0xff0099ff, 1);
 
 	if (m_isGameOver)
 	{

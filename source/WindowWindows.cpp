@@ -122,8 +122,7 @@ void WindowWindows::Update()
 
 	if(m_gameInterface->CheckIfExit())
 		PostQuitMessage(0);
-
-	
+		
 	/*wchar_t title[256];
 		swprintf_s(
 		title,

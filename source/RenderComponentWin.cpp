@@ -54,6 +54,7 @@ int RenderComponentWin::Initialize()
 
 void RenderComponentWin::Update( float p_dt )
 {
+	m_camera->RebuildView();
 	m_particleSystem->Update(p_dt);
 	m_fontRenderer->Update(p_dt);
 }
@@ -62,8 +63,6 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 {
 	Shader* l_shader = m_objVec.at((int)p_textureType).shader;
 	Model*	l_model = m_objVec.at((int)p_textureType).model;
-
-	m_camera->RebuildView();
 
 	D3DXMATRIX l_scaleMat;
 	if(p_boundingBox.Height == -1 || p_boundingBox.Width == -1)
