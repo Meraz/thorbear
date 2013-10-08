@@ -51,11 +51,6 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 	l_ss.str(L""); // reset stringstream to empty
 	l_ss << m_scoreMultiplier;
 	std::wstring l_scoreMulti( l_ss.str().substr(0,4) );
-
-	//Set the FLAG to 1 to increase performance
-	m_renderComponentInterface->RenderText(L"Score Multiplier: x" + l_scoreMulti, 15.0f, 10.0f, 40.0f, 0xff0099ff, 0);
-	m_renderComponentInterface->RenderText(L"FPS: " + l_fps, 15.0f, 10.0f, 60.0f, 0xff0099ff, 0);
-	m_renderComponentInterface->RenderText(L"GAME OVER", 100.0f, 650.0f, 500.0f, 0xff0099ff, 0);
 	//-----------------------------------------------------------------------------------------------------------------------------------
 }
 
@@ -104,6 +99,7 @@ void GameScene::Render()
 	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff, 1);
 	m_renderComponentInterface->RenderText(L"Score Multiplier: x" + l_scoreMulti, 15.0f, 10.0f, 40.0f, 0xff0099ff, 1);
 
+	l_ss.str(L""); // reset stringstream to empty
 	l_ss << 1/m_deltaTime;
 	std::wstring l_fps( l_ss.str() );
 
