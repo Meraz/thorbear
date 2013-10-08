@@ -3,8 +3,9 @@
 #include <string>
 #include <sstream>
 
-GameScene::GameScene()
+GameScene::GameScene(int p_gameMode)
 {
+	m_gameMode = p_gameMode;
 	m_currentLevel = 1;
 	m_maxNrOfLevels = 3;
 	m_score = 0;
@@ -70,7 +71,12 @@ void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePosi
 	else
 	{
 		if(p_lMouseClicked)
-			ChangeCurrentState(SceneState::HIGHSCORE, GameType::NOT_SPECIFIED);
+		{
+			if(m_gameMode == MODE_CAMPAIGN)
+				ChangeCurrentState(SceneState::CAMPAIGNHIGHSCORE, m_score);
+			else if(m_gameMode == MODE_SURVIVAL)
+				ChangeCurrentState(SceneState::SURVIVALHIGHSCORE, m_score);
+		}
 	}
 
 	m_deltaTime = p_deltaTime;
@@ -138,9 +144,4 @@ void GameScene::CheckEnemyNr()
 		m_level = new Level();
 		m_level->Init(m_currentLevel, m_gameMode, m_renderComponentInterface); 
 	}
-}
-
-void GameScene::SetGameMode( int p_gameMode )
-{
-	m_gameMode = p_gameMode;
 }

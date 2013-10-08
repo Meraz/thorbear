@@ -5,6 +5,9 @@
 #include "SceneState.h"
 #include "GameType.h"
 
+#define START_CAMPAIGN 1
+#define START_SURVIVAL 2
+
 class BaseScene
 {
 public:
@@ -14,16 +17,16 @@ public:
 	virtual void Initialize(RenderComponentInterface* p_renderComponentInterface);
 	virtual void Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked) = 0;
 	virtual void Render() = 0;
-	virtual SceneState::State GetSceneState();
+	SceneState::State GetSceneState();
+	int GetMenuFlag();
 	
 protected:
-	virtual void ChangeCurrentState(SceneState::State l_sceneState, GameType::Type l_gameType);
-
+	virtual void ChangeCurrentState(SceneState::State l_sceneState, int l_menuFlag);
 
 protected:
 	RenderComponentInterface* m_renderComponentInterface;
 	SceneState::State m_sceneState;
-	 GameType::Type m_gameType;			// Used to start the game with different parameters.
+	int m_menuFlag;		// Used to start the game with different parameters.
 
 };
 
