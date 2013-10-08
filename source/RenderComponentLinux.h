@@ -41,6 +41,8 @@ private:
   ModelMan m_modelManager;
   FontMan m_fontManager;
   
+  bool m_renderfirsttime;
+  
   std::vector< ModelInstance* > m_objectList;
   
   // Set the error message and return false to be returned further on for the error management

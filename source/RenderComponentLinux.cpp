@@ -71,6 +71,7 @@ inline void GLCheckErrors( std::string p_where )
 
 RenderComponentLinux::RenderComponentLinux()
 {
+  m_renderfirsttime = true;
 }
 
 RenderComponentLinux::~RenderComponentLinux()
@@ -178,19 +179,13 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
   //m_objectList.push_back( l_modelInstance );
   
   m_genericShader.Use( );
-  if( g_renderfirsttime )
-  {
+  if( m_renderfirsttime )
     GLCheckErrors( "RenderComponentLinux::RenderObject - m_genericShader.Use" );
-    g_renderfirsttime = false;
-  }
   
   l_modelInstance->Render( m_genericShader );
     
-  if( g_renderfirsttime )
-  {
+  if( m_renderfirsttime )
     GLCheckErrors( "RenderComponentLinux::RenderObject - l_modelInstance.Render" );
-    g_renderfirsttime = false;
-  }
     
 }
 
@@ -203,25 +198,18 @@ void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX
   m_fontManager.Draw( p_text, p_size, p_posX, p_posY, p_color );
 }
   
-bool g_renderfirsttime = true;
 void RenderComponentLinux::Render()
 {
   // m_genericShader.Use( );
-  // if( g_renderfirsttime )
-  // {
+  // if( m_renderfirsttime )
     // GLCheckErrors( "RenderComponentLinux::m_genericShader.Use" );
-    // g_renderfirsttime = false;
-  // }
   
   // Render all objects
   //for( int i = 0; i < m_objectList.size(); i++ )
   //  m_objectList[i]->Render( m_genericShader );
     
-  //if( g_renderfirsttime )
-  //{
+  //if( m_renderfirsttime )
   //  GLCheckErrors( "RenderComponentLinux::m_objectList[].Render" );
-  //  g_renderfirsttime = false;
-  //}
     
   // Text rendering here
   
@@ -233,10 +221,10 @@ void RenderComponentLinux::Render()
   //  delete m_objectList[i];
   //m_objectList.clear();
   
-  if( g_renderfirsttime )
+  if( m_renderfirsttime )
   {
     GLCheckErrors( "RenderComponentLinux::Render" );
-    g_renderfirsttime = false;
+    m_renderfirsttime = false;
   }
 }
 
