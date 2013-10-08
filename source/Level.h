@@ -61,7 +61,9 @@ private:
 	int		m_enemyDistance;
 	SoundHandler* m_soundHandler;
 
-	hash_map<string, float> m_levelValues;
+	hash_map<string, float> m_levelValues; //storage for variables read from the levelImporter used to set such things as mapEdge height and width etc...
+	bool m_renderErrorLoadingLevel;
+	float m_errorMessageTick;
 
 private:
 	void	CheckAllCollisions(float p_deltaTime);

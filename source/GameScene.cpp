@@ -80,13 +80,13 @@ void GameScene::Render()
 	std::wstring l_scoreMulti( l_ss.str().substr(0,4) );
   
 	//Set the FLAG to 1 to increase performance
-	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff, 1);
-	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff, 1);
+	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff, 0);
+	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff, 0);
 	
 	l_ss << 1/m_deltaTime;
 	std::wstring l_fps( l_ss.str() );
 
-	m_renderComponentInterface->RenderText(L"FPS: " + l_fps, 15.0f, 10.0f, 40.0f, 0xff0099ff, 1);
+	m_renderComponentInterface->RenderText(L"FPS: " + l_fps, 15.0f, 10.0f, 40.0f, 0xff0099ff, 0);
 }
 
 void GameScene::CheckPaddleLife()

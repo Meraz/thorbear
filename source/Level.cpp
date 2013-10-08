@@ -23,6 +23,8 @@ Level::Level(void)
 	m_invulTime = 1.5f;
 
 	m_mapBorderThickness = NULL;
+	m_errorMessageTick = 0.0f;
+	m_renderErrorLoadingLevel = false;
 }
 
 
@@ -47,7 +49,11 @@ void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_rende
 
 		m_map = LevelImporter::LoadLevel(tmpString);
 		if(m_map == 0)
+		{
 			m_gameMode = MODE_SURVIVAL;
+			m_renderErrorLoadingLevel = true;
+			m_renderComp->RenderText(L"No level file found, loaded survival mode....", 15.0f, 5.0f, 70.0f, 0xff0099ff, 0);
+		}
 	}
 
 	m_levelValues = LevelImporter::LoadGameplayValues("Gameplay Variables");
@@ -218,6 +224,11 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 
 	m_soundHandler->Update();
 	m_prevLMouseClickStatus = p_isMouseClicked;
+
+	if(m_errorMessageTick < 5)
+		m_errorMessageTick += p_deltaTime;
+	else
+		m_renderErrorLoadingLevel = false;
 }
 
 
@@ -242,6 +253,9 @@ void Level::Render()
 	{
 		m_powerup.at(i)->Render();
 	}
+
+	if(m_renderErrorLoadingLevel == true)
+		m_renderComp->RenderText(L"No level file found, loaded survival mode....", 15.0f, 5.0f, 70.0f, 0xff0099ff, 0);
 	
 }
 
