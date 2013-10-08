@@ -33,8 +33,27 @@ Level::~Level(void)
 	delete m_map;
 	delete m_soundHandler;
 	m_soundHandler = 0;
+<<<<<<< HEAD
 	vector<EnemySquad*>().swap(m_squad);
 	vector<Ball*>().swap(m_ball);
+=======
+
+	for (unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		delete m_squad.at(i);
+		m_squad.at(i) = 0;
+	}
+	m_squad.clear();
+	m_squad.shrink_to_fit();
+
+	for (unsigned int i = 0; i < m_ball.size(); i++)
+	{
+		delete m_ball.at(i);
+		m_ball.at(i) = 0;
+	}
+	m_ball.clear();
+	m_ball.shrink_to_fit();
+>>>>>>> origin/master
 }
 
 void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_renderComp )
@@ -99,6 +118,7 @@ void Level::CreateEnemies()
 					tempEnemy->Init(j * (float)l_enemyWidth, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * (float)l_enemyHeight), l_enemyWidth, l_enemyHeight);
 					l_enemy.push_back(tempEnemy);
 				}
+				
 			}
 		}
 	}
@@ -293,14 +313,14 @@ void Level::CheckAllCollisions(float p_deltaTime)
 						ParticleEmitterDesc l_desc;
 						l_desc.position			= Vect3(m_ball.at(k)->GetBoundingBox().PosX, m_ball.at(k)->GetBoundingBox().PosY, m_ball.at(k)->GetBoundingBox().PosZ);
 						l_desc.lifeTimeMin		= 0.5f;
-						l_desc.lifeTimeMax		= 1.5f;
+						l_desc.lifeTimeMax		= 0.7f;
 						l_desc.acceleration		= Vect3(0.0f, -1.0f, 0.0f);
 						l_desc.nrOfParticles	= 100;
 						l_desc.speedMin			= 50.0f;
-						l_desc.speedMax			= 300.0f;
-						l_desc.scale			= Vect3(0.7f, 0.7f, 2.5f);
-						l_desc.startColor		= Vect3(1.0f, 0.0f, 0.0f);
-						l_desc.endColor			= Vect3(1.0f, 1.0f, 0.0f);
+						l_desc.speedMax			= 200.0f;
+						l_desc.scale			= Vect3(0.5f, 0.5f, 0.5f);
+						l_desc.startColor		= Vect3(0.0f, 1.0f, 0.0f);
+						l_desc.endColor			= Vect3(0.0f, 0.4f, 0.0f);
 						m_renderComp->CreateParticleEmitter(l_desc);
 
 						m_renderComp->CreateSplashText(L"NICE!", 200.0f, 900.0f, 450.0f, 0.4f, 0.0f);

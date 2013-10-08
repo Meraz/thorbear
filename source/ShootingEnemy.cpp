@@ -43,7 +43,7 @@ void ShootingEnemy::Update(float p_velocity, EnemyDirection p_direction, float p
 
 void ShootingEnemy::Render()
 {
-	m_RenderComp->RenderObject(GetBoundingBox(), ENEMY1, Vect3(1.0f, 0.0f, 0.0f));
+	m_RenderComp->RenderObject(GetBoundingBox(), ENEMY1, Vect3(0.247, 0.611, 0.282));
 }
 
 bool ShootingEnemy::WantsToFire()
