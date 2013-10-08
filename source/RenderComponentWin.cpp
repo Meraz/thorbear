@@ -127,7 +127,7 @@ void RenderComponentWin::PreRender()
 void RenderComponentWin::PostRender()
 {
 	m_particleSystem->Render();
-	HR(m_swapChain->Present(0, 0));
+	HR(m_swapChain->Present(1, 0));
 }
 
 bool RenderComponentWin::InitializeDirect3D()
