@@ -22,6 +22,7 @@ public:
 	
 protected:
 	virtual void ChangeCurrentState(SceneState::State l_sceneState, int l_menuFlag);
+	void RenderParticleEffect(int p_x, int p_z);
 
 protected:
 	RenderComponentInterface* m_renderComponentInterface;
