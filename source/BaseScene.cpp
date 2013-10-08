@@ -3,7 +3,7 @@
 
 BaseScene::BaseScene()
 {
-	m_menuFlag = 0;
+	m_menuFlag = -1;
 }
 
 BaseScene::~BaseScene()

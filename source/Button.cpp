@@ -16,6 +16,28 @@ Button::Button(
 	m_menuFlag = p_menuFlag;
 	m_renderComponentInterface = p_renderComponentInterface;
 	m_buttonTexture = p_buttonTexture;
+	m_constructorId = 0;
+}
+
+Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(int), int p_buttonId, RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture )
+{
+	m_boundingBox = p_boundingBox;
+	m_highscore = p_highscore;
+	m_functionCharChange = p_function;
+	m_buttonId = p_buttonId;
+	m_renderComponentInterface = p_renderComponentInterface;
+	m_buttonTexture = p_buttonTexture;
+	m_constructorId = 1;
+}
+
+Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(), RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture )
+{
+	m_boundingBox = p_boundingBox;
+	m_highscore = p_highscore;
+	m_functionSave = p_function;
+	m_renderComponentInterface = p_renderComponentInterface;
+	m_buttonTexture = p_buttonTexture;
+	m_constructorId = 2;
 }
 
 Button::~Button()
@@ -35,7 +57,12 @@ bool Button::CheckIfInside(int p_X, int p_Y)
 
 void Button::ExecuteCommand()
 {
-	((m_scene)->*(m_function))(m_sceneState, m_menuFlag);
+	if(m_constructorId == 0)
+		((m_scene)->*(m_function))(m_sceneState, m_menuFlag);
+	if(m_constructorId == 1)
+		((m_highscore)->*(m_functionCharChange))(m_buttonId);
+	if(m_constructorId == 2)
+		((m_highscore)->*(m_functionSave))();
 }
 
 void Button::Render()

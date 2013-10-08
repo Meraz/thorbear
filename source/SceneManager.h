@@ -6,7 +6,8 @@
 #include "GameScene.h"
 #include "MainMenuScene.h"
 #include "GameModeMenuScene.h"
-#include "HighScoreScene.h"
+#include "CampaignHighScoreScene.h"
+#include "SurvivalHighscoreScene.h"
 #include "MemoryMacro.h"
 
 class SceneManager : public GameInterface 

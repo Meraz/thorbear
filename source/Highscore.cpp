@@ -1,21 +1,22 @@
 #include "Highscore.h"
 
-HighScore::HighScore()
+Highscore::Highscore()
 {
 	m_newAdditionToHighscore = false;
 	m_playerName = "AAA";
 }
-HighScore::~HighScore()
+Highscore::~Highscore()
 {
 
 }
 
-void HighScore::Init(int p_PlayerScore, bool p_Campaign)
+void Highscore::Init(int p_PlayerScore, bool p_Campaign)
 {
 	if(p_Campaign == true)
 		m_fileName = "campaign.score";
 	else
 		m_fileName = "survival.score";
+
 	LoadFile();
 	m_playerScore = p_PlayerScore;
 	int l_lowestScore = atoi(m_highscoreData[MAX_HIGHSCORE_ENTRIES-1][1].c_str());
@@ -23,12 +24,12 @@ void HighScore::Init(int p_PlayerScore, bool p_Campaign)
 		m_newAdditionToHighscore = true;
 }
 
-void HighScore::Update()
+void Highscore::Update()
 {
 
 }
 
-void HighScore::Render()
+void Highscore::Render()
 {
 	if(m_newAdditionToHighscore)
 	{
@@ -37,30 +38,25 @@ void HighScore::Render()
 	
 	printf("%c " ,m_playerName.at(0));
 	//Render the highscore
-
 }
 
-
-void HighScore::NextChar(int p_buttonId)
+void Highscore::NextChar(int p_buttonId)
 {
 	if(m_playerName.compare(p_buttonId, 1, "Z") == 0)
 		m_playerName[p_buttonId] = 'A';
 	else
-	m_playerName[p_buttonId] += 1;
-	
+	m_playerName[p_buttonId] += 1;	
 }
 
-void HighScore::PrevChar(int p_buttonId)
+void Highscore::PrevChar(int p_buttonId)
 {
 	if(m_playerName.compare(p_buttonId, 1, "A") == 0)
 		m_playerName[p_buttonId] = 'Z';
 	else
-		m_playerName[p_buttonId] -= 1;
-
-	
+		m_playerName[p_buttonId] -= 1;	
 }
 
-void HighScore::SaveFile()
+void Highscore::SaveFile()
 {
 	if(m_newAdditionToHighscore)
 	{
@@ -70,7 +66,7 @@ void HighScore::SaveFile()
 
 }
 
-void HighScore::LoadFile()
+void Highscore::LoadFile()
 {
 	std::string l_score, l_name;
 	std::ifstream l_myfile;
@@ -99,8 +95,7 @@ void HighScore::LoadFile()
 	}
 }
 
-
-void HighScore::CreateBaseHighscore(int p_modifier)
+void Highscore::CreateBaseHighscore(int p_modifier)
 {
 	std::stringstream l_tempstream;
 	//This is only called if the Highscorefile is corrupted or doesn't exist.
@@ -146,9 +141,7 @@ void HighScore::CreateBaseHighscore(int p_modifier)
 	WriteFile();
 }
 
-
-
-void HighScore::WriteFile()
+void Highscore::WriteFile()
 {
 	std::ofstream l_myFile;
 	l_myFile.open(m_fileName);
@@ -157,12 +150,11 @@ void HighScore::WriteFile()
 	l_myFile.close();
 }
 
-void HighScore::InsertScoreToHighscore()
+void Highscore::InsertScoreToHighscore()
 {
 
 	for(int i = 0; i < MAX_HIGHSCORE_ENTRIES ; i++)
-	{
-		
+	{		
 		if( atoi(m_highscoreData[i][1].c_str()) < m_playerScore)
 		{
 			
@@ -186,4 +178,9 @@ void HighScore::InsertScoreToHighscore()
 			break;
 		}
 	}
+}
+
+bool Highscore::GetnewAdditionToHighscore()
+{
+	return m_newAdditionToHighscore;
 }

@@ -5,17 +5,20 @@
 #include <string>
 #include <sstream>
 #define MAX_HIGHSCORE_ENTRIES 10
-class HighScore
+
+class Highscore
 {
 public:
-	HighScore();
-	~HighScore();
+	Highscore();
+	~Highscore();
 	void Init(int p_PlayerScore, bool p_Campaign); //p_Campaign should be true if the game mode was campaign
 	void Update();
 	void Render();
 	void NextChar(int p_buttonId);
 	void PrevChar(int p_buttonId);
 	void SaveFile();
+	bool GetnewAdditionToHighscore();
+
 private:
 	void LoadFile();
 	void CreateBaseHighscore(int p_modifier);

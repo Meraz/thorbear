@@ -15,9 +15,10 @@ void MainMenuScene::Initialize(RenderComponentInterface* p_renderComponentInterf
 	BaseScene::Initialize(p_renderComponentInterface);
 	m_sceneState = SceneState::MAIN_MENU;
 	
-	m_button.push_back(new Button(BoundingBox(250.0f, 250.0f, 50.0f, 50.0f, 50.0f), this, &MainMenuScene::ChangeCurrentState, SceneState::GAME_MODE_MENU,	0, p_renderComponentInterface, BUTTON3));
-	m_button.push_back(new Button(BoundingBox(250.0f, 150.0f, 50.0f, 50.0f, 50.0f), this, &MainMenuScene::ChangeCurrentState, SceneState::HIGHSCORE,		0, p_renderComponentInterface, BUTTON3));
-	m_button.push_back(new Button(BoundingBox(250.0f, 50.0f, 50.0f, 50.0f, 50.0f),	this, &MainMenuScene::ChangeCurrentState, SceneState::EXIT,				0, p_renderComponentInterface, BUTTON3));
+	m_button.push_back(new Button(BoundingBox(250.0f, 350.0f, 50.0f, 50.0f, 50.0f), this, &MainMenuScene::ChangeCurrentState, SceneState::GAME_MODE_MENU,	  0, p_renderComponentInterface, BUTTON3));
+	m_button.push_back(new Button(BoundingBox(250.0f, 250.0f, 50.0f, 50.0f, 50.0f), this, &MainMenuScene::ChangeCurrentState, SceneState::SURVIVALHIGHSCORE, -1, p_renderComponentInterface, BUTTON3));
+	m_button.push_back(new Button(BoundingBox(250.0f, 150.0f, 50.0f, 50.0f, 50.0f), this, &MainMenuScene::ChangeCurrentState, SceneState::CAMPAIGNHIGHSCORE, -1, p_renderComponentInterface, BUTTON3));
+	m_button.push_back(new Button(BoundingBox(250.0f, 50.0f, 50.0f, 50.0f, 50.0f),	this, &MainMenuScene::ChangeCurrentState, SceneState::EXIT,				  0, p_renderComponentInterface, BUTTON3));
 }
 
 void MainMenuScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked)
