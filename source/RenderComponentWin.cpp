@@ -337,11 +337,6 @@ void RenderComponentWin::RenderText(string p_text, float p_size, float p_posX, f
 	m_fontRenderer->RenderText(a::s2ws(p_text).c_str(), p_size, p_posX, p_posY, p_color, FLAG);
 }
 
-void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
-{
-	m_fontRenderer->RenderText(p_text.c_str(), p_size, p_posX, p_posY, p_color, FLAG);
-}
-
 void RenderComponentWin::RenderBackground(TextureType p_textureType)
 {
 	Shader* l_shader = m_objVec.at((int)p_textureType).shader;

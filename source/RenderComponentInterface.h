@@ -44,7 +44,6 @@ public:
 
 	/* Add this text to be drawn this update */
 	virtual void RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, unsigned int FLAG) = 0;
-	//virtual void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, unsigned int FLAG) = 0;
 
 
 	/* Only used in the render component */

@@ -6,9 +6,10 @@ Highscore::Highscore(RenderComponentInterface* p_renderComponentInterface)
 	m_newAdditionToHighscore = false;
 	m_playerName = "AAA";
 }
+
 Highscore::~Highscore()
 {
-
+	
 }
 
 void Highscore::Init(int p_PlayerScore, bool p_Campaign)
@@ -23,7 +24,6 @@ void Highscore::Init(int p_PlayerScore, bool p_Campaign)
 	int l_lowestScore = atoi(m_highscoreData[MAX_HIGHSCORE_ENTRIES-1][1].c_str());
 	if(l_lowestScore < m_playerScore)
 		m_newAdditionToHighscore = true;
-
 }
 
 void Highscore::Update()
@@ -33,17 +33,20 @@ void Highscore::Update()
 
 void Highscore::Render()
 {
-	//if(m_newAdditionToHighscore)
-	//{
-		m_renderComponentInterface->RenderText(m_playerName.substr(0,1), 15.0f, 300.0f, 350.0f, 0xffffffff, 0);
-		m_renderComponentInterface->RenderText(m_playerName.substr(1,1), 15.0f, 320.0f, 350.0f, 0xffffffff, 0);
-		m_renderComponentInterface->RenderText(m_playerName.substr(2,1), 15.0f, 340.0f, 350.0f, 0xffffffff, 0);
-
-		//m_renderComponentInterface->RenderText(L"hej", 15.0f, 350.0f, 350.0f, 0xffffffff, 0);
-		//m_renderComponentInterface->RenderText(L"hej", 15.0f, 350.0f, 350.0f, 0xffffffff, 0);
-	//}
+	if(m_newAdditionToHighscore)
+	{
+		m_renderComponentInterface->RenderText(m_playerName.substr(0,1), 15.0f, 400.0f, 200.0f, 0xffffffff, 0);
+		m_renderComponentInterface->RenderText(m_playerName.substr(1,1), 15.0f, 650.0f, 200.0f, 0xffffffff, 0);
+		m_renderComponentInterface->RenderText(m_playerName.substr(2,1), 15.0f, 900.0f, 200.0f, 0xffffffff, 0);
+	}
 
 	//Render the highscore
+	m_renderComponentInterface->RenderText("HighScore", 15.0f, 1115.0f, 350.0f, 0xffffffff, 0);
+	for(int i = 0; i < MAX_HIGHSCORE_ENTRIES; i++)
+	{
+		m_renderComponentInterface->RenderText(m_highscoreData[i][0], 15.0f, 1100.0f, 370.0f + i * 50.0f, 0xffffffff, 0);
+		m_renderComponentInterface->RenderText(m_highscoreData[i][1], 15.0f, 1160.0f, 370.0f + i * 50.0f, 0xffffffff, 0);
+	}
 }
 
 void Highscore::NextChar(int p_buttonId)
@@ -68,8 +71,8 @@ void Highscore::SaveFile()
 	{
 		InsertScoreToHighscore();
 		WriteFile();
+		m_newAdditionToHighscore = false;
 	}
-
 }
 
 void Highscore::LoadFile()
@@ -189,4 +192,9 @@ void Highscore::InsertScoreToHighscore()
 bool Highscore::GetnewAdditionToHighscore()
 {
 	return m_newAdditionToHighscore;
+}
+
+bool* Highscore::GetnewAdditionToHighscorePointer()
+{
+	return &m_newAdditionToHighscore;
 }

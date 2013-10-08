@@ -19,7 +19,7 @@ void SurvivalHighscoreScene::Initialize(RenderComponentInterface* p_renderCompon
 	BaseScene::Initialize(p_renderComponentInterface);
 	m_sceneState = SceneState::SURVIVALHIGHSCORE;
 	m_highScore = new Highscore(m_renderComponentInterface);
-	m_highScore->Init(m_score, false);
+	m_highScore->Init(60001, false);
 
 	bool l_newAdditionToHighscore = m_highScore->GetnewAdditionToHighscore();
 	//if(l_newAdditionToHighscore)
@@ -35,7 +35,7 @@ void SurvivalHighscoreScene::Initialize(RenderComponentInterface* p_renderCompon
 		
 		m_button.push_back(new Button(BoundingBox(350.0f, 300.0f, 50.0f, 50.0f, 5.0f),	m_highScore, &Highscore::SaveFile, p_renderComponentInterface, BUTTON3));
 	}
-	m_button.push_back(new Button(BoundingBox(250.0f, 50.0f, 50.0f, 50.0f, 1.0f),	this, &SurvivalHighscoreScene::ChangeCurrentState, SceneState::MAIN_MENU, 0, p_renderComponentInterface, BUTTON3));
+	m_button.push_back(new Button(BoundingBox(250.0f, 50.0f, 50.0f, 50.0f, 1.0f),this, &SurvivalHighscoreScene::ChangeCurrentState, SceneState::MAIN_MENU, 0, p_renderComponentInterface, BUTTON3));
 }
 
 void SurvivalHighscoreScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked)

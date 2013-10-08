@@ -20,6 +20,7 @@ public:
 	void PrevChar(int p_buttonId);
 	void SaveFile();
 	bool GetnewAdditionToHighscore();
+	bool* GetnewAdditionToHighscorePointer();
 
 private:
 	void LoadFile();

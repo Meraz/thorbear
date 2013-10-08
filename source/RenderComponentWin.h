@@ -42,7 +42,6 @@ public:
 	void CreateParticleEmitter(ParticleEmitterDesc p_particleDesc);
 	void RenderParticleSystem(ParticleSystem p_particleSystem);
 	void RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG);
-	void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG);
 
 	void RenderBackground(TextureType p_textureType);
 

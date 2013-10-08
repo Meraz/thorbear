@@ -25,6 +25,7 @@ void MainMenuScene::Update(double p_deltaTime, int p_mousePositionX, int p_mouse
 {
 	if(p_lMouseClicked == true && m_previousMouseState == false)
 		CheckButton(p_mousePositionX, p_mousePositionY);
+		m_previousMouseState = p_lMouseClicked;
 }
 
 void MainMenuScene::Render()
