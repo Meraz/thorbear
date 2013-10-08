@@ -23,7 +23,7 @@ private:
   FT_Library m_ft;
   FT_Face m_arial;
   GLuint m_arial_texture;
-  GLuint m_vbo;
+  GLuint m_vao, m_vbo;
   
   Shader m_fontShader;
   int m_windowWidth, m_windowHeight;

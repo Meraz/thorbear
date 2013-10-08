@@ -2,6 +2,8 @@
 
 #include <GL/glfw.h>
 
+extern inline void GLCheckErrors( std::string p_where );
+
 FontMan::FontMan()
 {
 }
@@ -21,10 +23,13 @@ void FontMan::Init( )
     fprintf(stderr, "Could not open font\n");
     return;
   }
+  GLCheckErrors( "FontMan::Init - FT_Init" );
   
   m_fontShader.Init( SHADER_DIRECTORY + "fontVertex.glsl", SHADER_DIRECTORY + "fontFragment.glsl" );
   m_fontShader.Build( );
   m_fontShader.Use( );
+  
+  GLCheckErrors( "FontMan::Init - Shaders" );
   
   m_currentSize = 48;
   FT_Set_Pixel_Sizes(m_arial, 0, m_currentSize);
@@ -40,12 +45,21 @@ void FontMan::Init( )
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   
+  GLCheckErrors( "FontMan::Init - TexGen" );
+  
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
   
+  GLCheckErrors( "FontMan::Init - PixelStore" );
+  
+  glGenVertexArrays(1, &m_vao);
+  glBindVertexArray( m_vao );
+  
   glGenBuffers(1, &m_vbo);
-  glEnableVertexAttribArray( 0 );
   glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+  glEnableVertexAttribArray( 0 );
   glVertexAttribPointer( 0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+  
+  GLCheckErrors( "FontMan::Init - Buffer setup" );
     
   glfwGetWindowSize( &m_windowWidth, &m_windowHeight );
 }
@@ -60,6 +74,8 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
     m_currentSize = (int)p_size;
     FT_Set_Pixel_Sizes(m_arial, 0, m_currentSize);
   }
+  glBindVertexArray( m_vao );
+  
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   
