@@ -1,7 +1,8 @@
 #include "Highscore.h"
 
-Highscore::Highscore()
+Highscore::Highscore(RenderComponentInterface* p_renderComponentInterface)
 {
+	m_renderComponentInterface = p_renderComponentInterface;
 	m_newAdditionToHighscore = false;
 	m_playerName = "AAA";
 }
@@ -22,6 +23,7 @@ void Highscore::Init(int p_PlayerScore, bool p_Campaign)
 	int l_lowestScore = atoi(m_highscoreData[MAX_HIGHSCORE_ENTRIES-1][1].c_str());
 	if(l_lowestScore < m_playerScore)
 		m_newAdditionToHighscore = true;
+
 }
 
 void Highscore::Update()
@@ -31,12 +33,16 @@ void Highscore::Update()
 
 void Highscore::Render()
 {
-	if(m_newAdditionToHighscore)
-	{
-		//Render the buttons and stuff like that here
-	}
-	
-	printf("%c " ,m_playerName.at(0));
+	//if(m_newAdditionToHighscore)
+	//{
+		m_renderComponentInterface->RenderText(m_playerName.substr(0,1), 15.0f, 300.0f, 350.0f, 0xffffffff, 0);
+		m_renderComponentInterface->RenderText(m_playerName.substr(1,1), 15.0f, 320.0f, 350.0f, 0xffffffff, 0);
+		m_renderComponentInterface->RenderText(m_playerName.substr(2,1), 15.0f, 340.0f, 350.0f, 0xffffffff, 0);
+
+		//m_renderComponentInterface->RenderText(L"hej", 15.0f, 350.0f, 350.0f, 0xffffffff, 0);
+		//m_renderComponentInterface->RenderText(L"hej", 15.0f, 350.0f, 350.0f, 0xffffffff, 0);
+	//}
+
 	//Render the highscore
 }
 

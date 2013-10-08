@@ -4,7 +4,7 @@
 CampaignHighscoreScene::CampaignHighscoreScene(int p_score)
 {
 	m_button = std::vector<Button*>(); 
-	m_highScore = new Highscore();
+	
 	m_score = p_score;
 }
 
@@ -16,6 +16,7 @@ CampaignHighscoreScene::~CampaignHighscoreScene(void)
 
 void CampaignHighscoreScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 {
+	m_highScore = new Highscore(p_renderComponentInterface);
 	BaseScene::Initialize(p_renderComponentInterface);
 	m_sceneState = SceneState::CAMPAIGNHIGHSCORE;
 

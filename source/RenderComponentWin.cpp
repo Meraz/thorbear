@@ -181,7 +181,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = false;
+	l_sd.Windowed     = true;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -317,6 +317,25 @@ BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBo
 	return l_boundingBox;
 }
 
+namespace a
+{
+std::wstring s2ws(const std::string& s)
+{
+	int len;
+	int slength = (int)s.length() + 1;
+	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0); 
+	wchar_t* buf = new wchar_t[len];
+	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
+	std::wstring r(buf);
+	delete[] buf;
+	return r;
+}
+}
+
+void RenderComponentWin::RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
+{
+	m_fontRenderer->RenderText(a::s2ws(p_text).c_str(), p_size, p_posX, p_posY, p_color, FLAG);
+}
 
 void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
 {

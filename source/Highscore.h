@@ -6,10 +6,12 @@
 #include <sstream>
 #define MAX_HIGHSCORE_ENTRIES 10
 
+#include "RenderComponentInterface.h"
+
 class Highscore
 {
 public:
-	Highscore();
+	Highscore(RenderComponentInterface* p_renderComponentInterface);
 	~Highscore();
 	void Init(int p_PlayerScore, bool p_Campaign); //p_Campaign should be true if the game mode was campaign
 	void Update();
@@ -32,6 +34,7 @@ private:
 	std::string m_fileName;
 	int			m_playerScore;
 	bool		m_newAdditionToHighscore;
+	RenderComponentInterface* m_renderComponentInterface;
 
 };
 #endif // !HighScore_H

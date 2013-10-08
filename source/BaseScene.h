@@ -27,6 +27,7 @@ protected:
 	RenderComponentInterface* m_renderComponentInterface;
 	SceneState::State m_sceneState;
 	int m_menuFlag;		// Used to start the game with different parameters.
+	bool m_previousMouseState;
 
 };
 

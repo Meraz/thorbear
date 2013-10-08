@@ -23,7 +23,7 @@ void MainMenuScene::Initialize(RenderComponentInterface* p_renderComponentInterf
 
 void MainMenuScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked)
 {
-	if(p_lMouseClicked)
+	if(p_lMouseClicked == true && m_previousMouseState == false)
 		CheckButton(p_mousePositionX, p_mousePositionY);
 }
 
