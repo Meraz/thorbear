@@ -33,10 +33,6 @@ Level::~Level(void)
 	delete m_map;
 	delete m_soundHandler;
 	m_soundHandler = 0;
-<<<<<<< HEAD
-	vector<EnemySquad*>().swap(m_squad);
-	vector<Ball*>().swap(m_ball);
-=======
 
 	for (unsigned int i = 0; i < m_squad.size(); i++)
 	{
@@ -53,7 +49,16 @@ Level::~Level(void)
 	}
 	m_ball.clear();
 	m_ball.shrink_to_fit();
->>>>>>> origin/master
+
+	for (unsigned int i = 0; i < m_powerup.size(); i++)
+	{
+		delete m_powerup.at(i);
+		m_powerup.at(i) = 0;
+	}
+	m_powerup.clear();
+	m_powerup.shrink_to_fit();
+
+
 }
 
 void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_renderComp )
