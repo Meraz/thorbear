@@ -189,6 +189,7 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
   if( m_renderfirsttime )
     GLCheckErrors( "RenderComponentLinux::RenderObject - l_modelInstance.Render" );
     
+  delete l_modelInstance;
 }
 
 void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
