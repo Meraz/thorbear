@@ -3,7 +3,7 @@
 #include <GL/glfw.h>
 #include <cstdlib>
 
-extern inline void GLCheckErrors( std::string p_where );
+extern void GLCheckErrors( std::string p_where );
 
 FontMan::FontMan()
 {

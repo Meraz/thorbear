@@ -8,8 +8,8 @@
 #include <vector>
 #include "glm/ext.hpp"
 
-extern inline std::string stringf( const char *p_fmt, ... );
-extern inline void GLCheckErrors( std::string p_where );
+extern std::string stringf( const char *p_fmt, ... );
+extern void GLCheckErrors( std::string p_where );
 
 void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const int& p_type );
 
@@ -144,10 +144,10 @@ void Shader::CreateProgram( )
 			char* l_errorLog = new char[ l_length ];
 			int l_written = 0;
 			glGetProgramInfoLog( m_handle, l_length, &l_written, l_errorLog );
-			printf( (l_error + stringf( "Shader error log:\n%s\n", l_errorLog )).c_str() );
+			printf( "%s", (l_error + stringf( "Shader error log:\n%s\n", l_errorLog )).c_str() );
 			delete[ ] l_errorLog;
 		}
-		printf( l_error.c_str() );
+		printf( "%s", l_error.c_str() );
 	}
   GLCheckErrors( "Shader::CreateProgram" );
 }
@@ -205,10 +205,10 @@ void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const 
 			char* l_errorLog = new char[ l_length ];
 			int l_written = 0;
 			glGetShaderInfoLog( p_shaderHandle, l_length, &l_written, l_errorLog );
-			printf( (l_error + stringf( "Shader error log;\n%s\n", l_errorLog )).c_str() );
+			printf( "%s", (l_error + stringf( "Shader error log;\n%s\n", l_errorLog )).c_str() );
 			delete[ ] l_errorLog;
 		}
-		printf( l_error.c_str() );
+		printf( "%s", l_error.c_str() );
 	}
   GLCheckErrors( "Shader::CompileShader" );
 }

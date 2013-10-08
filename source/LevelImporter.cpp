@@ -69,9 +69,9 @@ int** LevelImporter::LoadLevel( string p_levelName )
 	return l_map;
 }
 
-hash_map<string, float> LevelImporter::LoadGameplayValues( string p_fileName )
+unordered_map<string, float> LevelImporter::LoadGameplayValues( string p_fileName )
 {
-	hash_map<string, float> l_values;
+	unordered_map<string, float> l_values;
 
 	//Set standard values if no file can be read
 	l_values.insert(pair<string, float>("LEVELHEIGHT", 400));

@@ -23,11 +23,20 @@ public:
   // Sets the hints for window, such as required version of the OpenGL
   void SetHints();
 
-	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f));
-	void RenderParticleSystem(ParticleSystem p_particleSystem);
-	void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color);
-	void Render();
-  
+  // Instant render functions
+	void RenderObject( BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f) );
+	void RenderText( std::wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, unsigned int FLAG );
+	void RenderBackground(TextureType p_textureType);
+  // Managed render functions
+	void CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime );
+	void CreateParticleEmitter( ParticleEmitterDesc p_particleDesc );
+	// Update managed render objects, swap buffer
+	void Update( float p_deltatime );
+	
+	// Convert coordinates to screen space
+	BoundingBox ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType);
+
+  // Update viewport on window resize
   void UpdateViewportSize( int p_width, int p_height );
   
   // Return the error message

@@ -23,7 +23,7 @@ Level::Level(void)
 	m_invulTimer = 0.0f;
 	m_invulTime = 1.5f;
 
-	m_mapBorderThickness = NULL;
+	m_mapBorderThickness = 0;
 }
 
 

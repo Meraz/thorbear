@@ -192,43 +192,42 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
   delete l_modelInstance;
 }
 
-void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
-{
-}
-
-void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, unsigned int FLAG)
 {
   m_fontManager.Draw( p_text, p_size, p_posX, p_posY, p_color );
 }
-  
-void RenderComponentLinux::Render()
+
+void RenderComponentLinux::RenderBackground(TextureType p_textureType)
 {
-  // m_genericShader.Use( );
-  // if( m_renderfirsttime )
-    // GLCheckErrors( "RenderComponentLinux::m_genericShader.Use" );
   
-  // Render all objects
-  //for( int i = 0; i < m_objectList.size(); i++ )
-  //  m_objectList[i]->Render( m_genericShader );
-    
-  //if( m_renderfirsttime )
-  //  GLCheckErrors( "RenderComponentLinux::m_objectList[].Render" );
-    
-  // Text rendering here
+}
+
+void RenderComponentLinux::CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
+{
   
+}
+
+void RenderComponentLinux::CreateParticleEmitter( ParticleEmitterDesc p_particleDesc )
+{
+  
+}
+  
+void RenderComponentLinux::Update( float p_deltatime )
+{
+  // Process particles
   glfwSwapBuffers();
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
-  
-  // Clear the render object list for next frame
-  //for( int i = 0; i < m_objectList.size(); i++ )
-  //  delete m_objectList[i];
-  //m_objectList.clear();
-  
+  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
   if( m_renderfirsttime )
   {
     GLCheckErrors( "RenderComponentLinux::Render" );
     m_renderfirsttime = false;
   }
+}
+
+BoundingBox RenderComponentLinux::ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType)
+{
+  
 }
 
 void RenderComponentLinux::UpdateViewportSize( int p_width, int p_height )

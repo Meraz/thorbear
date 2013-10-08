@@ -1,4 +1,4 @@
-#include "CampaignHighscoreScene.h"
+#include "CampaignHighScoreScene.h"
 
 
 CampaignHighscoreScene::CampaignHighscoreScene(int p_score)

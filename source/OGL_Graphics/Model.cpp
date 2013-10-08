@@ -9,7 +9,7 @@
 
 // Parses the object data from an .obj file and stores it in the model
 bool LoadOBJ( std::string p_dir, std::string p_fileName, Model &p_model );
-extern inline std::string stringf( const char *p_fmt, ... );
+extern std::string stringf( const char *p_fmt, ... );
 
 Model::Model( )
   : m_mtl( 0 )

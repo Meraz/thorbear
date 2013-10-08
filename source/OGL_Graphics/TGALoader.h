@@ -2,8 +2,9 @@
 #define _TGALOADER_H_
 
 // Some macros to shorten things up.
+//#define sint short int
+#include "glm/ext.hpp"
 #define uchar unsigned char
-#define sint short int
 
 /**
  * This structure holds info about the TGA image before we load it into OpenGL.
