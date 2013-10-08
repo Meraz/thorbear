@@ -29,6 +29,8 @@ private:
 	Level*	m_level;
 	int		m_gameMode;
 
+	bool	m_isGameOver;
+
 private:
 	void NewLevel();
 	void CheckEnemyNr();

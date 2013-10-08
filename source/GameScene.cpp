@@ -13,6 +13,7 @@ GameScene::GameScene()
 	m_enemyWorth = 100;
 	m_scoreMultiplier = 1.0f;
 	m_gameMode = MODE_SURVIVAL;
+	m_isGameOver = false;
 }
 
 GameScene::~GameScene()
@@ -33,10 +34,18 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 
 void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked /* add keyboard parameters here*/)
 {
-	m_level->Update(p_mousePositionX, p_lMouseClicked, (float)p_deltaTime); 
-	m_scoreMultiplier = m_level->GetMultiplier();
-	CheckPaddleLife();
-	CheckEnemyNr();
+	if(!m_isGameOver)
+	{
+		m_level->Update(p_mousePositionX, p_lMouseClicked, (float)p_deltaTime); 
+		m_scoreMultiplier = m_level->GetMultiplier();
+		CheckPaddleLife();
+		CheckEnemyNr();
+	}
+	else
+	{
+		if(p_lMouseClicked)
+			ChangeCurrentState(SceneState::HIGHSCORE, GameType::NOT_SPECIFIED);
+	}
 }
 
 void GameScene::Render()
@@ -56,9 +65,13 @@ void GameScene::Render()
 	l_ss << m_scoreMultiplier;
 	std::wstring l_scoreMulti( l_ss.str().substr(0,4) );
   
-	m_renderComponentInterface->RenderText(L"Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff);
+	m_renderComponentInterface->RenderText(L"Extra Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff);
 	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff);
 	m_renderComponentInterface->RenderText(L"Score Multiplier: x" + l_scoreMulti, 15.0f, 10.0f, 40.0f, 0xff0099ff);
+	if (m_isGameOver)
+	{
+		m_renderComponentInterface->RenderText(L"GAME OVER", 100.0f, 650.0f, 500.0f, 0xff0099ff); //TODO Place in the middle of the screen
+	}
 }
 
 void GameScene::CheckPaddleLife()
@@ -66,7 +79,7 @@ void GameScene::CheckPaddleLife()
 	m_nrOfLives += m_level->GetLifeChanged();
 	if(m_nrOfLives < 0)
 	{
-		//TODO GAME OVER STUFF GOES HERE
+		m_isGameOver = true;
 	}
 }
 

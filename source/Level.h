@@ -47,7 +47,7 @@ private:
 	int		m_changesInLife;
 	int		m_gameMode;
 	bool	m_prevLMouseClickStatus;
-
+	bool	m_isBeginningOfGame;
 	bool	m_isPaddleInvulnerable;
 	float	m_invulTimer;
 	float	m_invulTime;

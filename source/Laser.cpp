@@ -26,7 +26,7 @@ void Laser::Update(float p_deltaTime)
 
 void Laser::Render()
 {
-	m_renderComp->RenderObject( m_BoundingBox, BALL); //TODO change to LASER once this exists
+	m_renderComp->RenderObject( m_BoundingBox, BALL, Vect3(1.0f, 0.0f, 0.0f)); //TODO change to LASER once this exists
 }
 
 BoundingBox Laser::GetBoundingBox()

@@ -57,7 +57,7 @@ void Ball::Update(float p_deltaTime)
 
 void Ball::Render()
 {
-	m_renderComp->RenderObject(GetBoundingBox(), BALL);
+	m_renderComp->RenderObject(GetBoundingBox(), BALL, Vect3(0.0f, 1.0f, 0.0f));
 }
 
 bool Ball::IsBallDead()
