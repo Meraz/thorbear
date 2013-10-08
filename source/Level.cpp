@@ -33,8 +33,22 @@ Level::~Level(void)
 	delete m_map;
 	delete m_soundHandler;
 	m_soundHandler = 0;
-	vector<EnemySquad*>().swap(m_squad);
-	vector<Ball*>().swap(m_ball);
+
+	for (unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		delete m_squad.at(i);
+		m_squad.at(i) = 0;
+	}
+	m_squad.clear();
+	m_squad.shrink_to_fit();
+
+	for (unsigned int i = 0; i < m_ball.size(); i++)
+	{
+		delete m_ball.at(i);
+		m_ball.at(i) = 0;
+	}
+	m_ball.clear();
+	m_ball.shrink_to_fit();
 }
 
 void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_renderComp )
@@ -99,6 +113,7 @@ void Level::CreateEnemies()
 					tempEnemy->Init(j * (float)l_enemyWidth, m_mapEdges.PosX + m_mapEdges.Height - ((i+1) * (float)l_enemyHeight), l_enemyWidth, l_enemyHeight);
 					l_enemy.push_back(tempEnemy);
 				}
+				
 			}
 		}
 	}
