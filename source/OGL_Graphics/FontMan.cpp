@@ -1,6 +1,7 @@
 #include "FontMan.h"
 
 #include <GL/glfw.h>
+#include <cstdlib>
 
 extern inline void GLCheckErrors( std::string p_where );
 
@@ -66,6 +67,8 @@ void FontMan::Init( )
 
 void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color )
 {
+  char* l_text = new char[ p_text.size()*2 ];
+  wcstombs( l_text, p_text.c_str(), p_text.size() );
   float x = p_posX;
   float y = p_posY;
   
@@ -83,9 +86,9 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
   
   m_fontShader.Use();
   m_fontShader.SetUniformVector( "color", glm::vec4( (p_color >> 24) & 0xFF, (p_color >> 16) & 0xFF, (p_color >> 8) & 0xFF, p_color & 0xFF ) );
-  m_fontShader.SetUniformInt( "tex", 0 );
+  m_fontShader.SetUniformInt( "tex", 2 );
   
-  for(const wchar_t* p = p_text.c_str(); *p; p++)
+  for(const char* p = l_text; *p; p++)
   {
     if(FT_Load_Char(m_arial, *p, FT_LOAD_RENDER))
         continue;
@@ -106,16 +109,16 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
     float sx = 2.0f / m_windowWidth;
     float sy = 2.0f / m_windowHeight;
     
-    float x2 = x + m_arial->glyph->bitmap_left * sx;
-    float y2 = -y - m_arial->glyph->bitmap_top * sy;
+    float x2 = -1 + (x + m_arial->glyph->bitmap_left) * sx;
+    float y2 =  1 - (y + m_arial->glyph->bitmap_top) * sy;
     float w = m_arial->glyph->bitmap.width * sx;
     float h = m_arial->glyph->bitmap.rows * sy;
 
     GLfloat box[4][4] = {
-        {x2,     -y2    , 0, 0},
-        {x2 + w, -y2    , 1, 0},
-        {x2,     -y2 - h, 0, 1},
-        {x2 + w, -y2 - h, 1, 1},
+        {x2,     y2    , 0, 0},
+        {x2 + w, y2    , 1, 0},
+        {x2,     y2 - h, 0, 1},
+        {x2 + w, y2 - h, 1, 1},
     };
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof box, box, GL_DYNAMIC_DRAW);
@@ -127,4 +130,5 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
     x += (m_arial->glyph->advance.x >> 6) * sx;
     y += (m_arial->glyph->advance.y >> 6) * sy;
   }
+  delete[] l_text;
 }
