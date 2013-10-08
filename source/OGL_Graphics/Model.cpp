@@ -51,11 +51,11 @@ bool Model::Load( std::string p_dir, std::string p_fileName )
 
 void Model::Render( Shader &p_shader, glm::vec3 p_tint )
 {
+  glBindVertexArray( m_handleVAO ); // bind VAO
   m_mtl->Apply( p_shader );
   
   p_shader.SetUniformVector( "intensityDiffuse", p_tint ); // override diffuse intensity with tint
 
-  glBindVertexArray( m_handleVAO ); // bind VAO
   glDrawArrays( GL_TRIANGLES, 0, m_vertexCount );
 }
 
