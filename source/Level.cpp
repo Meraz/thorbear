@@ -289,14 +289,14 @@ void Level::CheckAllCollisions(float p_deltaTime)
 						ParticleEmitterDesc l_desc;
 						l_desc.position			= Vect3(m_ball.at(k)->GetBoundingBox().PosX, m_ball.at(k)->GetBoundingBox().PosY, m_ball.at(k)->GetBoundingBox().PosZ);
 						l_desc.lifeTimeMin		= 0.5f;
-						l_desc.lifeTimeMax		= 1.5f;
+						l_desc.lifeTimeMax		= 0.7f;
 						l_desc.acceleration		= Vect3(0.0f, -1.0f, 0.0f);
 						l_desc.nrOfParticles	= 100;
 						l_desc.speedMin			= 50.0f;
-						l_desc.speedMax			= 300.0f;
-						l_desc.scale			= Vect3(0.7f, 0.7f, 2.5f);
-						l_desc.startColor		= Vect3(1.0f, 0.0f, 0.0f);
-						l_desc.endColor			= Vect3(1.0f, 1.0f, 0.0f);
+						l_desc.speedMax			= 200.0f;
+						l_desc.scale			= Vect3(0.5f, 0.5f, 0.5f);
+						l_desc.startColor		= Vect3(0.0f, 1.0f, 0.0f);
+						l_desc.endColor			= Vect3(0.0f, 0.4f, 0.0f);
 						m_renderComp->CreateParticleEmitter(l_desc);
 					}
 					m_soundHandler->PlayGameSound(BALLBOUNCE);
