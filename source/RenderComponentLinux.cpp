@@ -56,6 +56,19 @@ inline std::string stringf( const char *p_fmt, ... )
     return l_buf;
 }
 
+inline void GLCheckErrors( std::string p_where )
+{
+  l_errCount = 0;
+  for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
+  {
+    //Do something with `currError`.
+    printf( "OpenGL error #%d: %s.\n", currError, gluErrorString( currError ) );
+    ++l_errCount;
+  }
+  if( l_errCount > 0 )
+    printf( "%s: Total of %d OpenGL errors.\n", p_where.c_str(), l_errCount );
+}
+
 RenderComponentLinux::RenderComponentLinux()
 {
 }
@@ -128,31 +141,15 @@ bool RenderComponentLinux::Init()
   glm::vec3 l_fwd = glm::vec3(0.f, 0.f, -1.f) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
   printf( "Debug info: Forward is towards %f, %f, %f\n", l_fwd[0], l_fwd[1], l_fwd[2] );
   
-  int l_errCount = 0;
-  for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
-  {
-    //Do something with `currError`.
-    printf( "OpenGL error #%d.\n", currError );
-    ++l_errCount;
-  }
-  if( l_errCount > 0 )
-    printf( "RenderComponentLinux::Init: Total of %d OpenGL errors.\n", l_errCount );
+  GLCheckErrors( "RenderComponentLinux::Init" );
   
   m_modelManager.LoadModels();
   
-  l_errCount = 0;
-  for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
-  {
-    //Do something with `currError`.
-    printf( "OpenGL error #%d.\n", currError );
-    ++l_errCount;
-  }
-  if( l_errCount > 0 )
-    printf( "RenderComponentLinux::m_modelManager.LoadModels: Total of %d OpenGL errors.\n", l_errCount );
+  GLCheckErrors( "RenderComponentLinux::m_modelManager.LoadModels" );
     
   m_fontManager.Init();
   
-  m_objectList.clear();
+  GLCheckErrors( "RenderComponentLinux::m_fontManager.Init" );
   
   return true;
 }
@@ -171,10 +168,9 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
   // Create an object based on p_objectType (p_textureType)
   ModelInstance* l_modelInstance = m_modelManager.CreateInstance( p_boundingBox, p_textureType );
   l_modelInstance->SetTint( p_color );
+  
   // Add the object to the list of objects to render
-  m_genericShader.Use( );
-  l_modelInstance->Render( m_genericShader );
-  //m_objectList.push_back( l_modelInstance );
+  m_objectList.push_back( l_modelInstance );
 }
 
 void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
@@ -189,11 +185,22 @@ void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX
 bool g_renderfirsttime = true;
 void RenderComponentLinux::Render()
 {
-  
+  m_genericShader.Use( );
+  if( g_renderfirsttime )
+  {
+    GLCheckErrors( "RenderComponentLinux::m_genericShader.Use" );
+    g_renderfirsttime = false;
+  }
   
   // Render all objects
-  //for( int i = 0; i < m_objectList.size(); i++ )
-  //  m_objectList[i]->Render( m_genericShader );
+  for( int i = 0; i < m_objectList.size(); i++ )
+    m_objectList[i]->Render( m_genericShader );
+    
+  if( g_renderfirsttime )
+  {
+    GLCheckErrors( "RenderComponentLinux::m_objectList[].Render" );
+    g_renderfirsttime = false;
+  }
     
   // Text rendering here
   
@@ -201,21 +208,13 @@ void RenderComponentLinux::Render()
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
   
   // Clear the render object list for next frame
-  //for( int i = 0; i < m_objectList.size(); i++ )
-  //  delete m_objectList[i];
-  //m_objectList.clear();
+  for( int i = 0; i < m_objectList.size(); i++ )
+    delete m_objectList[i];
+  m_objectList.clear();
   
   if( g_renderfirsttime )
   {
-    int l_errCount = 0;
-    for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
-    {
-      //Do something with `currError`.
-      printf( "OpenGL error #%d.\n", currError );
-      ++l_errCount;
-    }
-    if( l_errCount > 0 )
-      printf( "RenderComponentLinux::Render: Total of %d OpenGL errors.\n", l_errCount );
+    GLCheckErrors( "RenderComponentLinux::Render" );
     g_renderfirsttime = false;
   }
 }
