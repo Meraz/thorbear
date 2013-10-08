@@ -3,7 +3,7 @@
 
 #include "RenderComponentInterface.h"
 #include "GameInterface.h"
-#include "GameScene.h"
+#include "SceneManager.h"
 
 class WindowBaseClass
 {
@@ -14,7 +14,7 @@ public:
 
 protected:
 	virtual void Render();
-	
+
 	/* Deltatime, Mouseposition.X, Mouseposition.Y */
 	void Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked);	// Add support for use of keyboard
 

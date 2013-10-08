@@ -1,17 +1,12 @@
 #ifndef RENDERCOMPONENTINTERFACE_H
 #define RENDERCOMPONENTINTERFACE_H
 
+#include "ParticleEffect.h"
 #include "BoundingBox.h"
 #include "Vect3.h"
 #include <string>
 using namespace std;
 
-struct ParticleSystem
-{
-	int x;
-	int y;
-	int z;
-};
 
 enum TextureType
 {
@@ -23,20 +18,42 @@ enum TextureType
 	ADDBALLPOWERUP,
 	LARGERPADDLEPOWERUP,
 	SMALLERPADDLEPOWERUP,
-  TTCOUNT // Leave this last, you can loop i < TTCOUNT
+	LEVEL,
+	TTCOUNT // Leave this last, you can loop i < TTCOUNT
+};
+
+enum ButtonTexture
+{
+	BUTTON1,
+	BUTTON2,
+	BUTTON3,
+	BUTTON4
 };
 
 class RenderComponentInterface
 {
 public:
-	/* Add this object to be drawn this update. */
+
 	virtual void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f)) = 0;
+	
+	/* Button texture thingy */
+	//virtual void RenderMenuButton(BoundingBox2D p_boundingBox, ButtonTexture p_buttonTexture) = 0;	// Not in the code for the moment.
 
 	/* Add this particle system to be drawn this update */
-	virtual void RenderParticleSystem(ParticleSystem p_particleSystem) = 0;				
+	virtual void CreateParticleEmitter(ParticleEmitterDesc p_particleDesc) = 0;				
 
 	/* Add this text to be drawn this update */
-	virtual void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color) = 0;
+	virtual void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, unsigned int FLAG) = 0;
+
+	/* Only used in the render component */
+	virtual void Update(float p_dt) = 0;
+	
+	virtual BoundingBox ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType) = 0;
+
+	virtual void RenderBackground(TextureType p_textureType) = 0;
+
+	virtual void CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime ) = 0;
+
 };
 
 #endif

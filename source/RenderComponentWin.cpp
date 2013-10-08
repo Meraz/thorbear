@@ -1,5 +1,5 @@
 #include "RenderComponentWin.h"
-
+#include <cmath>
 
 RenderComponentWin::RenderComponentWin(HWND p_hMainWnd)
 {	
@@ -13,6 +13,7 @@ RenderComponentWin::~RenderComponentWin()
 	delete m_shaderManager;
 	delete m_camera;
 	delete m_fontRenderer;
+	delete m_particleSystem;
 
 	ReleaseCOM(m_d3dDevice);
 	ReleaseCOM( m_d3dImmediateContext);
@@ -42,11 +43,19 @@ int RenderComponentWin::Initialize()
 
 	Load();
 	CreateTemplates();
-	ShowCursor(false);
+	ShowCursor(true);
 
 	m_fontRenderer = new FontRenderWin();
 	m_fontRenderer->Init(m_d3dDevice, L"Arial", m_d3dImmediateContext);
+
+	m_particleSystem = new ParticleSystem(m_d3dDevice, m_d3dImmediateContext, m_modelManager, m_shaderManager, m_camera);
 	return 0;
+}
+
+void RenderComponentWin::Update( float p_dt )
+{
+	m_particleSystem->Update(p_dt);
+	m_fontRenderer->Update(p_dt);
 }
 
 void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color)
@@ -105,9 +114,9 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 	}
 }
 
-void RenderComponentWin::RenderParticleSystem(ParticleSystem p_particleSystem)
+void RenderComponentWin::CreateParticleEmitter(ParticleEmitterDesc p_particleDesc)
 {
-
+	m_particleSystem->CreateParticleEmitter(p_particleDesc);
 }
 
 void RenderComponentWin::PreRender()
@@ -118,7 +127,9 @@ void RenderComponentWin::PreRender()
 
 void RenderComponentWin::PostRender()
 {
-	HR(m_swapChain->Present(1, 0));
+	m_particleSystem->Render();
+	m_fontRenderer->Render();
+	HR(m_swapChain->Present(0, 0));
 }
 
 bool RenderComponentWin::InitializeDirect3D()
@@ -172,7 +183,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = false;
+	l_sd.Windowed     = true;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -257,7 +268,13 @@ void RenderComponentWin::Load()
 	m_modelManager->CreateModel("AddBallPowerup.obj",	"object\\AddBallPowerup");
 	m_modelManager->CreateModel("LargerPaddlePowerup.obj",	"object\\LargerPaddlePowerup");
 	m_modelManager->CreateModel("SmallerPaddlePowerup.obj",	"object\\SmallerPaddlePowerup");
+	m_modelManager->CreateModel("background.obj", "object\\levelBackground");
 	m_shaderManager->AddShader("effect\\object.fx", 12);	
+	m_shaderManager->AddShader("effect\\background.fx", 12);
+	m_shaderManager->AddShader("effect\\instanced.fx", 12);
+
+		
+
 }
 
 void RenderComponentWin::CreateTemplates()
@@ -271,13 +288,92 @@ void RenderComponentWin::CreateTemplates()
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("AddBallPowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("LargerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("SmallerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 }
 
+BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBox, TextureType p_textureType)
+{		
+	D3DXMATRIX l_WVP		= /*l_worldMat */ m_camera->GetViewMatrix() *  m_camera->GetProjMatrix();
 
+	D3DXVECTOR4 l_point = D3DXVECTOR4 ( p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), p_boundingBox.PosZ, 1.0 );
+	
+	D3DXVec4Transform(&l_point,&l_point, &l_WVP);
+	
+	D3DXVECTOR3 l_point2;
+	l_point2.x = l_point.x / l_point.w;
+	l_point2.y = l_point.y / l_point.w;
+	l_point2.z = l_point.z / l_point.w;
 
+	D3DXVECTOR2 l_point3;
+	l_point3.x = ((l_point2.x + 1.0) / 2.0) * m_clientWidth;
+	l_point3.y = ((l_point2.y + 1.0) / 2.0) * m_clientHeight;
 
+	BoundingBox l_boundingBox;
+	l_boundingBox.PosX = l_point3.x - p_boundingBox.Width/1.5f;
+	l_boundingBox.PosY = m_clientHeight - (l_point3.y + p_boundingBox.Height/2);
+	l_boundingBox.Width = p_boundingBox.Width * 1.3f;
+	l_boundingBox.Height = p_boundingBox.Height * 1.3f;
+	l_boundingBox.Depth = p_boundingBox.Depth;
+	
+	return l_boundingBox;
+}
 
-void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+void RenderComponentWin::CreateSplashText( wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
 {
-	m_fontRenderer->RenderText(p_text.c_str(), p_size, p_posX, p_posY, p_color);
+	m_fontRenderer->CreateSplashText(p_text, p_size, p_posX, p_posY, p_travelTime, p_stillTime);
 }
+
+void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
+{
+	m_fontRenderer->RenderText(p_text.c_str(), p_size, p_posX, p_posY, p_color, FLAG);
+}
+
+void RenderComponentWin::RenderBackground(TextureType p_textureType)
+{
+	Shader* l_shader = m_objVec.at((int)p_textureType).shader;
+	Model*	l_model = m_objVec.at((int)p_textureType).model;
+
+	m_camera->RebuildView();
+
+	D3DXMATRIX l_scaleMat;
+
+	float l_xScaleFactor = 1.0f/(l_model->m_topBoundingCorner.x - l_model->m_bottomBoundingCorner.x);
+	float l_yScaleFactor = 1.0f/(l_model->m_topBoundingCorner.y - l_model->m_bottomBoundingCorner.y);
+	l_xScaleFactor *= 1600; //TODO do not hard code this
+	l_yScaleFactor *= 1000; //TODO do not hard code this
+
+	float l_zScaleFactor = 1.0f;
+
+	D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, -l_yScaleFactor, l_zScaleFactor);
+
+
+	// Translation matrix
+	D3DXMATRIX l_translateMat;
+	D3DXMatrixTranslation(&l_translateMat, 330, 300, 400);	// Create translation matrix
+
+	D3DXMATRIX l_rotationMat;
+	D3DXMatrixRotationX(&l_rotationMat, atan(0.2f));
+
+	D3DXMATRIX l_worldMat	= l_rotationMat * l_scaleMat *  l_translateMat;
+	D3DXMATRIX l_WVP		= l_worldMat * m_camera->GetViewMatrix() *  m_camera->GetProjMatrix();
+
+	l_model->m_vertexBuffer->Apply(0);
+	l_model->m_indexBuffer->Apply(0);
+
+	l_shader->SetMatrix("gWorld", l_worldMat);
+	l_shader->SetMatrix("gWVP", l_WVP);
+	l_shader->SetResource("gTexture", l_model->m_material->m_textureResource);
+	l_shader->SetFloat4("gColor", D3DXVECTOR4(1.0f, 1.0f, 1.0f, 1.0f));
+
+
+	D3DX11_TECHNIQUE_DESC techDesc;
+	l_shader->GetTechnique()->GetDesc( &techDesc );
+	for(int p = 0; p < (int)techDesc.Passes; ++p)
+	{
+		l_shader->Apply(p);
+		m_d3dImmediateContext->DrawIndexed(l_model->m_size, 0, 0);
+	}
+}
+
+

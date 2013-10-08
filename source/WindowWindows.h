@@ -16,7 +16,6 @@ public:
 
 	LRESULT MsgProc(HWND p_hwnd, UINT p_msg, WPARAM p_wParam, LPARAM p_lParam);
 	int		Run();
-
 private:
 	void	Update();
 	void	Render();

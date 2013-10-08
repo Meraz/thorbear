@@ -146,5 +146,8 @@ App_Data/*.ldf
 
 #unignore model .obj files
 !resources/models/*.obj
+
+# Custom
+*.score
 !resources/models/*/*.obj
 !object/*/*.obj
