@@ -3,6 +3,7 @@
 
 BaseScene::BaseScene()
 {
+	m_menuFlag = -1;
 }
 
 BaseScene::~BaseScene()
@@ -20,8 +21,13 @@ SceneState::State BaseScene::GetSceneState()
 	return m_sceneState;
 }
 
-void BaseScene::ChangeCurrentState(SceneState::State l_sceneState, GameType::Type l_gameType)
+int BaseScene::GetMenuFlag()
+{
+	return m_menuFlag;
+}
+
+void BaseScene::ChangeCurrentState(SceneState::State l_sceneState, int l_menuFlag)
 {
 	m_sceneState = l_sceneState;
-	m_gameType = l_gameType;
+	m_menuFlag = l_menuFlag;
 }

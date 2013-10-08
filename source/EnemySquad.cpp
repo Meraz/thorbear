@@ -15,8 +15,22 @@ EnemySquad::EnemySquad()
 
 EnemySquad::~EnemySquad()
 {
-	vector<Enemy*>().swap(m_enemy);
-	vector<Laser*>().swap(m_laser);
+	for (unsigned int i = 0; i < m_enemy.size(); i++)
+	{
+		delete m_enemy.at(i);
+		m_enemy.at(i) = 0;
+	}
+	m_enemy.clear();
+	m_enemy.shrink_to_fit();
+
+	for (unsigned int i = 0; i < m_laser.size(); i++)
+	{
+		delete m_laser.at(i);
+		m_laser.at(i) = 0;
+	}
+	m_laser.clear();
+	m_laser.shrink_to_fit();
+
 }
 
 void EnemySquad::Init(BoundingBox p_mapEdges, float p_velocity, vector<Enemy*> p_enemy)
@@ -141,9 +155,17 @@ vector<Laser*> EnemySquad::GetLasers()
 void EnemySquad::EraseMember( int p_type, int p_vectorPos )
 {
 	if(p_type == BALL) //TODO Change to LASER once this define is implemented
+	{
+		delete m_laser.at(p_vectorPos);
+		m_laser.at(p_vectorPos) = 0;
 		m_laser.erase(m_laser.begin() + p_vectorPos);
+	}
 	else if(p_type == ENEMY1) //only use ENEMY1 for both types
+	{
+		delete m_enemy.at(p_vectorPos);
+		m_enemy.at(p_vectorPos) = 0;
 		m_enemy.erase(m_enemy.begin() + p_vectorPos);
+	}
 }
 
 void EnemySquad::CalculateBoundingBox()

@@ -14,20 +14,18 @@ void SceneManager::Initialize(RenderComponentInterface* p_renderComponentInterfa
 	m_renderComponentInterface = p_renderComponentInterface;
 
 	m_currentScene = 0;
-	SwapSceneState(SceneState::GAME);
+	SwapSceneState(SceneState::MAIN_MENU);
 }
 
-bool SceneManager::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked)
+void SceneManager::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_mouseClicked)
 {
-	m_currentScene->Update(p_deltaTime, p_mousePositionX, p_mousePositionY, p_lMouseClicked);
+	m_currentScene->Update(p_deltaTime, p_mousePositionX, p_mousePositionY, p_mouseClicked);
 	
 	SceneState::State l_sceneState = m_currentScene->GetSceneState();	
 	if(l_sceneState != m_currentSceneState)
 	{
 		SwapSceneState(l_sceneState);
-		return false;
 	}
-	return true;
 }
 
 void SceneManager::Render()
@@ -44,6 +42,10 @@ bool SceneManager::CheckIfExit()
 
 void SceneManager::SwapSceneState(SceneState::State p_sceneState)
 {	
+	int l_menuFlag;
+	if(m_currentScene != 0) // Avoid crash during initialize
+		l_menuFlag = m_currentScene->GetMenuFlag();
+
 	if (p_sceneState == SceneState::MAIN_MENU)
 	{
 		SafeDelete(m_currentScene);
@@ -52,19 +54,22 @@ void SceneManager::SwapSceneState(SceneState::State p_sceneState)
 	else if (p_sceneState == SceneState::GAME_MODE_MENU)
 	{
 		SafeDelete(m_currentScene);
-		m_currentScene = new MainMenuScene();
+		m_currentScene = new GameModeMenuScene();
 	}
 	else if (p_sceneState == SceneState::GAME)
 	{
 		SafeDelete(m_currentScene);
-		m_currentScene = new GameScene();
-		GameScene* a = (GameScene*)m_currentScene;
-		a->SetGameMode(MODE_SURVIVAL);
+		m_currentScene = new GameScene(l_menuFlag);				// l_menuFlag represents what mode to start
 	}
-	else if (p_sceneState == SceneState::HIGHSCORE)
+	else if (p_sceneState == SceneState::CAMPAIGNHIGHSCORE)
 	{
 		SafeDelete(m_currentScene);
-		m_currentScene = new HighScoreScene();
+		m_currentScene = new CampaignHighscoreScene(l_menuFlag); // l_menuFlag represents the score
+	}
+	else if (p_sceneState == SceneState::SURVIVALHIGHSCORE)
+	{
+		SafeDelete(m_currentScene);
+		m_currentScene = new SurvivalHighscoreScene(l_menuFlag); // l_menuFlag represents the score
 	}
 	else if (p_sceneState == SceneState::EXIT)
 		m_Exit = true;

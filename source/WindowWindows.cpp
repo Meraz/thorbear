@@ -105,14 +105,14 @@ int WindowWindows::Run()
 				Update();
 				Render();
 
-				/*		char title[256];
+				char title[256];
 				sprintf_s(
 				title,
 				sizeof(title),
 				"%f",
 				(1.0f/m_gameTimer->DeltaTime())
 				);
-				SetWindowTextA(m_hMainWnd, title);*/
+				SetWindowTextA(m_hMainWnd, title);
 			}
 			else
 			{
@@ -129,17 +129,19 @@ void WindowWindows::Update()
 	WindowBaseClass::Update(m_gameTimer->DeltaTime(), m_mousePositionX, m_mousePositionY, m_lMouseClicked);
 	m_renderComponent->Update(m_gameTimer->DeltaTime());
 
-	/*if(m_gameInterface->CheckIfExit())
+	if(m_gameInterface->CheckIfExit())
 		PostQuitMessage(0);
 
+	
 	wchar_t title[256];
 		swprintf_s(
 		title,
 		_countof(title),
 		L"Mouse: x:%d y:%d", m_mousePositionX, m_mousePositionY
 		);
-	SetWindowText(m_hMainWnd, title);*/
 
+	SetWindowText(m_hMainWnd, title); // TEST CODE : TODO REMOVE
+	
 }
 
 void WindowWindows::Render()

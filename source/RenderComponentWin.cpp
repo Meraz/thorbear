@@ -43,7 +43,7 @@ int RenderComponentWin::Initialize()
 
 	Load();
 	CreateTemplates();
-	ShowCursor(false);
+	ShowCursor(true);
 
 	m_fontRenderer = new FontRenderWin();
 	m_fontRenderer->Init(m_d3dDevice, L"Arial", m_d3dImmediateContext);
@@ -55,6 +55,7 @@ int RenderComponentWin::Initialize()
 void RenderComponentWin::Update( float p_dt )
 {
 	m_particleSystem->Update(p_dt);
+	m_fontRenderer->Update(p_dt);
 }
 
 void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color)
@@ -127,7 +128,8 @@ void RenderComponentWin::PreRender()
 void RenderComponentWin::PostRender()
 {
 	m_particleSystem->Render();
-	HR(m_swapChain->Present(1, 0));
+	m_fontRenderer->Render();
+	HR(m_swapChain->Present(0, 0));
 }
 
 bool RenderComponentWin::InitializeDirect3D()
@@ -181,7 +183,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = false;
+	l_sd.Windowed     = true;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -292,73 +294,35 @@ void RenderComponentWin::CreateTemplates()
 
 BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBox, TextureType p_textureType)
 {		
-	Model*	l_model = m_objVec.at((int)p_textureType).model;
+	D3DXMATRIX l_WVP		= /*l_worldMat */ m_camera->GetViewMatrix() *  m_camera->GetProjMatrix();
 
-	D3DXMATRIX l_scaleMat;
-	if(p_boundingBox.Height == -1 || p_boundingBox.Width == -1)
-	{
-		D3DXMatrixScaling(&l_scaleMat, 1.0f, 1.0f, 1.0f);
-	}
-	else
-	{
-		float l_xScaleFactor = 1.0f/(l_model->m_topBoundingCorner.x - l_model->m_bottomBoundingCorner.x);
-		float l_yScaleFactor = 1.0f/(l_model->m_topBoundingCorner.y - l_model->m_bottomBoundingCorner.y);
-		l_xScaleFactor *= p_boundingBox.Width;
-		l_yScaleFactor *= p_boundingBox.Height;
-
-		if(p_boundingBox.Depth == -1)
-		{
-			D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, l_yScaleFactor, 1.0f);
-		}
-		else
-		{
-			float l_zScaleFactor = 1.0f/(l_model->m_topBoundingCorner.z - l_model->m_bottomBoundingCorner.z);
-			l_zScaleFactor *= p_boundingBox.Depth;
-			D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, l_yScaleFactor, l_zScaleFactor);
-		}
-	}
-
-	// Translation matrix
-	D3DXMATRIX l_translateMat;
-	D3DXMatrixTranslation(&l_translateMat, p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), 0);	// Create translation matrix
-
-	D3DXMATRIX l_worldMat	= l_scaleMat *  l_translateMat;												// 
-	D3DXMATRIX l_WVP		= l_worldMat * m_camera->GetViewMatrix() *  m_camera->GetProjMatrix();
+	D3DXVECTOR4 l_point = D3DXVECTOR4 ( p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), p_boundingBox.PosZ, 1.0 );
 	
-	/* Top left 0,0
-	D3DXVECTOR4 l_topLeft	= D3DXVECTOR4(p_boundingBox.PosX, p_boundingBox.PosX, 1, 1);
-	D3DXVECTOR4 l_topRight	= D3DXVECTOR4(p_boundingBox.PosX + p_boundingBox.Width, p_boundingBox.PosY, 1, 1);
-	D3DXVECTOR4 l_botLeft	= D3DXVECTOR4(p_boundingBox.PosX, p_boundingBox.PosY + p_boundingBox.Height, 1, 1);
-	D3DXVECTOR4 l_botRight	= D3DXVECTOR4(p_boundingBox.PosX + p_boundingBox.Width, p_boundingBox.PosY+ p_boundingBox.Height, 1, 1);
-	*/
+	D3DXVec4Transform(&l_point,&l_point, &l_WVP);
+	
+	D3DXVECTOR3 l_point2;
+	l_point2.x = l_point.x / l_point.w;
+	l_point2.y = l_point.y / l_point.w;
+	l_point2.z = l_point.z / l_point.w;
 
-	// Bot left 0,0
-	D3DXVECTOR4 l_topLeft	= D3DXVECTOR4(p_boundingBox.PosX,						p_boundingBox.PosY + p_boundingBox.Height, 50, 1);
-	D3DXVECTOR4 l_topRight	= D3DXVECTOR4(p_boundingBox.PosX + p_boundingBox.Width, p_boundingBox.PosY + p_boundingBox.Height, 50, 1);
-	D3DXVECTOR4 l_botLeft	= D3DXVECTOR4(p_boundingBox.PosX,						p_boundingBox.PosY, 50, 1);
-	D3DXVECTOR4 l_botRight	= D3DXVECTOR4(p_boundingBox.PosX + p_boundingBox.Width, p_boundingBox.PosY, 50, 1);
-
-	D3DXVec4Transform(&l_topLeft,	&l_topLeft, &l_WVP);
-	D3DXVec4Transform(&l_topRight,	&l_topRight, &l_WVP);
-	D3DXVec4Transform(&l_botLeft,	&l_botLeft,	&l_WVP);
-	D3DXVec4Transform(&l_botRight,	&l_botRight, &l_WVP);
-
-	l_topLeft = l_topLeft / l_topLeft.w;
-	l_topRight = l_topRight / l_topRight.w;
-	l_botLeft = l_botLeft / l_botLeft.w;
-	l_botRight = l_botRight / l_botRight.w;
-
+	D3DXVECTOR2 l_point3;
+	l_point3.x = ((l_point2.x + 1.0) / 2.0) * m_clientWidth;
+	l_point3.y = ((l_point2.y + 1.0) / 2.0) * m_clientHeight;
 
 	BoundingBox l_boundingBox;
-	l_boundingBox.PosX = l_botLeft.x;
-	l_boundingBox.PosY = l_botLeft.y;
-	l_boundingBox.Width = l_topRight.x - l_topLeft.x;
-	l_boundingBox.Height = l_topRight.x - l_topLeft.x;
+	l_boundingBox.PosX = l_point3.x - p_boundingBox.Width/1.5f;
+	l_boundingBox.PosY = m_clientHeight - (l_point3.y + p_boundingBox.Height/2);
+	l_boundingBox.Width = p_boundingBox.Width * 1.3f;
+	l_boundingBox.Height = p_boundingBox.Height * 1.3f;
 	l_boundingBox.Depth = p_boundingBox.Depth;
-
+	
 	return l_boundingBox;
 }
 
+void RenderComponentWin::CreateSplashText( wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
+{
+	m_fontRenderer->CreateSplashText(p_text, p_size, p_posX, p_posY, p_travelTime, p_stillTime);
+}
 
 void RenderComponentWin::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
 {
@@ -411,3 +375,5 @@ void RenderComponentWin::RenderBackground(TextureType p_textureType)
 		m_d3dImmediateContext->DrawIndexed(l_model->m_size, 0, 0);
 	}
 }
+
+
