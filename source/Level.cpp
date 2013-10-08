@@ -45,7 +45,9 @@ void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_rende
 		l_ss << p_lvlNr;
 		std::string tmpString( "level" + l_ss.str() );
 
-		m_map = LevelImporter::LoadLevel(tmpString);	
+		m_map = LevelImporter::LoadLevel(tmpString);
+		if(m_map == 0)
+			m_gameMode = MODE_SURVIVAL;
 	}
 
 	m_levelValues = LevelImporter::LoadGameplayValues("Gameplay Variables");

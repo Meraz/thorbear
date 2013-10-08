@@ -59,7 +59,7 @@ void SceneManager::SwapSceneState(SceneState::State p_sceneState)
 		SafeDelete(m_currentScene);
 		m_currentScene = new GameScene();
 		GameScene* a = (GameScene*)m_currentScene;
-		a->SetGameMode(MODE_SURVIVAL);
+		a->SetGameMode(MODE_CAMPAIGN);
 	}
 	else if (p_sceneState == SceneState::HIGHSCORE)
 	{
