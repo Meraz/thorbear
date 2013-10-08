@@ -39,7 +39,6 @@ WindowLinux::WindowLinux()
 
 WindowLinux::~WindowLinux()
 {
-	delete m_gameInterface;
 }
 
 bool WindowLinux::Init( RenderComponentLinux *p_renderComponentLinux )

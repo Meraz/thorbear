@@ -19,7 +19,7 @@ CC= gcc
 CXX= g++
 AR= ar
 CFLAGS= -g
-CXXFLAGS= -g -std=c++0x -iquote./source/ -iquote./source/Fmod/inc/
+CXXFLAGS= -g -std=c++0x -iquote./source/ -iquote./source/Fmod/inc/ #-DDEBUG
 ARFLAGS= cru
 LDFLAGS= -lX11 -lpthread -lglfw -lGLEW -lGLU -lGL -lfmodex64 -lfreetype
 RESULT=spaceout

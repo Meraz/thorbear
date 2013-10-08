@@ -145,9 +145,11 @@ bool RenderComponentLinux::Init()
   int l_windowWidth, l_windowHeight; // 800x600?
   glfwGetWindowSize( &l_windowWidth, &l_windowHeight );
   UpdateViewportSize( l_windowWidth, l_windowHeight );
-  
+
+#ifdef DEBUG
   glm::vec3 l_fwd = glm::vec3(0.f, 0.f, -1.f) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
   printf( "Debug info: Forward is towards %f, %f, %f\n", l_fwd[0], l_fwd[1], l_fwd[2] );
+#endif
   
   GLCheckErrors( "RenderComponentLinux::Init" );
   
