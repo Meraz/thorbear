@@ -38,7 +38,6 @@ void FontRenderWin::RenderText( LPCWSTR p_text, float p_size, float p_posX, floa
 		m_fontWrapper->DrawString(m_context, p_text, p_size, p_posX, p_posY, p_color, FW1_RESTORESTATE);
 	else if(FLAG = 0)
 		m_fontWrapper->DrawString(m_context, p_text, p_size, p_posX, p_posY, p_color, FW1_IMMEDIATECALL);
-
 }
 
 void FontRenderWin::Update( float p_dt )

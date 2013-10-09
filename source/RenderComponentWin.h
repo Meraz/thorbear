@@ -14,20 +14,37 @@
 
 struct ObjTemplate
 {
+	ObjTemplate(){instancedBuffer = 0;}
 	ObjTemplate(Model* p_model, Shader* p_shader)
 	{
 		model = p_model;
 		shader = p_shader;
+
+		D3DXMATRIX f;
+		D3DXMatrixIdentity(&f);
+		for (unsigned int i = 0; i < 100; i++)
+		{
+			matrixList.push_back(f);
+		}
+		//Instance Buffer Description
+		bdInstance.ElementSize = sizeof( D3DXMATRIX );
+		bdInstance.InitData = &matrixList[0];
+		bdInstance.NumElements = matrixList.size();
+		bdInstance.Type = VERTEX_BUFFER;
+		bdInstance.Usage = BUFFER_CPU_WRITE_DISCARD;
+
+		instancedBuffer = new Buffer();
 	}
 
 	~ObjTemplate()
 	{
-		//delete model;
-		//delete shader;
 	}
 
 	Model*	model;
 	Shader*	shader;  
+	Buffer*	instancedBuffer;
+	vector<D3DXMATRIX> matrixList;
+	BUFFER_INIT_DESC bdInstance;
 };
 
 class RenderComponentWin : public RenderComponentInterface
@@ -57,6 +74,8 @@ private:
 	bool InitializeDirect3D();
 	void Load();
 	void CreateTemplates();
+	void CreateInstancedWorldMatrix(BoundingBox p_boundingBox, TextureType p_type, Vect3 p_color);
+	void RenderInstancedData(TextureType p_type);
 
 private:
 	HWND					m_hMainWnd;
