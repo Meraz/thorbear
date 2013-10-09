@@ -56,8 +56,22 @@ inline std::string stringf( const char *p_fmt, ... )
     return l_buf;
 }
 
+inline void GLCheckErrors( std::string p_where )
+{
+  int l_errCount = 0;
+  for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
+  {
+    //Do something with `currError`.
+    printf( "OpenGL error #%d: %s.\n", currError, gluErrorString( currError ) );
+    ++l_errCount;
+  }
+  if( l_errCount > 0 )
+    printf( "%s: Total of %d OpenGL errors.\n", p_where.c_str(), l_errCount );
+}
+
 RenderComponentLinux::RenderComponentLinux()
 {
+  m_renderfirsttime = true;
 }
 
 RenderComponentLinux::~RenderComponentLinux()
@@ -89,6 +103,7 @@ bool RenderComponentLinux::Init()
 		glfwTerminate();
 		return this->SetError( stringf( "ERROR: GL Version not supported: %d\n", l_major ) );
   }
+  GLCheckErrors( "RenderComponentLinux::Init - Glew" );
 		
 	// enable some useful GL behaviours
 	glEnable( GL_DEPTH_TEST );
@@ -97,14 +112,20 @@ bool RenderComponentLinux::Init()
 	glCullFace( GL_BACK );
 	glFrontFace( GL_CCW );
 	glEnable( GL_MULTISAMPLE_ARB );
+  glEnable( GL_BLEND );
+  glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+  
+  GLCheckErrors( "RenderComponentLinux::Init - Options" );
 
 	// set colour to clear screen buffer to
 	glClearColor( 0.f, 0.f, 0.f, 1.f );
 	glFlush();
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
+  
+  GLCheckErrors( "RenderComponentLinux::Init - Clear" );
 	
 	glfwSetWindowTitle( "SpaceOut: OpenGL4 Test" );//l_windowTitle.c_str( ) );
-	glfwSwapInterval( 0 ); // 0: VSync off, 1: on
+	glfwSwapInterval( 1 ); // 0: VSync off, 1: on
     
   m_genericShader.Init( SHADER_DIRECTORY + "genericVertex.glsl", SHADER_DIRECTORY + "genericFragment.glsl" );
   m_genericShader.Build( );
@@ -124,31 +145,21 @@ bool RenderComponentLinux::Init()
   int l_windowWidth, l_windowHeight; // 800x600?
   glfwGetWindowSize( &l_windowWidth, &l_windowHeight );
   UpdateViewportSize( l_windowWidth, l_windowHeight );
-  
+
+#ifdef DEBUG
   glm::vec3 l_fwd = glm::vec3(0.f, 0.f, -1.f) * glm::mat3( m_genericShader.m_activeCamera->GetViewMatrix() );
   printf( "Debug info: Forward is towards %f, %f, %f\n", l_fwd[0], l_fwd[1], l_fwd[2] );
+#endif
   
-  int l_errCount = 0;
-  for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
-  {
-    //Do something with `currError`.
-    printf( "OpenGL error #%d.\n", currError );
-    ++l_errCount;
-  }
-  if( l_errCount > 0 )
-    printf( "RenderComponentLinux::Init: Total of %d OpenGL errors.\n", l_errCount );
+  GLCheckErrors( "RenderComponentLinux::Init" );
   
   m_modelManager.LoadModels();
   
-  l_errCount = 0;
-  for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
-  {
-    //Do something with `currError`.
-    printf( "OpenGL error #%d.\n", currError );
-    ++l_errCount;
-  }
-  if( l_errCount > 0 )
-    printf( "RenderComponentLinux::m_modelManager.LoadModels: Total of %d OpenGL errors.\n", l_errCount );
+  GLCheckErrors( "RenderComponentLinux::m_modelManager.LoadModels" );
+    
+  m_fontManager.Init();
+  
+  GLCheckErrors( "RenderComponentLinux::m_fontManager.Init" );
   
   return true;
 }
@@ -167,49 +178,58 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
   // Create an object based on p_objectType (p_textureType)
   ModelInstance* l_modelInstance = m_modelManager.CreateInstance( p_boundingBox, p_textureType );
   l_modelInstance->SetTint( p_color );
-  // Add the object to the list of objects to render
-  m_objectList.push_back( l_modelInstance );
-}
-
-void RenderComponentLinux::RenderParticleSystem(ParticleSystem p_particleSystem)
-{
-}
-
-void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
-{
-}
   
-bool g_renderfirsttime = true;
-void RenderComponentLinux::Render()
-{
-	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ); // clear buffer using colour
+  // Add the object to the list of objects to render
+  //m_objectList.push_back( l_modelInstance );
   
   m_genericShader.Use( );
+  if( m_renderfirsttime )
+    GLCheckErrors( "RenderComponentLinux::RenderObject - m_genericShader.Use" );
   
-  // Render all objects
-  for( int i = 0; i < m_objectList.size(); i++ )
-    m_objectList[i]->Render( m_genericShader );
+  l_modelInstance->Render( m_genericShader );
+    
+  if( m_renderfirsttime )
+    GLCheckErrors( "RenderComponentLinux::RenderObject - l_modelInstance.Render" );
+    
+  delete l_modelInstance;
+}
+
+void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, unsigned int FLAG)
+{
+  m_fontManager.Draw( p_text, p_size, p_posX, p_posY, p_color );
+}
+
+void RenderComponentLinux::RenderBackground(TextureType p_textureType)
+{
   
+}
+
+void RenderComponentLinux::CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
+{
+  
+}
+
+void RenderComponentLinux::CreateParticleEmitter( ParticleEmitterDesc p_particleDesc )
+{
+  
+}
+  
+void RenderComponentLinux::Update( float p_deltatime )
+{
+  // Process particles
   glfwSwapBuffers();
-  
-  // Clear the render object list for next frame
-  for( int i = 0; i < m_objectList.size(); i++ )
-    delete m_objectList[i];
-  m_objectList.clear();
-  
-  if( g_renderfirsttime )
+  glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+  if( m_renderfirsttime )
   {
-    int l_errCount = 0;
-    for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
-    {
-      //Do something with `currError`.
-      printf( "OpenGL error #%d.\n", currError );
-      ++l_errCount;
-    }
-    if( l_errCount > 0 )
-      printf( "RenderComponentLinux::Render: Total of %d OpenGL errors.\n", l_errCount );
-    g_renderfirsttime = false;
+    GLCheckErrors( "RenderComponentLinux::Render" );
+    m_renderfirsttime = false;
   }
+}
+
+BoundingBox RenderComponentLinux::ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType)
+{
+  
 }
 
 void RenderComponentLinux::UpdateViewportSize( int p_width, int p_height )

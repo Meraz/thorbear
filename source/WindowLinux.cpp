@@ -3,7 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 
-extern inline std::string stringf( const char *p_fmt, ... );
+extern std::string stringf( const char *p_fmt, ... );
 
 WindowLinux* WindowLinux::m_windowLinux = NULL;
 
@@ -17,14 +17,14 @@ WindowLinux::WindowLinux()
   // Attempt to init the window
   if(! this->Init( l_renderComponentLinux ) )
   {
-    printf( this->GetErrorMessage().c_str() );
+    printf( "%s", this->GetErrorMessage().c_str() );
     exit(1);
   }
   
   // Attempt to init the graphical rendering system
   if( !l_renderComponentLinux->Init() )
   {
-    printf( l_renderComponentLinux->GetErrorMessage().c_str() );
+    printf( "%s", l_renderComponentLinux->GetErrorMessage().c_str() );
     exit(1);
   }
   
@@ -39,7 +39,6 @@ WindowLinux::WindowLinux()
 
 WindowLinux::~WindowLinux()
 {
-	delete m_gameInterface;
 }
 
 bool WindowLinux::Init( RenderComponentLinux *p_renderComponentLinux )
@@ -128,14 +127,14 @@ void WindowLinux::Update()
 
 	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY, l_clicked);
   
+  ((RenderComponentLinux*)m_renderComponentInterface)->Update( l_deltaTime );
+  
   //glfwSleep( 1. / 60. - l_deltaTime - .01 ); // Limit UPS
 }
 
 void WindowLinux::Render()
 {
-	WindowBaseClass::Render();
-  
-  ((RenderComponentLinux*)m_renderComponentInterface)->Render();
+  WindowBaseClass::Render();
 }
 
 void GLFWCALL WindowLinux::ResizeCallback( int p_width, int p_height )

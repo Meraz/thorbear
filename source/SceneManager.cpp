@@ -65,6 +65,7 @@ void SceneManager::SwapSceneState(SceneState::State p_sceneState)
 	{
 		SafeDelete(m_currentScene);
 		m_currentScene = new CampaignHighscoreScene(l_menuFlag); // l_menuFlag represents the score
+
 	}
 	else if (p_sceneState == SceneState::SURVIVALHIGHSCORE)
 	{

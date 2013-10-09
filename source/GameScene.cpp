@@ -13,7 +13,7 @@ GameScene::GameScene(int p_gameMode)
 	m_lastKnownNrOfEnemies = 0;
 	m_enemyWorth = 100;
 	m_scoreMultiplier = 1.0f;
-	m_gameMode = MODE_SURVIVAL;
+	m_gameMode = p_gameMode;
 	m_isGameOver = false;
 }
 
@@ -62,37 +62,44 @@ void GameScene::Render()
 
 	m_renderComponentInterface->RenderBackground(LEVEL);
 	m_level->Render();
-	//m_renderComponentInterface->RenderText("HELLO", 15.0f, 10.0f, 0.0f, 0xff0099ff, 1);
-	//std::ostringstream  l_ss;
+	
+	std::ostringstream  l_ss;
 
 	// Lives
-	//l_ss << "Extra Lives: " << m_nrOfLives;
-	
+	l_ss << "Extra Lives: " << m_nrOfLives;
+	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 0.0f, 0xff0099ff);
 
-	/*Score
-		l_ss.clear();
-		l_ss.str("");
-		l_ss << "Score: " << m_score;
-		m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 20.0f, 0xff0099ff, 1);
-	
-		// FPS
-		l_ss.clear();
-		l_ss.str("");
-		l_ss << "FPS: " << 1.0f/m_deltaTime;
-		m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 60.0f, 0xff0099ff, 1);
-	
-		// Multiplier
-		l_ss.clear();
-		l_ss.str("");
-		l_ss << m_scoreMultiplier;
-		std::string l_scoreMulti = l_ss.str().substr(0,4);
-		l_ss.str("");
-		l_ss << "Score Multiplier: x" << l_scoreMulti ;
-		m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 40.0f, 0xff0099ff, 1);*/
+	// Score
+	l_ss.clear();
+	l_ss.str("");
+	l_ss << "Score: " << m_score;
+	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 20.0f, 0xff0099ff);
+
+	// FPS
+	l_ss.clear();
+	l_ss.str("");
+
+	l_ss << 1.0f/m_deltaTime;
+	std::string l_fps( l_ss.str() );
+	l_ss.clear();
+	l_ss.seekp(0);
+	l_ss << "FPS: " << l_fps;
+	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 60.0f, 0xff0099ff);
+
+	// Multiplier
+	l_ss.clear();
+	l_ss.str("");
+	l_ss << m_scoreMultiplier;
+
+	std::string l_scoreMulti = l_ss.str().substr(0,4);
+	l_ss.clear();
+	l_ss.str("");
+	l_ss << "Score Multiplier: x" << l_scoreMulti ;
+	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 40.0f, 0xff0099ff);
 
 	if (m_isGameOver)
 	{
-		m_renderComponentInterface->RenderText("GAME OVER", 100.0f, 650.0f, 500.0f, 0xff0099ff, 1); //TODO Place in the middle of the screen
+		m_renderComponentInterface->RenderText("GAME OVER", 100.0f, 650.0f, 500.0f, 0xff0099ff); //TODO Place in the middle of the screen
 	}
 }
 
