@@ -14,7 +14,7 @@ void SceneManager::Initialize(RenderComponentInterface* p_renderComponentInterfa
 	m_renderComponentInterface = p_renderComponentInterface;
 
 	m_currentScene = 0;
-	SwapSceneState(SceneState::GAME);
+	SwapSceneState(SceneState::MAIN_MENU);
 }
 
 void SceneManager::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_mouseClicked)
