@@ -45,7 +45,7 @@ void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePosi
 	}
 	else
 	{
-		if(p_lMouseClicked)
+		if(p_lMouseClicked == true && m_previousMouseState == false)
 		{
 			if(m_gameMode == MODE_CAMPAIGN)
 				ChangeCurrentState(SceneState::CAMPAIGNHIGHSCORE, m_score);
