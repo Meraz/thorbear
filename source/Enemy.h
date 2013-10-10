@@ -19,11 +19,15 @@ public:
 	int				GetNumOfLives();
 	void			WritePosition(); //For test purpose
 	virtual bool	WantsToFire() = 0;
+	Vect3			GetColour();
+
 protected:
+	Vect3	m_colour;
 	float	m_posX;
 	float	m_posY;
-	int m_numOfLives;
-	int m_enemyType;
+	int		m_numOfLives;
+	int		m_enemyType;
+
 	BoundingBox m_BoundingBox;
 	RenderComponentInterface* m_RenderComp;
 };
