@@ -208,8 +208,8 @@ void RenderComponentLinux::RenderBackground(TextureType p_textureType)
   l_bobo.Width = 1600;
   l_bobo.Height = 1000;
   // Set camera to 0
-  l_cam.SetPosition( glm::vec3( 0.f, 0.f, 0.f ) );
-  l_cam.SetYawPitch( 0.f, 0.f );
+  m_genericShader.m_activeCamera->SetPosition( glm::vec3( 0.f, 0.f, 0.f ) );
+  m_genericShader.m_activeCamera->SetYawPitch( 0.f, 0.f );
   
   // Create an object based on p_objectType (p_textureType)
   ModelInstance* l_modelInstance = m_modelManager.CreateInstance( l_bobo, p_textureType );
@@ -229,8 +229,8 @@ void RenderComponentLinux::RenderBackground(TextureType p_textureType)
   delete l_modelInstance;
   
   // Reset camera to previous values
-  l_cam.SetPosition( glm::vec3( 300.f, 90.f, 500.f ) );
-  l_cam.SetYawPitch( 0, 11.31f );
+  m_genericShader.m_activeCamera->SetPosition( glm::vec3( 300.f, 90.f, 500.f ) );
+  m_genericShader.m_activeCamera->SetYawPitch( 0, 11.31f );
 }
 
 void RenderComponentLinux::CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
