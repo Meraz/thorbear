@@ -59,7 +59,7 @@ void SceneManager::SwapSceneState(SceneState::State p_sceneState)
 	else if (p_sceneState == SceneState::GAME)
 	{
 		SafeDelete(m_currentScene);
-		m_currentScene = new GameScene(START_SURVIVAL);				// l_menuFlag represents what mode to start
+		m_currentScene = new GameScene(l_menuFlag);				// l_menuFlag represents what mode to start
 	}
 	else if (p_sceneState == SceneState::CAMPAIGNHIGHSCORE)
 	{
