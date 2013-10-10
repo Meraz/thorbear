@@ -20,7 +20,7 @@ void CampaignHighscoreScene::Initialize(RenderComponentInterface* p_renderCompon
 	BaseScene::Initialize(p_renderComponentInterface);
 	m_sceneState = SceneState::CAMPAIGNHIGHSCORE;
 
-	m_highScore->Init(m_score, false);
+	m_highScore->Init(m_score, true);
 
 	bool l_newAdditionToHighscore = m_highScore->GetnewAdditionToHighscore();
 //	if(l_newAdditionToHighscore)
