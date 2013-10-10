@@ -126,6 +126,8 @@ void WindowLinux::Update()
   bool l_clicked = (glfwGetMouseButton( GLFW_MOUSE_BUTTON_LEFT ) == GLFW_PRESS);
 
 	WindowBaseClass::Update(l_deltaTime, l_mousePositionX, l_mousePositionY, l_clicked);
+	if(m_gameInterface->CheckIfExit())
+		glfwCloseWindow();
   
   ((RenderComponentLinux*)m_renderComponentInterface)->Update( l_deltaTime );
   
