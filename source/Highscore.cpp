@@ -121,7 +121,7 @@ void Highscore::CreateBaseHighscore(int p_modifier)
 	l_tempstream << 9000 * p_modifier;
 	m_highscoreData[1][1] = l_tempstream.str();
 	m_highscoreData[2][0] = "YNK";
-	l_tempstream.str("");
+	l_tempstream.str(""); 
 	l_tempstream << 6000 * p_modifier;
 	m_highscoreData[2][1] = l_tempstream.str();
 	m_highscoreData[3][0] = "BOL";

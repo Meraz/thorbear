@@ -35,7 +35,6 @@ public:
 	float	GetMultiplier();
 	void	AddBall();
 
-
 private:
 	vector<EnemySquad*> m_squad;
 	vector<Ball*>		m_ball;
@@ -49,6 +48,7 @@ private:
 	int		m_gameMode;
 	bool	m_prevLMouseClickStatus;
 	bool	m_isBeginningOfGame;
+
 	bool	m_isPaddleInvulnerable;
 	float	m_invulTimer;
 	float	m_invulTime;
@@ -56,6 +56,8 @@ private:
 	float	m_blinkTimer;
 	float	m_blinkTime;
 	float	m_scoreMultiplier;
+
+	bool	m_wasBallDeadLastUpdate;
 
 	RenderComponentInterface*	m_renderComp;
 	int		m_mapBorderThickness;

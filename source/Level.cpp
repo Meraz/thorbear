@@ -11,6 +11,7 @@ Level::Level(void)
 	m_changesInLife = 0;
 	m_map = NULL;
 	m_prevLMouseClickStatus = false;
+	m_wasBallDeadLastUpdate = false;
 
 	m_enemyDistance = 2;
 	m_scoreMultiplier = 1.0f;
@@ -132,7 +133,7 @@ void Level::CreateEnemies()
 	}
 	else if(m_gameMode == MODE_SURVIVAL)
 	{
-		srand(time(NULL));
+		srand((int)time(NULL));
 		for(unsigned int i = 0; i < 15; i++) // TODO Hardcoded number of enemies
 		{
 			if(rand() % 2 == 0)
@@ -188,7 +189,10 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 		{
 			if (m_ball.size() == 1)
 			{
-				
+				if (!m_ball.at(i)->WasBallDeadLastUpdate())
+				{
+					m_changesInLife--;
+				}
 				m_ball.at(i)->SetPosX(CalculateBallOnPaddlePosX());
 				m_ball.at(i)->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height));
 				if(p_isMouseClicked && !m_prevLMouseClickStatus)
@@ -309,36 +313,39 @@ void Level::CheckAllCollisions(float p_deltaTime)
 		//... Enemy
 		for(unsigned int i = 0; i < m_squad.size(); i++)
 		{
-			for(unsigned int j = 0; j < m_squad.at(i)->GetEnemies().size(); j++)
+			if(BoundingBoxIntersect(m_ball.at(k)->GetBoundingBox(), m_squad.at(i)->GetBoundingBox()))
 			{
-				if(BoundingBoxIntersect(m_ball.at(k)->GetBoundingBox(), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox()))
+				for(unsigned int j = 0; j < m_squad.at(i)->GetEnemies().size(); j++)
 				{
-					CheckIncrementalCollisions(m_ball.at(k), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox(), true, p_deltaTime);
-					m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
-					if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
+					if(BoundingBoxIntersect(m_ball.at(k)->GetBoundingBox(), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox()))
 					{
-						int l_random = rand() % 100;
-						if(l_random < POWERUPDROPRATIO)
-							SpawnPowerup(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosX, m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosY);
-						m_squad.at(i)->EraseMember(ENEMY1, j);
-						m_soundHandler->PlayGameSound(ENEMYDEATH);
+						CheckIncrementalCollisions(m_ball.at(k), m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox(), true, p_deltaTime);
+						m_squad.at(i)->GetEnemies().at(j)->TakeDamage();
+						if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
+						{
+							int l_random = rand() % 100;
+							if(l_random < POWERUPDROPRATIO)
+								SpawnPowerup(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosX, m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosY);
 
-						ParticleEmitterDesc l_desc;
-						l_desc.position			= Vect3(m_ball.at(k)->GetBoundingBox().PosX, m_ball.at(k)->GetBoundingBox().PosY, m_ball.at(k)->GetBoundingBox().PosZ);
-						l_desc.lifeTimeMin		= 0.5f;
-						l_desc.lifeTimeMax		= 0.7f;
-						l_desc.acceleration		= Vect3(0.0f, 0.0f, 0.0f);
-						l_desc.nrOfParticles	= 200;
-						l_desc.speedMin			= 50.0f;
-						l_desc.speedMax			= 300.0f;
-						l_desc.scale			= Vect3(0.5f, 0.5f, 0.5f);
-						l_desc.startColor		= Vect3(0.0f, 1.0f, 0.0f);
-						l_desc.endColor			= Vect3(0.0f, 0.4f, 0.0f);
-						m_renderComp->CreateParticleEmitter(l_desc);
+							ParticleEmitterDesc l_desc;
+							l_desc.position			= Vect3(m_ball.at(k)->GetBoundingBox().PosX, m_ball.at(k)->GetBoundingBox().PosY, m_ball.at(k)->GetBoundingBox().PosZ);
+							l_desc.lifeTimeMin		= 0.5f;
+							l_desc.lifeTimeMax		= 0.7f;
+							l_desc.acceleration		= Vect3(0.0f, 0.0f, 0.0f);
+							l_desc.nrOfParticles	= 200;
+							l_desc.speedMin			= 50.0f;
+							l_desc.speedMax			= 300.0f;
+							l_desc.scale			= Vect3(0.5f, 0.5f, 0.5f);
+							l_desc.startColor		= m_squad.at(i)->GetEnemies().at(j)->GetColour();
+							l_desc.endColor			= Vect3(0.0f, 0.4f, 0.0f);
+							m_renderComp->CreateParticleEmitter(l_desc);
 
-						//m_renderComp->CreateSplashText(L"NICE!", 200.0f, 900.0f, 450.0f, 0.4f, 0.0f);
+							m_squad.at(i)->EraseMember(ENEMY1, j);
+							m_soundHandler->PlayGameSound(ENEMYDEATH);
+							//m_renderComp->CreateSplashText(L"NICE!", 200.0f, 900.0f, 450.0f, 0.4f, 0.0f);
+						}
+						m_soundHandler->PlayGameSound(BALLBOUNCE);
 					}
-					m_soundHandler->PlayGameSound(BALLBOUNCE);
 				}
 			}
 		}
@@ -423,6 +430,14 @@ void Level::CheckAllCollisions(float p_deltaTime)
 				m_powerup.erase(m_powerup.begin() + i);
 		}
 	}
+
+	// Paddle vs Enemy
+	for (unsigned int i = 0; i < m_squad.size(); i++)
+	{
+		if(BoundingBoxIntersect(m_squad.at(i)->GetBoundingBox(), m_paddle->GetBoundingBox()))
+			m_changesInLife -= INT_MAX;
+	}
+
 	// Enemy vs Enemy
 	for(unsigned int i = 1; i < m_squad.size(); i++)
 	{
@@ -437,7 +452,11 @@ void Level::CheckAllCollisions(float p_deltaTime)
 			}
 		}
 	}
-
+	// TODO Check stuff and stuff
+	if (m_squad.front()->IsPaused())
+	{
+		m_squad.front()->StartMovement();
+	}
 	for(unsigned int i = 1; i < m_squad.size(); i++)
 	{
 		if(m_squad.at(i)->IsPaused())
@@ -446,10 +465,6 @@ void Level::CheckAllCollisions(float p_deltaTime)
 				m_squad.at(i)->StartMovement();
 		}
 	}
-	
-	// if(BoundingBoxIntersect(m_paddle->GetBoundingBox(), PowerUpBoundingBox))
-	// TODO Stuff happens
-	
 }
 
 void Level::CheckIncrementalCollisions(Ball* p_ball, BoundingBox p_bBox, bool p_isEnemy, float p_dt)

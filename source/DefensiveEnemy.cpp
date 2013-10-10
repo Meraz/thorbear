@@ -9,6 +9,7 @@ DefensiveEnemy::DefensiveEnemy(void)
 	m_enemyType = ENEMY2;
 	m_phaseZ = ((float)rand())/RAND_MAX*16.0f;
 	m_BoundingBox.Depth = 9;
+	m_colour = Vect3(1.0f);
 }
 
 
@@ -28,7 +29,7 @@ void DefensiveEnemy::Update( float p_velocity, EnemyDirection p_direction, float
 
 void DefensiveEnemy::Render()
 {
-	m_RenderComp->RenderObject(GetBoundingBox(), ENEMY2, Vect3(1.0f)*(m_numOfLives*0.5f)); //TODO change to ENEMY2 once we have a model for it
+	m_RenderComp->RenderObject(GetBoundingBox(), ENEMY2, m_colour*(m_numOfLives*0.5f)); 
 }
 
 bool DefensiveEnemy::WantsToFire()

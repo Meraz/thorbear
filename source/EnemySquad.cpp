@@ -173,14 +173,14 @@ void EnemySquad::CalculateBoundingBox()
 	float l_x,l_y;
 	int l_width, l_height;
 	l_x = 1000.0f;
-	l_y = 0.0f;
+	l_y = 1000.0f;
 	l_height = 0;
 	l_width = INT_MIN;
 	for(unsigned int i = 0; i < m_enemy.size(); i++)
 	{
 		if(l_x > m_enemy.at(i)->GetBoundingBox().PosX)
 			l_x = m_enemy.at(i)->GetBoundingBox().PosX;
-		if(l_y < m_enemy.at(i)->GetBoundingBox().PosY)
+		if(l_y > m_enemy.at(i)->GetBoundingBox().PosY)
 			l_y = m_enemy.at(i)->GetBoundingBox().PosY;
 		if(l_width < m_enemy.at(i)->GetBoundingBox().PosX + m_enemy.at(i)->GetBoundingBox().Width)
 			l_width = (int)m_enemy.at(i)->GetBoundingBox().PosX + m_enemy.at(i)->GetBoundingBox().Width;

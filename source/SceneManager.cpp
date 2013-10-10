@@ -47,7 +47,7 @@ bool SceneManager::CheckIfExit()
 void SceneManager::SwapSceneState(SceneState::State p_sceneState)
 {	
 	int l_menuFlag;
-	SceneState::State l_tempSceneState = p_sceneState;
+	SceneState::State l_tempSceneState = m_currentSceneState;
 	if(m_currentScene != 0) // Avoid crash during initialize
 		l_menuFlag = m_currentScene->GetMenuFlag();
 	
@@ -65,16 +65,20 @@ void SceneManager::SwapSceneState(SceneState::State p_sceneState)
 	{
 		SafeDelete(m_currentScene);
 		m_currentScene = new GameScene(l_menuFlag, m_soundHandler);				// l_menuFlag represents what mode to start
+		m_renderComponentInterface->SetShowCursor(false);
 	}
+
 	else if (p_sceneState == SceneState::CAMPAIGNHIGHSCORE)
 	{
 		SafeDelete(m_currentScene);
+		m_renderComponentInterface->SetShowCursor(true);
 		m_currentScene = new CampaignHighscoreScene(l_menuFlag); // l_menuFlag represents the score
 
 	}
 	else if (p_sceneState == SceneState::SURVIVALHIGHSCORE)
 	{
 		SafeDelete(m_currentScene);
+		m_renderComponentInterface->SetShowCursor(true);
 		m_currentScene = new SurvivalHighscoreScene(l_menuFlag); // l_menuFlag represents the score
 	}
 	else if (p_sceneState == SceneState::EXIT)

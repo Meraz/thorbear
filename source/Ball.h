@@ -30,6 +30,7 @@ public:
 	void Render();
 
 	bool IsBallDead();
+	bool WasBallDeadLastUpdate();
 
 	void SetPosX(float p_PosX);
 	void SetPosY(float p_posY);
@@ -67,6 +68,7 @@ private:
 	int		m_minBallAngle;
 
 	bool	m_isBallDead;
+	bool	m_wasBallDeadLastUpdate;
 	bool	m_hasBallBouncedAgainstEnemy;
 
 	float	m_speed;
