@@ -17,7 +17,7 @@ public:
   ~FontMan();
   
   void Init( );
-  void Draw( std::wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color );
+  void Draw( std::string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color );
 
 private:
   FT_Library m_ft;
