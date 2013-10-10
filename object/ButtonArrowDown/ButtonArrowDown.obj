@@ -1,6 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
-mtllib cube1.mtl
+mtllib ButtonArrowDown.mtl
 
 v -2.047483 -1.997455 1.995829
 v 1.947427 -1.997455 1.995829

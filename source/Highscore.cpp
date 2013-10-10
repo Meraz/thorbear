@@ -29,6 +29,7 @@ void Highscore::Init(int p_PlayerScore, bool p_Campaign)
 void Highscore::Update()
 {
 
+
 }
 
 void Highscore::Render()
@@ -111,7 +112,7 @@ void Highscore::CreateBaseHighscore(int p_modifier)
 {
 	std::stringstream l_tempstream;
 	//This is only called if the Highscorefile is corrupted or doesn't exist.
-	m_highscoreData[0][0] = "ROM";
+	m_highscoreData[0][0] = "GUD";
 	l_tempstream << 10000 * p_modifier;
 	m_highscoreData[0][1] = l_tempstream.str();
 	m_highscoreData[1][0] = "RAG";
