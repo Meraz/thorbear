@@ -137,7 +137,7 @@ void Level::CreateEnemies()
 	}
 	else if(m_gameMode == MODE_SURVIVAL)
 	{
-		srand(time(NULL));
+		srand((int)time(NULL));
 		for(unsigned int i = 0; i < 15; i++) // TODO Hardcoded number of enemies
 		{
 			if(rand() % 2 == 0)

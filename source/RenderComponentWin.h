@@ -68,6 +68,7 @@ public:
 	void Update(float p_dt);
 	BoundingBox ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType);
 
+	void SetShowCursor(bool p_showCursor);
 
 private:
 	bool InitializeDirect3D();
