@@ -25,7 +25,7 @@ public:
 	Level(void);
 	~Level(void);
 
-	void Init(int p_lvlNr, int p_gameMode, RenderComponentInterface* p_renderComp);
+	void Init(int p_lvlNr, int p_gameMode, RenderComponentInterface* p_renderComp, SoundHandler* p_soundHandler);
 
 	void	Update(int p_mousePosX, bool p_isMouseClicked, float p_deltaTime); //Not sure if int or float
 	void	Render();

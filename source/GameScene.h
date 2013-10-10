@@ -9,7 +9,7 @@ using namespace std;
 class GameScene : public BaseScene
 {
 public:
-	GameScene(int p_gameMode);
+	GameScene(int p_gameMode, SoundHandler* p_soundHandler);
 	~GameScene(void);
 
 	void Initialize(RenderComponentInterface* p_renderComponentInterface);
@@ -28,6 +28,7 @@ private:
 	float	m_scoreMultiplier;
 	Level*	m_level;
 	int		m_gameMode;
+	SoundHandler* m_soundHandler;
 	RenderComponentInterface* m_renderComponentInterface;
 
 	bool	m_isGameOver;

@@ -7,7 +7,7 @@ Button::Button(
 					SceneState::State p_sceneState, 
 					int p_menuFlag, 
 					RenderComponentInterface* p_renderComponentInterface, 
-					ButtonTexture p_buttonTexture)
+					TextureType p_buttonTexture)
 {
 	m_boundingBox = p_boundingBox;
 	m_scene = p_scene;
@@ -20,7 +20,7 @@ Button::Button(
 	m_clickable = new bool(true);
 }
 
-Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(int), int p_buttonId, RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture )
+Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(int), int p_buttonId, RenderComponentInterface* p_renderComponentInterface, TextureType p_buttonTexture )
 {
 	m_boundingBox = p_boundingBox;
 	m_highscore = p_highscore;
@@ -32,7 +32,7 @@ Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highsco
 	m_clickable = p_highscore->GetnewAdditionToHighscorePointer();
 }
 
-Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(), RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture )
+Button::Button( BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(), RenderComponentInterface* p_renderComponentInterface, TextureType p_buttonTexture )
 {
 	m_boundingBox = p_boundingBox;
 	m_highscore = p_highscore;
@@ -54,7 +54,7 @@ bool Button::CheckIfInside(int p_X, int p_Y)
 	if(*m_clickable == false)
 		return false;
 
-	BoundingBox l_boundingBox = m_renderComponentInterface->ConvertIntoScreenSpace(m_boundingBox, ENEMY1);
+	BoundingBox l_boundingBox = m_renderComponentInterface->ConvertIntoScreenSpace(m_boundingBox, m_buttonTexture);
 	
 	if(	p_X > l_boundingBox.PosX && p_X < l_boundingBox.PosX + l_boundingBox.Width &&
 		p_Y > l_boundingBox.PosY && p_Y < l_boundingBox.PosY + l_boundingBox.Height)
@@ -75,6 +75,7 @@ void Button::ExecuteCommand()
 
 void Button::Render()
 {
+	m_boundingBox.Depth = 1;
 	if(*m_clickable == true)
-			m_renderComponentInterface->RenderObject(m_boundingBox, ENEMY1); 
+			m_renderComponentInterface->RenderObject(m_boundingBox, m_buttonTexture); 
 }

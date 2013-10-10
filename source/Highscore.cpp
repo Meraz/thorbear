@@ -29,6 +29,7 @@ void Highscore::Init(int p_PlayerScore, bool p_Campaign)
 void Highscore::Update()
 {
 
+
 }
 
 void Highscore::Render()
@@ -40,7 +41,8 @@ void Highscore::Render()
 		m_renderComponentInterface->RenderText(m_playerName.substr(2,1), 15.0f, 900.0f, 200.0f, 0xffffffff);
 	}
 	std::stringstream l_tempstream;
-	l_tempstream << "Your Score: " << m_playerScore;
+	if(m_playerScore != -1) //Don't print if we entered from Menu
+		l_tempstream << "Your Score: " << m_playerScore;
 
 	m_renderComponentInterface->RenderText(l_tempstream.str(), 50.0f, 400.0f, 900.0f, 0xff00ffff);
 	//Render the highscore
@@ -111,7 +113,7 @@ void Highscore::CreateBaseHighscore(int p_modifier)
 {
 	std::stringstream l_tempstream;
 	//This is only called if the Highscorefile is corrupted or doesn't exist.
-	m_highscoreData[0][0] = "ROM";
+	m_highscoreData[0][0] = "GUD";
 	l_tempstream << 10000 * p_modifier;
 	m_highscoreData[0][1] = l_tempstream.str();
 	m_highscoreData[1][0] = "RAG";

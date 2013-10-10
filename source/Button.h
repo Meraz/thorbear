@@ -10,13 +10,13 @@
 class Button
 {
 public:
-	Button(BoundingBox p_boundingBox, BaseScene* p_scene, void (BaseScene::*p_function)(SceneState::State, int), SceneState::State p_sceneState, int p_menuFlag, RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture);
+	Button(BoundingBox p_boundingBox, BaseScene* p_scene, void (BaseScene::*p_function)(SceneState::State, int), SceneState::State p_sceneState, int p_menuFlag, RenderComponentInterface* p_renderComponentInterface, TextureType p_buttonTexture);
 	
 	// Used for Higscore function "NextChar(int)" and "PrevChar(int)"
-	Button(BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(int), int p_buttonId, RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture);
+	Button(BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(int), int p_buttonId, RenderComponentInterface* p_renderComponentInterface, TextureType p_buttonTexture);
 	
 	// Used for Higscore function "SaveFile()"
-	Button(BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(), RenderComponentInterface* p_renderComponentInterface, ButtonTexture p_buttonTexture);
+	Button(BoundingBox p_boundingBox, Highscore* p_highscore, void (Highscore::*p_function)(), RenderComponentInterface* p_renderComponentInterface, TextureType p_buttonTexture);
 	
 	~Button();
 	
@@ -46,7 +46,7 @@ private:
 
 
 	RenderComponentInterface* m_renderComponentInterface;
-	ButtonTexture m_buttonTexture;
+	TextureType m_buttonTexture;
 
 };
 
