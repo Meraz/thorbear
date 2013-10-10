@@ -15,6 +15,7 @@ Ball::Ball(void)
 	m_maxBallAngle = 170;
 	m_minBallAngle = 10;
 	m_isBallDead = true;
+	m_wasBallDeadLastUpdate = true;
 	m_hasBallBouncedAgainstEnemy = false;
 }
 
@@ -41,6 +42,7 @@ void Ball::ShootBall()
 
 void Ball::Update(float p_deltaTime)
 {
+	m_wasBallDeadLastUpdate = m_isBallDead;
 	if (!m_isBallDead)
 	{
 		m_incPosX = m_posX;
@@ -53,6 +55,7 @@ void Ball::Update(float p_deltaTime)
 		CheckCollisionAgainstWalls();
 		m_hasBallBouncedAgainstEnemy = false;
 	}
+	
 }
 
 void Ball::Render()
@@ -63,6 +66,11 @@ void Ball::Render()
 bool Ball::IsBallDead()
 {
 	return m_isBallDead;
+}
+
+bool Ball::WasBallDeadLastUpdate()
+{
+	return m_wasBallDeadLastUpdate;
 }
 
 void Ball::SetPosX( float p_PosX)
@@ -126,7 +134,9 @@ void Ball::CheckCollisionAgainstWalls()
 		m_direction.X *= -1;
 
 	if(m_posY < 0)
+	{
 		m_isBallDead = true;
+	}
 	else if(m_posY + m_height > m_mapEdges.Height && m_direction.Y > 0)
 		m_direction.Y *= -1;
 }
