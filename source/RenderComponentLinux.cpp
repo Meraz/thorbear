@@ -229,7 +229,30 @@ void RenderComponentLinux::Update( float p_deltatime )
 
 BoundingBox RenderComponentLinux::ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType)
 {
-  
+	int l_windowWidth, l_windowHeight; // 800x600?
+	glfwGetWindowSize( &l_windowWidth, &l_windowHeight );
+  	glm::mat4 l_WVP		= m_genericShader.m_activeCamera->GetProjectionMatrix()* m_genericShader.m_activeCamera->GetViewMatrix();
+
+	glm::vec4 l_point = glm::vec4 ( p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), p_boundingBox.PosZ, 1.0 );
+	
+	l_point = l_WVP * l_point;
+	
+	glm::vec3 l_point2;
+	l_point2.x = l_point.x / l_point.w;
+	l_point2.y = l_point.y / l_point.w;
+	l_point2.z = l_point.z / l_point.w;
+
+	glm::vec2 l_point3;
+	l_point3.x = ((l_point2.x + 1.0) / 2.0) * l_windowWidth;
+	l_point3.y = ((l_point2.y + 1.0) / 2.0) * l_windowHeight;
+
+	BoundingBox l_boundingBox;
+	l_boundingBox.PosX = l_point3.x - p_boundingBox.Width/1.5f;
+	l_boundingBox.PosY = l_windowHeight - (l_point3.y + p_boundingBox.Height/2);
+	l_boundingBox.Width = p_boundingBox.Width * 1.3f;
+	l_boundingBox.Height = p_boundingBox.Height * 1.3f;
+	l_boundingBox.Depth = p_boundingBox.Depth;
+	return l_boundingBox;
 }
 
 void RenderComponentLinux::UpdateViewportSize( int p_width, int p_height )
