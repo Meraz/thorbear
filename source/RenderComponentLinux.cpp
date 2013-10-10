@@ -125,7 +125,7 @@ bool RenderComponentLinux::Init()
   GLCheckErrors( "RenderComponentLinux::Init - Clear" );
 	
 	glfwSetWindowTitle( "SpaceOut: OpenGL4 Test" );//l_windowTitle.c_str( ) );
-	glfwSwapInterval( 1 ); // 0: VSync off, 1: on
+	glfwSwapInterval( 0 ); // 0: VSync off, 1: on
     
   m_genericShader.Init( SHADER_DIRECTORY + "genericVertex.glsl", SHADER_DIRECTORY + "genericFragment.glsl" );
   m_genericShader.Build( );
