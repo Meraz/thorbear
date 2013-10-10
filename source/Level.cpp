@@ -33,8 +33,6 @@ Level::~Level(void)
 {
 	delete m_paddle;
 	delete m_map;
-	delete m_soundHandler;
-	m_soundHandler = 0;
 
 	for (unsigned int i = 0; i < m_squad.size(); i++)
 	{
@@ -63,11 +61,11 @@ Level::~Level(void)
 
 }
 
-void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_renderComp )
+void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_renderComp, SoundHandler* p_soundHandler )
 {
 	m_renderComp = p_renderComp;
 	m_gameMode = p_gameMode;
-
+	m_soundHandler = p_soundHandler;
 	if(m_gameMode == MODE_CAMPAIGN)
 	{
 		std::stringstream l_ss;
@@ -96,9 +94,7 @@ void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_rende
 		(int)m_levelValues.at("BALLWIDTH"), (int)m_levelValues.at("BALLHEIGHT"), m_levelValues.at("BALLSPEED"), m_mapEdges, m_renderComp); //SPEED?!
 
 	CreateEnemies();
-	m_soundHandler = new SoundHandler();
-	m_soundHandler->Initialize();
-	m_soundHandler->PlayBackGroundSound("Audio/GameBackground.wav");
+
 }
 
 

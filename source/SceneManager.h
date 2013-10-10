@@ -9,6 +9,7 @@
 #include "CampaignHighScoreScene.h"
 #include "SurvivalHighscoreScene.h"
 #include "MemoryMacro.h"
+#include "SoundHandler.h"
 
 class SceneManager : public GameInterface 
 {
@@ -29,7 +30,7 @@ private:
 
 	SceneState::State m_currentSceneState;
 	BaseScene* m_currentScene;
-
+	SoundHandler* m_soundHandler;
 	bool m_Exit;
 
 };

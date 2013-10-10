@@ -49,6 +49,7 @@ void CampaignHighscoreScene::Render()
 {
 	for(int i = 0; i < m_button.size(); i++)
 		m_button.at(i)->Render();
+	m_highScore->Render();
 }
 
 void CampaignHighscoreScene::CheckButton(int p_mousePositionX, int p_mousePositionY)

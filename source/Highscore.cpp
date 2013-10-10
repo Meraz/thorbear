@@ -41,7 +41,8 @@ void Highscore::Render()
 		m_renderComponentInterface->RenderText(m_playerName.substr(2,1), 15.0f, 900.0f, 200.0f, 0xffffffff);
 	}
 	std::stringstream l_tempstream;
-	l_tempstream << "Your Score: " << m_playerScore;
+	if(m_playerScore != -1) //Don't print if we entered from Menu
+		l_tempstream << "Your Score: " << m_playerScore;
 
 	m_renderComponentInterface->RenderText(l_tempstream.str(), 50.0f, 400.0f, 900.0f, 0xff00ffff);
 	//Render the highscore

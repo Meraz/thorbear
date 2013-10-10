@@ -3,7 +3,7 @@
 #include <string>
 #include <sstream>
 
-GameScene::GameScene(int p_gameMode)
+GameScene::GameScene(int p_gameMode, SoundHandler* p_soundHandler)
 {
 	m_gameMode = p_gameMode;
 	m_currentLevel = 1;
@@ -15,6 +15,7 @@ GameScene::GameScene(int p_gameMode)
 	m_scoreMultiplier = 1.0f;
 	m_gameMode = p_gameMode;
 	m_isGameOver = false;
+	m_soundHandler = p_soundHandler;
 }
 
 GameScene::~GameScene()
@@ -28,7 +29,7 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 	m_sceneState = SceneState::GAME;
 
 	m_level = new Level();
-	m_level->Init(m_currentLevel, m_gameMode, p_renderComponentInterface); 
+	m_level->Init(m_currentLevel, m_gameMode, p_renderComponentInterface, m_soundHandler); 
 	m_lastKnownNrOfEnemies = m_level->GetNrOfEnemies();
 
 	m_renderComponentInterface = p_renderComponentInterface;
@@ -147,6 +148,6 @@ void GameScene::CheckEnemyNr()
 		if(m_currentLevel > m_maxNrOfLevels)
 			m_currentLevel = 1;
 		m_level = new Level();
-		m_level->Init(m_currentLevel, m_gameMode, m_renderComponentInterface); 
+		m_level->Init(m_currentLevel, m_gameMode, m_renderComponentInterface, m_soundHandler); 
 	}
 }
