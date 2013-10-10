@@ -90,7 +90,7 @@ void FontMan::Draw( std::string p_text, float p_size, float p_posX, float p_posY
   float sx = 2.0f / m_windowWidth;
   float sy = 2.0f / m_windowHeight;
   
-  for(const char* p = p_text; *p; p++)
+  for(const char* p = p_text.c_str(); *p; p++)
   {
     if(FT_Load_Char(m_arial, *p, FT_LOAD_RENDER))
         continue;
