@@ -5,6 +5,8 @@
 #include "glm/glm.hpp"
 #include <string>
 
+#define SHADER_DIRECTORY std::string("effect/")
+
 #include "Camera.h"
 
 class Shader

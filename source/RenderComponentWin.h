@@ -14,20 +14,37 @@
 
 struct ObjTemplate
 {
+	ObjTemplate(){instancedBuffer = 0;}
 	ObjTemplate(Model* p_model, Shader* p_shader)
 	{
 		model = p_model;
 		shader = p_shader;
+
+		D3DXMATRIX f;
+		D3DXMatrixIdentity(&f);
+		for (unsigned int i = 0; i < 100; i++)
+		{
+			matrixList.push_back(f);
+		}
+		//Instance Buffer Description
+		bdInstance.ElementSize = sizeof( D3DXMATRIX );
+		bdInstance.InitData = &matrixList[0];
+		bdInstance.NumElements = matrixList.size();
+		bdInstance.Type = VERTEX_BUFFER;
+		bdInstance.Usage = BUFFER_CPU_WRITE_DISCARD;
+
+		instancedBuffer = new Buffer();
 	}
 
 	~ObjTemplate()
 	{
-		//delete model;
-		//delete shader;
 	}
 
 	Model*	model;
 	Shader*	shader;  
+	Buffer*	instancedBuffer;
+	vector<D3DXMATRIX> matrixList;
+	BUFFER_INIT_DESC bdInstance;
 };
 
 class RenderComponentWin : public RenderComponentInterface
@@ -41,7 +58,7 @@ public:
 	void RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f));
 	void CreateParticleEmitter(ParticleEmitterDesc p_particleDesc);
 	void RenderParticleSystem(ParticleSystem p_particleSystem);
-	void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG);
+	void RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color);
 	void RenderBackground(TextureType p_textureType);
 	void CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime );
 
@@ -56,6 +73,8 @@ private:
 	bool InitializeDirect3D();
 	void Load();
 	void CreateTemplates();
+	void CreateInstancedWorldMatrix(BoundingBox p_boundingBox, TextureType p_type, Vect3 p_color);
+	void RenderInstancedData(TextureType p_type);
 
 private:
 	HWND					m_hMainWnd;

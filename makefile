@@ -19,9 +19,9 @@ CC= gcc
 CXX= g++
 AR= ar
 CFLAGS= -g
-CXXFLAGS= -g -iquote./source/ -iquote./source/Fmod/inc/
+CXXFLAGS= -g -std=c++0x -iquote./source/ -iquote./source/Fmod/inc/ #-DDEBUG
 ARFLAGS= cru
-LDFLAGS= -lX11 -lpthread -lglfw -lGLEW -lGLU -lGL -lfmodex64
+LDFLAGS= -lX11 -lpthread -lglfw -lGLEW -lGLU -lGL -lfmodex64 -lfreetype
 RESULT=spaceout
 INTERMEDIATE_DIR=./obj
 DESTINATION_DIR=.
@@ -31,7 +31,7 @@ MKDIR= mkdir -p
 INTERMEDIATE_DIR_MK=./obj
 DESTINATION_DIR_MK=.
 
-EXCLUDES= %Windows.cpp %Win.cpp source/D3DX_Graphics/%.cpp
+EXCLUDES= %Windows.cpp %Win.cpp source/D3DX_Graphics/%.cpp source/ParticleEmitter.cpp source/ParticleSystem.cpp source/SplashText.cpp
 SOURCEPATHS= $(filter-out $(EXCLUDES), $(wildcard source/*.cpp) $(wildcard source/*/*.cpp))
 SOURCES= $(notdir $(SOURCEPATHS))
 HEADERS= $(wildcard source/*.h) $(wildcard source/*/*.h)

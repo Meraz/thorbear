@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <time.h>
+#include <unordered_map>
 #include "Paddle.h"
 #include "EnemySquad.h"
 #include "LevelImporter.h"
@@ -63,7 +64,9 @@ private:
 	int		m_enemyDistance;
 	SoundHandler* m_soundHandler;
 
-	hash_map<string, float> m_levelValues;
+	unordered_map<string, float> m_levelValues; //storage for variables read from the levelImporter used to set such things as mapEdge height and width etc...
+	bool m_renderErrorLoadingLevel;
+	float m_errorMessageTick;
 
 private:
 	void	CheckAllCollisions(float p_deltaTime);

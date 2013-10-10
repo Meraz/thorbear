@@ -19,6 +19,7 @@ enum TextureType
 	LARGERPADDLEPOWERUP,
 	SMALLERPADDLEPOWERUP,
 	LEVEL,
+	MAINMENU,
 	TTCOUNT // Leave this last, you can loop i < TTCOUNT
 };
 
@@ -43,7 +44,7 @@ public:
 	virtual void CreateParticleEmitter(ParticleEmitterDesc p_particleDesc) = 0;				
 
 	/* Add this text to be drawn this update */
-	virtual void RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, unsigned int FLAG) = 0;
+	virtual void RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color) = 0;
 
 	/* Only used in the render component */
 	virtual void Update(float p_dt) = 0;

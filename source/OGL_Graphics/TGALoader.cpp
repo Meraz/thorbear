@@ -7,6 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
+
+// Some macros to shorten things up.
+#define sint short int
+#define uchar unsigned char
+
 // Eliminate extraneous calls to sizeof().
 const size_t size_uchar = sizeof(uchar);
 const size_t size_sint = sizeof(sint);
@@ -43,7 +48,9 @@ tga_data_t* tga_data_load( const char* fn )
 		{ // Load the actual image data.
 			md = tga->depth / 8; // Mode = components per pixel.
 			t = tga->h * tga->w * md; // Total bytes = h * w * md.
+#ifdef DEBUG
 			printf("Reading %d bytes.\n", t);
+#endif
 			tga->data = (uchar*)malloc(size_uchar * t); // Allocate memory for the image data.
 			fseek(fh, 18, SEEK_SET); // Seek to the image data.
 			fread(tga->data, size_uchar, t, fh);
@@ -57,7 +64,9 @@ tga_data_t* tga_data_load( const char* fn )
 				}
 			}
 		}
+#ifdef DEBUG
 		printf("Loaded texture -> (%s)\nWidth: %d\nHeight: %d\nDepth: %d\n", fn, tga->w, tga->h, tga->depth);
+#endif
 	}
 	return tga;
 }

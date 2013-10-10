@@ -35,28 +35,33 @@ void GameScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
 
 	//Render the text one with FLAG set to 0
 	//-----------------------------------------------------------------------------------------------------------------------------------
-	std::wostringstream  l_ss;
-	l_ss << m_nrOfLives;
-	std::wstring l_lives( l_ss.str() );
+	std::ostringstream  l_ss;
+	std::ostringstream  l_ss2;
 
-	l_ss.str(L""); // reset stringstream to empty
-	l_ss << m_score;
-	std::wstring l_score( l_ss.str() );
+	// Lives
+	l_ss << "Extra Lives: " << m_nrOfLives << "\n";
+	l_ss << "Score: " << m_score  << "\n";
 
-	m_renderComponentInterface->RenderText(L"Extra Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff, 0);
-	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff, 0);
+	l_ss2 << 1.0f/m_deltaTime;
+	std::string l_fps( l_ss2.str() );
+	l_ss2.clear();
+	l_ss2.str("");
 
-	l_ss << 1.0f/m_deltaTime;
-	std::wstring l_fps( l_ss.str() );
-	l_ss.str(L""); // reset stringstream to empty
-	l_ss << m_scoreMultiplier;
-	std::wstring l_scoreMulti( l_ss.str().substr(0,4) );
 
+	l_ss << "FPS: " << l_fps  << "\n";
+
+	l_ss2 << m_scoreMultiplier;
+	std::string l_scoreMulti = l_ss2.str().substr(0,4);
+
+	l_ss << "Score Multiplier: x" << l_scoreMulti;
+
+	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 0.0f, 0xff0099ff);
+
+	// Game over
+	m_renderComponentInterface->RenderText("GAME OVER", 100.0f, 650.0f, 500.0f, 0xff0099ff);
 	//Set the FLAG to 1 to increase performance
-	m_renderComponentInterface->RenderText(L"Score Multiplier: x" + l_scoreMulti, 15.0f, 10.0f, 40.0f, 0xff0099ff, 0);
-	m_renderComponentInterface->RenderText(L"FPS: " + l_fps, 15.0f, 10.0f, 60.0f, 0xff0099ff, 0);
-	m_renderComponentInterface->RenderText(L"GAME OVER", 100.0f, 650.0f, 500.0f, 0xff0099ff, 0);
 	//-----------------------------------------------------------------------------------------------------------------------------------
+
 }
 
 void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePositionY, bool p_lMouseClicked /* add keyboard parameters here*/)
@@ -84,34 +89,35 @@ void GameScene::Update(double p_deltaTime, int p_mousePositionX, int p_mousePosi
 
 void GameScene::Render()
 {
+
 	m_renderComponentInterface->RenderBackground(LEVEL);
 	m_level->Render();
+	
+	std::ostringstream  l_ss;
+	std::ostringstream  l_ss2;
+	
+	// Lives
+	l_ss << "Extra Lives: " << m_nrOfLives << "\n";
+	l_ss << "Score: " << m_score  << "\n";
 
-	std::wostringstream  l_ss;
-	l_ss << m_nrOfLives;
-	std::wstring l_lives( l_ss.str() );
-  
-	l_ss.str(L""); // reset stringstream to empty
-	l_ss << m_score;
-	std::wstring l_score( l_ss.str() );
+	l_ss2 << 1.0f/m_deltaTime;
+	std::string l_fps( l_ss2.str() );
+	l_ss2.clear();
+	l_ss2.str("");
 
-	l_ss.str(L""); // reset stringstream to empty
-	l_ss << m_scoreMultiplier;
-	std::wstring l_scoreMulti( l_ss.str().substr(0,4) );
 
-	//Set the FLAG to 1 to increase performance
-	m_renderComponentInterface->RenderText(L"Extra Lives: " + l_lives, 15.0f, 10.0f, 0.0f, 0xff0099ff, 1);
-	m_renderComponentInterface->RenderText(L"Score: " + l_score, 15.0f, 10.0f, 20.0f, 0xff0099ff, 1);
-	m_renderComponentInterface->RenderText(L"Score Multiplier: x" + l_scoreMulti, 15.0f, 10.0f, 40.0f, 0xff0099ff, 1);
+	l_ss << "FPS: " << l_fps  << "\n";
 
-	l_ss << 1/m_deltaTime;
-	std::wstring l_fps( l_ss.str() );
+	l_ss2 << m_scoreMultiplier;
+	std::string l_scoreMulti = l_ss2.str().substr(0,4);
 
-	m_renderComponentInterface->RenderText(L"FPS: " + l_fps,		15.0f, 10.0f, 60.0f, 0xff0099ff, 1);
+	l_ss << "Score Multiplier: x" << l_scoreMulti;
+
+	m_renderComponentInterface->RenderText(l_ss.str(), 15.0f, 10.0f, 0.0f, 0xff0099ff);
 
 	if (m_isGameOver)
 	{
-		m_renderComponentInterface->RenderText(L"GAME OVER", 100.0f, 650.0f, 500.0f, 0xff0099ff, 1); //TODO Place in the middle of the screen
+		m_renderComponentInterface->RenderText("GAME OVER", 100.0f, 650.0f, 500.0f, 0xff0099ff); //TODO Place in the middle of the screen
 	}
 }
 
@@ -124,8 +130,6 @@ void GameScene::CheckPaddleLife()
 		m_nrOfLives = 0;
 	}
 }
-
-
 
 void GameScene::CheckEnemyNr()
 {

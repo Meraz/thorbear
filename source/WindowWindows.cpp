@@ -104,15 +104,6 @@ int WindowWindows::Run()
 				//CalculateFrameStats();
 				Update();
 				Render();
-
-				char title[256];
-				sprintf_s(
-				title,
-				sizeof(title),
-				"%f",
-				(1.0f/m_gameTimer->DeltaTime())
-				);
-				SetWindowTextA(m_hMainWnd, title);
 			}
 			else
 			{
@@ -131,9 +122,8 @@ void WindowWindows::Update()
 
 	if(m_gameInterface->CheckIfExit())
 		PostQuitMessage(0);
-
-	
-	wchar_t title[256];
+		
+	/*wchar_t title[256];
 		swprintf_s(
 		title,
 		_countof(title),
@@ -141,6 +131,16 @@ void WindowWindows::Update()
 		);
 
 	SetWindowText(m_hMainWnd, title); // TEST CODE : TODO REMOVE
+	*/
+	
+	/*char title[256];
+	sprintf_s(
+		title,
+		sizeof(title),
+		"%f",
+		(1.0f/m_gameTimer->DeltaTime())
+		);
+	SetWindowTextA(m_hMainWnd, title);	// TEST CODE : TODO REMOVE*/
 	
 }
 
@@ -161,13 +161,13 @@ LRESULT WindowWindows::MsgProc(HWND p_hwnd, UINT p_msg, WPARAM p_wParam, LPARAM 
 	case WM_ACTIVATE:
 		if( LOWORD(p_wParam) == WA_INACTIVE )
 		{
-			m_appPaused = true;
-			m_gameTimer->Stop();
+			//m_appPaused = true;
+			//m_gameTimer->Stop();
 		}
 		else
 		{
-			m_appPaused = false;
-			m_gameTimer->Start();
+			//m_appPaused = false;
+			//m_gameTimer->Start();
 		}
 		return 0;
 

@@ -9,7 +9,7 @@
 
 // Parses the object data from an .obj file and stores it in the model
 bool LoadOBJ( std::string p_dir, std::string p_fileName, Model &p_model );
-extern inline std::string stringf( const char *p_fmt, ... );
+extern std::string stringf( const char *p_fmt, ... );
 
 Model::Model( )
   : m_mtl( 0 )
@@ -51,11 +51,11 @@ bool Model::Load( std::string p_dir, std::string p_fileName )
 
 void Model::Render( Shader &p_shader, glm::vec3 p_tint )
 {
+  glBindVertexArray( m_handleVAO ); // bind VAO
   m_mtl->Apply( p_shader );
   
   p_shader.SetUniformVector( "intensityDiffuse", p_tint ); // override diffuse intensity with tint
 
-  glBindVertexArray( m_handleVAO ); // bind VAO
   glDrawArrays( GL_TRIANGLES, 0, m_vertexCount );
 }
 
@@ -145,7 +145,9 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				if( tmpstr.compare( "newmtl" ) == 0 )
 				{
 					mtlf >> tmpstr;
+#ifdef DEBUG
 					printf( "New Material: %s\n", tmpstr.c_str( ) );
+#endif
 					model.m_mtl = new Material( );
 					//mtls.push_back( mtl );
 				}
@@ -162,7 +164,9 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				if( tmpstr.compare( "map_Ka" ) == 0 )
 				{
 					mtlf >> tmpstr;
+#ifdef DEBUG
 					printf( "Ambient texture: " );
+#endif
 
 					tga_data_t* l_mapAmbient = tga_data_load( ( dir + tmpstr + TEXTURE_EXT).c_str( ) );
           model.m_mtl->m_coefficientAmbient = glm::vec3(0);
@@ -182,7 +186,9 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				if( tmpstr.compare( "map_Kd" ) == 0 )
 				{
 					mtlf >> tmpstr;
+#ifdef DEBUG
 					printf( "Diffuse texture: " );
+#endif
 
 					tga_data_t* l_mapDiffuse = tga_data_load( ( dir + tmpstr + TEXTURE_EXT ).c_str( ) );
           model.m_mtl->m_coefficientDiffuse = glm::vec3(0);
@@ -202,7 +208,9 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 				if( tmpstr.compare( "map_Ks" ) == 0 )
 				{
 					mtlf >> tmpstr;
+#ifdef DEBUG
 					printf( "Specular texture: " );
+#endif
 
 					tga_data_t* l_mapSpecular = tga_data_load( ( dir + tmpstr + TEXTURE_EXT ).c_str( ) );
           model.m_mtl->m_coefficientSpecular = glm::vec3(0);
@@ -229,7 +237,9 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 			break;
 		case 'g': // mesh name or something
 			f >> tmpstr;
+#ifdef DEBUG
 			printf("Loading mesh '%s'\n", tmpstr.c_str());
+#endif
 			break;
 		case 'v': // vertex or vertex normal, or vertex uv
 			if (f.peek() == 'n') // vertex normal
@@ -365,9 +375,10 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
 			break;
 		}
 	}
-
+#ifdef DEBUG
 	printf("Successfully loaded object\n");
 	printf(" %d vertices, %d indices\n", (int)vertexData->size( ) / 8, (int)indices->size( ) );
+#endif
 #pragma endregion
 
   model.m_vertexCount = indices->size();
