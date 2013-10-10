@@ -47,7 +47,7 @@ int RenderComponentWin::Initialize()
 
 	Load();
 	CreateTemplates();
-	ShowCursor(true);
+	//ShowCursor(true);
 
 	m_fontRenderer = new FontRenderWin();
 	m_fontRenderer->Init(m_d3dDevice, L"Arial", m_d3dImmediateContext);
@@ -504,5 +504,10 @@ void RenderComponentWin::RenderInstancedData( TextureType p_type )
 		}
 		m_objVec.at((int)p_type).matrixList.clear();
 	}
+}
+
+void RenderComponentWin::SetShowCursor( bool p_showCursor )
+{
+	ShowCursor(p_showCursor);
 }
 

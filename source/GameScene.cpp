@@ -106,7 +106,11 @@ void GameScene::CheckEnemyNr()
 	int l_nrEnemies = m_level->GetNrOfEnemies();
 
 	if(l_nrEnemies < m_lastKnownNrOfEnemies)
+	{
 		m_score += (int)(m_scoreMultiplier * m_enemyWorth * (m_lastKnownNrOfEnemies - l_nrEnemies));
+		if(m_score > INT_MAX)
+			m_score = INT_MAX;
+	}
 	m_lastKnownNrOfEnemies = l_nrEnemies;
 
 	if(m_lastKnownNrOfEnemies == 0 && m_gameMode == MODE_CAMPAIGN)
