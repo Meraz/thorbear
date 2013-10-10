@@ -12,6 +12,7 @@ ShootingEnemy::ShootingEnemy(void)
 	m_shootIntervall = 3.0f +  rand() % 10;
 	m_phaseZ = ((float)rand())/RAND_MAX*16.f;
 	m_BoundingBox.Depth = 9;
+	m_colour = Vect3(0.247, 0.611, 0.282);
 }
 
 
@@ -43,7 +44,7 @@ void ShootingEnemy::Update(float p_velocity, EnemyDirection p_direction, float p
 
 void ShootingEnemy::Render()
 {
-	m_RenderComp->RenderObject(GetBoundingBox(), ENEMY1, Vect3(0.247, 0.611, 0.282));
+	m_RenderComp->RenderObject(GetBoundingBox(), ENEMY1, m_colour);
 }
 
 bool ShootingEnemy::WantsToFire()

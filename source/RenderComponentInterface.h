@@ -55,6 +55,8 @@ public:
 
 	virtual void CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime ) = 0;
 
+	virtual void SetShowCursor(bool p_showCursor) = 0;
+
 };
 
 #endif

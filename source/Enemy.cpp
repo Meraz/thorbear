@@ -37,3 +37,8 @@ void Enemy::SetRenderComponentInterface(RenderComponentInterface* p_RenderComp)
 	m_RenderComp = p_RenderComp;
 }
 
+Vect3 Enemy::GetColour()
+{
+	return m_colour;
+}
+
