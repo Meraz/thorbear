@@ -194,7 +194,7 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
   delete l_modelInstance;
 }
 
-void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+void RenderComponentLinux::RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
 {
   m_fontManager.Draw( p_text, p_size, p_posX, p_posY, p_color );
 }
