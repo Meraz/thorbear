@@ -208,7 +208,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = false;
+	l_sd.Windowed     = !(!NULL);
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -296,6 +296,19 @@ void RenderComponentWin::Load()
 	m_modelManager->CreateModel("background.obj", "object\\levelBackground");
 	m_modelManager->CreateModel("mainmenu.obj", "object\\mainmenu_background");
 
+	m_modelManager->CreateModel("ButtonStart.obj", "object\\ButtonStart");
+	m_modelManager->CreateModel("ButtonCampaign.obj", "object\\ButtonCampaign");
+	m_modelManager->CreateModel("ButtonSurvival.obj", "object\\ButtonSurvival");
+	m_modelManager->CreateModel("ButtonCampaignHS.obj", "object\\ButtonCampaignHS");
+	m_modelManager->CreateModel("ButtonSurvivalHS.obj", "object\\ButtonSurvivalHS");
+	m_modelManager->CreateModel("ButtonExit.obj", "object\\ButtonExit");
+	m_modelManager->CreateModel("ButtonArrowUp.obj", "object\\ButtonArrowUp");
+	m_modelManager->CreateModel("ButtonArrowDown.obj", "object\\ButtonArrowDown");
+	m_modelManager->CreateModel("ButtonSave.obj", "object\\ButtonSave");
+	m_modelManager->CreateModel("ButtonReturn.obj", "object\\ButtonReturn");
+
+	//m_modelManager->CreateModel("")
+
 	m_shaderManager->AddShader("effect\\object.fx", 12);	
 	m_shaderManager->AddShader("effect\\background.fx", 12);
 	m_shaderManager->AddShader("effect\\instanced.fx", 12);
@@ -320,6 +333,18 @@ void RenderComponentWin::CreateTemplates()
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("mainmenu.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonStart.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonCampaign.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonSurvival.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonCampaignHS.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonSurvivalHS.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonExit.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonArrowUp.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonArrowDown.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonSave.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonReturn.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+
 
 	for (unsigned int i = 0; i < m_objVec.size(); i++)
 	{

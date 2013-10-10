@@ -20,16 +20,20 @@ enum TextureType
 	SMALLERPADDLEPOWERUP,
 	LEVEL,
 	MAINMENU,
+	START,
+	CAMPAIGN,
+	SURVIVAL,
+	CAMPAIGNHS,
+	SURVIVALHS,
+	EXIT,
+	ARROWUP,
+	ARROWDOWN,
+	SAVE,
+	RETURN,
 	TTCOUNT // Leave this last, you can loop i < TTCOUNT
 };
 
-enum ButtonTexture
-{
-	BUTTON1,
-	BUTTON2,
-	BUTTON3,
-	BUTTON4
-};
+
 
 class RenderComponentInterface
 {

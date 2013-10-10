@@ -63,13 +63,9 @@ void FontMan::Init( )
     
 }
 
-void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color )
+void FontMan::Draw( std::string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color )
 {
   glfwGetWindowSize( &m_windowWidth, &m_windowHeight );
-  char* l_text = new char[ p_text.size() ];
-  int l_size = wcstombs( l_text, p_text.c_str(), p_text.size() );
-  if( l_size == p_text.size() )
-    l_text[l_size-1]='\0';
   
   if( m_currentSize != (int)p_size )
   {
@@ -87,15 +83,24 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
   glBindTexture(GL_TEXTURE_2D, m_arial_texture);
   
   m_fontShader.Use();
-  m_fontShader.SetUniformVector( "color", glm::vec4( (p_color >> 24) & 0xFF, (p_color >> 16) & 0xFF, (p_color >> 8) & 0xFF, p_color & 0xFF ) );
+  glm::vec4 l_fontColor = glm::vec4( (p_color >> 0) & 0xFF, (p_color >> 8) & 0xFF, (p_color >> 16) & 0xFF, (p_color >> 24) & 0xFF ) / 256.f;
+  m_fontShader.SetUniformVector( "color", l_fontColor );
   m_fontShader.SetUniformInt( "tex", 1 );
   
   // For converting screenspace to clipspace [-1..1]
   float sx = 2.0f / m_windowWidth;
   float sy = 2.0f / m_windowHeight;
   
-  for(const char* p = l_text; *p; p++)
+  for(const char* p = p_text.c_str(); *p; p++)
   {
+    if( *p == '\r' )
+      continue;
+    if( *p == '\n' )
+    {
+      x = p_posX;
+      y += m_currentSize;
+      continue;
+    }
     if(FT_Load_Char(m_arial, *p, FT_LOAD_RENDER))
         continue;
  
@@ -134,5 +139,4 @@ void FontMan::Draw( std::wstring p_text, float p_size, float p_posX, float p_pos
     x += (m_arial->glyph->advance.x >> 6);
     y += (m_arial->glyph->advance.y >> 6);
   }
-  delete[] l_text;
 }
