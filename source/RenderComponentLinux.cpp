@@ -287,6 +287,14 @@ BoundingBox RenderComponentLinux::ConvertIntoScreenSpace(BoundingBox p_boundingB
 	return l_boundingBox;
 }
 
+void RenderComponentLinux::SetShowCursor(bool p_showCursor)
+{
+  if( p_showCursor )
+    glfwEnable( GLFW_MOUSE_CURSOR );
+  else
+    glfwDisable( GLFW_MOUSE_CURSOR );
+}
+
 void RenderComponentLinux::UpdateViewportSize( int p_width, int p_height )
 {
   glViewport( 0, 0, p_width, p_height );

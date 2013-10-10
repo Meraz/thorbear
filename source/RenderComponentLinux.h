@@ -35,6 +35,9 @@ public:
 	
 	// Convert coordinates to screen space
 	BoundingBox ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType);
+	
+	// Show or hide mouse cursor
+	void SetShowCursor(bool p_showCursor);
 
   // Update viewport on window resize
   void UpdateViewportSize( int p_width, int p_height );
