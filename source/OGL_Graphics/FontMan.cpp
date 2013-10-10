@@ -83,7 +83,8 @@ void FontMan::Draw( std::string p_text, float p_size, float p_posX, float p_posY
   glBindTexture(GL_TEXTURE_2D, m_arial_texture);
   
   m_fontShader.Use();
-  m_fontShader.SetUniformVector( "color", glm::vec4( (p_color >> 24) & 0xFF, (p_color >> 16) & 0xFF, (p_color >> 8) & 0xFF, p_color & 0xFF ) );
+  glm::vec4 l_fontColor = glm::vec4( (p_color >> 0) & 0xFF, (p_color >> 8) & 0xFF, (p_color >> 16) & 0xFF, (p_color >> 24) & 0xFF ) / 256.f;
+  m_fontShader.SetUniformVector( "color", l_fontColor );
   m_fontShader.SetUniformInt( "tex", 1 );
   
   // For converting screenspace to clipspace [-1..1]
@@ -92,6 +93,14 @@ void FontMan::Draw( std::string p_text, float p_size, float p_posX, float p_posY
   
   for(const char* p = p_text.c_str(); *p; p++)
   {
+    if( *p == '\r' )
+      continue;
+    if( *p == '\n' )
+    {
+      x = p_posX;
+      y += m_currentSize;
+      continue;
+    }
     if(FT_Load_Char(m_arial, *p, FT_LOAD_RENDER))
         continue;
  
