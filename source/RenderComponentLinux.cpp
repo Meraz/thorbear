@@ -201,7 +201,36 @@ void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX
 
 void RenderComponentLinux::RenderBackground(TextureType p_textureType)
 {
+  BoundingBox l_bobo;
+  l_bobo.PosX = -800;
+  l_bobo.PosY = -500;
+  l_bobo.PosZ = -300;
+  l_bobo.Width = 1600;
+  l_bobo.Height = 1000;
+  // Set camera to 0
+  l_cam.SetPosition( glm::vec3( 0.f, 0.f, 0.f ) );
+  l_cam.SetYawPitch( 0.f, 0.f );
   
+  // Create an object based on p_objectType (p_textureType)
+  ModelInstance* l_modelInstance = m_modelManager.CreateInstance( l_bobo, p_textureType );
+  
+  // Add the object to the list of objects to render
+  //m_objectList.push_back( l_modelInstance );
+  
+  m_genericShader.Use( );
+  if( m_renderfirsttime )
+    GLCheckErrors( "RenderComponentLinux::RenderObject - m_genericShader.Use" );
+  
+  l_modelInstance->Render( m_genericShader );
+    
+  if( m_renderfirsttime )
+    GLCheckErrors( "RenderComponentLinux::RenderObject - l_modelInstance.Render" );
+    
+  delete l_modelInstance;
+  
+  // Reset camera to previous values
+  l_cam.SetPosition( glm::vec3( 300.f, 90.f, 500.f ) );
+  l_cam.SetYawPitch( 0, 11.31f );
 }
 
 void RenderComponentLinux::CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
