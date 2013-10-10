@@ -25,7 +25,7 @@ public:
 
   // Instant render functions
 	void RenderObject( BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color = Vect3(1.0f, 1.0f, 1.0f) );
-	void RenderText( std::wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, unsigned int FLAG );
+	void RenderText( std::string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color );
 	void RenderBackground(TextureType p_textureType);
   // Managed render functions
 	void CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime );
@@ -35,6 +35,9 @@ public:
 	
 	// Convert coordinates to screen space
 	BoundingBox ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType);
+	
+	// Show or hide mouse cursor
+	void SetShowCursor(bool p_showCursor);
 
   // Update viewport on window resize
   void UpdateViewportSize( int p_width, int p_height );

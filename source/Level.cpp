@@ -2,6 +2,8 @@
 
 #include <string>
 #include <sstream>
+#include <climits>
+
 using namespace std;
 
 Level::Level(void)

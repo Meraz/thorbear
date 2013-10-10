@@ -108,8 +108,8 @@ bool RenderComponentLinux::Init()
 	// enable some useful GL behaviours
 	glEnable( GL_DEPTH_TEST );
 	glDepthFunc( GL_LESS );
-	glEnable( GL_CULL_FACE );
-	glCullFace( GL_BACK );
+	//glEnable( GL_CULL_FACE );
+	//glCullFace( GL_BACK );
 	glFrontFace( GL_CCW );
 	glEnable( GL_MULTISAMPLE_ARB );
   glEnable( GL_BLEND );
@@ -125,7 +125,7 @@ bool RenderComponentLinux::Init()
   GLCheckErrors( "RenderComponentLinux::Init - Clear" );
 	
 	glfwSetWindowTitle( "SpaceOut: OpenGL4 Test" );//l_windowTitle.c_str( ) );
-	glfwSwapInterval( 1 ); // 0: VSync off, 1: on
+	glfwSwapInterval( 0 ); // 0: VSync off, 1: on
     
   m_genericShader.Init( SHADER_DIRECTORY + "genericVertex.glsl", SHADER_DIRECTORY + "genericFragment.glsl" );
   m_genericShader.Build( );
@@ -194,14 +194,46 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
   delete l_modelInstance;
 }
 
-void RenderComponentLinux::RenderText(wstring p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, unsigned int FLAG)
+void RenderComponentLinux::RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
 {
   m_fontManager.Draw( p_text, p_size, p_posX, p_posY, p_color );
 }
 
 void RenderComponentLinux::RenderBackground(TextureType p_textureType)
 {
+  BoundingBox l_bobo;
+  l_bobo.PosX = -1920/4;
+  l_bobo.PosY = -1200/4;
+  l_bobo.PosZ = -600;
+  l_bobo.Width = 1920/2;
+  l_bobo.Height = 1200/2;
+  l_bobo.Depth = -10;
+  // Set camera to 0
+  m_genericShader.m_activeCamera->SetPosition( glm::vec3( 0.f, 0.f, 0.f ) );
+  m_genericShader.m_activeCamera->SetYawPitch( 0.f, 0.f );
+  m_genericShader.m_activeCamera->UpdateViewMatrix( );
   
+  // Create an object based on p_objectType (p_textureType)
+  ModelInstance* l_modelInstance = m_modelManager.CreateInstance( l_bobo, p_textureType );
+  
+  // Add the object to the list of objects to render
+  //m_objectList.push_back( l_modelInstance );
+  
+  m_genericShader.Use( );
+  if( m_renderfirsttime )
+    GLCheckErrors( "RenderComponentLinux::RenderObject - m_genericShader.Use" );
+  
+  l_modelInstance->Render( m_genericShader );
+    
+  if( m_renderfirsttime )
+    GLCheckErrors( "RenderComponentLinux::RenderObject - l_modelInstance.Render" );
+    
+  delete l_modelInstance;
+  
+  // Reset camera to previous values
+  m_genericShader.m_activeCamera->SetPosition( glm::vec3( 300.f, 90.f, 500.f ) );
+  m_genericShader.m_activeCamera->SetYawPitch( 0, 11.31f );
+  m_genericShader.m_activeCamera->UpdateViewMatrix( );
 }
 
 void RenderComponentLinux::CreateSplashText(wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
@@ -229,7 +261,38 @@ void RenderComponentLinux::Update( float p_deltatime )
 
 BoundingBox RenderComponentLinux::ConvertIntoScreenSpace(BoundingBox p_boundingBox, TextureType p_textureType)
 {
-  
+	int l_windowWidth, l_windowHeight; // 800x600?
+	glfwGetWindowSize( &l_windowWidth, &l_windowHeight );
+  	glm::mat4 l_WVP		= m_genericShader.m_activeCamera->GetProjectionMatrix()* m_genericShader.m_activeCamera->GetViewMatrix();
+
+	glm::vec4 l_point = glm::vec4 ( p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), p_boundingBox.PosZ, 1.0 );
+	
+	l_point = l_WVP * l_point;
+	
+	glm::vec3 l_point2;
+	l_point2.x = l_point.x / l_point.w;
+	l_point2.y = l_point.y / l_point.w;
+	l_point2.z = l_point.z / l_point.w;
+
+	glm::vec2 l_point3;
+	l_point3.x = ((l_point2.x + 1.0) / 2.0) * l_windowWidth;
+	l_point3.y = ((l_point2.y + 1.0) / 2.0) * l_windowHeight;
+
+	BoundingBox l_boundingBox;
+	l_boundingBox.PosX = l_point3.x - p_boundingBox.Width/1.5f;
+	l_boundingBox.PosY = l_windowHeight - (l_point3.y + p_boundingBox.Height/2);
+	l_boundingBox.Width = p_boundingBox.Width * 1.3f;
+	l_boundingBox.Height = p_boundingBox.Height * 1.3f;
+	l_boundingBox.Depth = p_boundingBox.Depth;
+	return l_boundingBox;
+}
+
+void RenderComponentLinux::SetShowCursor(bool p_showCursor)
+{
+  if( p_showCursor )
+    glfwEnable( GLFW_MOUSE_CURSOR );
+  else
+    glfwDisable( GLFW_MOUSE_CURSOR );
 }
 
 void RenderComponentLinux::UpdateViewportSize( int p_width, int p_height )

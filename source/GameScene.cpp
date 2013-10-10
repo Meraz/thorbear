@@ -2,6 +2,7 @@
 
 #include <string>
 #include <sstream>
+#include <climits>
 
 GameScene::GameScene(int p_gameMode, SoundHandler* p_soundHandler)
 {
