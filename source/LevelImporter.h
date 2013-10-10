@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <hash_map>
+#include <unordered_map>
 #include "LodePNG.h"
 using namespace std;
 
@@ -21,7 +21,7 @@ public:
 
 	//Enter name of level without the .png file ending
 	static int**		LoadLevel(string p_levelName);
-	static hash_map<string, float>	LoadGameplayValues(string p_fileName);
+	static unordered_map<string, float>	LoadGameplayValues(string p_fileName);
 private:
 	LevelImporter(void);
 	void SetStandardValues();

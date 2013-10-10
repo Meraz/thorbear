@@ -19,19 +19,21 @@ ParticleEmitter::ParticleEmitter(ParticleEmitterDesc p_particleDesc, ModelManage
 		//l_speed is between m_particleDesc.speedMin and m_particleDesc.speedMax
 		float l_speed = m_particleDesc.speedMin + (float)rand()/((float)RAND_MAX/(m_particleDesc.speedMax-m_particleDesc.speedMin));
 
-		//a is between 0 and 2PI
-		double a = (double)rand()/((double)RAND_MAX/(2.0*MathHelper::PI));
-		//z is between -1 and 1
-		double z = (double)rand()/((double)RAND_MAX/(2.0)) - 1;
+		//Random x,y,z between -1 and 1
+		double xx = (double)rand()/((double)RAND_MAX/(2.0)) - 1;
+		double yy = (double)rand()/((double)RAND_MAX/(2.0)) - 1;
+		double zz = (double)rand()/((double)RAND_MAX/(2.0)) - 1;
 
-		//http://math.stackexchange.com/questions/44689/how-to-find-a-random-axis-or-unit-vector-in-
-		double p = abs(1 - pow(2.0,z));
-		double s = sqrt(p);
-		double c = cos(a);
-		double si = sin(a);
-		float xx = (float)(s*c);
-		float yy = (float)(s*si);
-		Vect3 l_direction = Vect3(xx, yy, (float)z);
+		//Calculate magnitude of x,y,z
+		double vmag = sqrt((xx*xx)+(yy*yy)+(zz*zz));
+
+		//Normalize x,y,z
+		xx = xx/vmag;
+		yy = yy/vmag;
+		zz = zz/vmag;
+
+		//Voila! Random unit vector!
+		Vect3 l_direction = Vect3((float)xx, (float)yy, (float)zz);
 
 		//TODO calculate direction depending on what angles are set
 		m_particleList.at(i)->Init(m_particleDesc.position, m_particleDesc.scale, l_direction, m_particleDesc.acceleration, m_particleDesc.startColor, m_particleDesc.endColor, l_lifeTime, l_speed, 0.0f);

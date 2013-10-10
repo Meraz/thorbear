@@ -1,6 +1,6 @@
 #ifdef _WIN32 
 #include "WindowWindows.h"
-#include <vld.h>
+//#include <vld.h>
 
 int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrevInstance, PSTR p_pScmdline, int p_Cmdshow)
 {
@@ -12,7 +12,7 @@ int WINAPI WinMain(HINSTANCE p_hInstance, HINSTANCE p_hPrevInstance, PSTR p_pScm
 }
 #endif
 
-#ifdef linux
+#ifdef __linux
 #include "WindowLinux.h"
 
 int main(int argc, char** argv)
@@ -20,6 +20,8 @@ int main(int argc, char** argv)
 	WindowLinux* m_windowLinux = new WindowLinux();
   
   m_windowLinux->Run();
+  
+  delete m_windowLinux;
   
 	return 0;
 }

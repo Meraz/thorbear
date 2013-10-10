@@ -14,18 +14,30 @@ LevelImporter::~LevelImporter(void)
 int** LevelImporter::LoadLevel( string p_levelName )
 {
 	std::vector<unsigned char> l_image;
-	unsigned l_Width, l_height;
+	unsigned l_width, l_height;
 
-	//An external library which handles PNG reading and decoding
-	unsigned l_error = lodepng::decode(l_image,l_Width,l_height, "levels/" + p_levelName + ".png");
 
-	if(l_error) cout << "decode error " << l_error << ": " << lodepng_error_text(l_error) << endl;
+	ifstream l_fileCheck("levels/" + p_levelName + ".png");
+	
+	//Check if the file actually exists
+	if(l_fileCheck)
+	{
+		//An external library which handles PNG reading and decoding
+		unsigned l_error = lodepng::decode(l_image,l_width,l_height, "levels/" + p_levelName + ".png");
+
+
+		if(l_error) cout << "decode error " << l_error << ": " << lodepng_error_text(l_error) << endl;
+	}
+	else
+	{
+		return NULL;
+	}
 
 	//Creating a double array
 	int** l_map = new int*[l_height]; //Send or return this somewhere?
 	for(unsigned int i = 0; i < l_height; i++)
 	{
-		l_map[i] = new int[l_Width];
+		l_map[i] = new int[l_width];
 	}
 
 	unsigned int x,y;
@@ -51,27 +63,19 @@ int** LevelImporter::LoadLevel( string p_levelName )
 		}
 		l_map[y][x] = l_enemyType;
 		x++;
-		if(x >= l_Width)
+		if(x >= l_width)
 		{
 			y++;
 			x = 0;
 		}
 	}
-	///////////////TESTING///////////////////
-	/*
-	for(int i = 0; i < l_height; i++)
-	{
-		for(int j = 0; j < l_Width; j++)
-			cout << l_map[i][j];
-		cout << endl;
-	}
-	*/
+
 	return l_map;
 }
 
-hash_map<string, float> LevelImporter::LoadGameplayValues( string p_fileName )
+unordered_map<string, float> LevelImporter::LoadGameplayValues( string p_fileName )
 {
-	hash_map<string, float> l_values;
+	unordered_map<string, float> l_values;
 
 	//Set standard values if no file can be read
 	l_values.insert(pair<string, float>("LEVELHEIGHT", 400));

@@ -23,7 +23,9 @@ Level::Level(void)
 	m_invulTimer = 0.0f;
 	m_invulTime = 1.5f;
 
-	m_mapBorderThickness = NULL;
+	m_mapBorderThickness = 0;
+	m_errorMessageTick = 0.0f;
+	m_renderErrorLoadingLevel = false;
 }
 
 
@@ -72,7 +74,12 @@ void Level::Init( int p_lvlNr, int p_gameMode, RenderComponentInterface* p_rende
 		l_ss << p_lvlNr;
 		std::string tmpString( "level" + l_ss.str() );
 
-		m_map = LevelImporter::LoadLevel(tmpString);	
+		m_map = LevelImporter::LoadLevel(tmpString);
+		if(m_map == 0)
+		{
+			m_gameMode = MODE_SURVIVAL;
+			m_renderErrorLoadingLevel = true;
+		}
 	}
 
 	m_levelValues = LevelImporter::LoadGameplayValues("Gameplay Variables");
@@ -251,6 +258,11 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 
 	m_soundHandler->Update();
 	m_prevLMouseClickStatus = p_isMouseClicked;
+
+	if(m_errorMessageTick < 5)
+		m_errorMessageTick += p_deltaTime;
+	else
+		m_renderErrorLoadingLevel = false;
 }
 
 void Level::Render()
@@ -273,6 +285,9 @@ void Level::Render()
 	{
 		m_powerup.at(i)->Render();
 	}
+
+	if(m_renderErrorLoadingLevel == true)
+		m_renderComp->RenderText("No level file found, loaded survival mode....", 15.0f, 5.0f, 70.0f, 0xff0099ff);
 	
 }
 
@@ -316,16 +331,16 @@ void Level::CheckAllCollisions(float p_deltaTime)
 						l_desc.position			= Vect3(m_ball.at(k)->GetBoundingBox().PosX, m_ball.at(k)->GetBoundingBox().PosY, m_ball.at(k)->GetBoundingBox().PosZ);
 						l_desc.lifeTimeMin		= 0.5f;
 						l_desc.lifeTimeMax		= 0.7f;
-						l_desc.acceleration		= Vect3(0.0f, -1.0f, 0.0f);
-						l_desc.nrOfParticles	= 100;
+						l_desc.acceleration		= Vect3(0.0f, 0.0f, 0.0f);
+						l_desc.nrOfParticles	= 200;
 						l_desc.speedMin			= 50.0f;
-						l_desc.speedMax			= 200.0f;
+						l_desc.speedMax			= 300.0f;
 						l_desc.scale			= Vect3(0.5f, 0.5f, 0.5f);
 						l_desc.startColor		= Vect3(0.0f, 1.0f, 0.0f);
 						l_desc.endColor			= Vect3(0.0f, 0.4f, 0.0f);
 						m_renderComp->CreateParticleEmitter(l_desc);
 
-						m_renderComp->CreateSplashText(L"NICE!", 200.0f, 900.0f, 450.0f, 0.4f, 0.0f);
+						//m_renderComp->CreateSplashText(L"NICE!", 200.0f, 900.0f, 450.0f, 0.4f, 0.0f);
 					}
 					m_soundHandler->PlayGameSound(BALLBOUNCE);
 				}

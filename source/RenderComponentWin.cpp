@@ -22,6 +22,10 @@ RenderComponentWin::~RenderComponentWin()
 	ReleaseCOM( m_renderTargetView);
 	ReleaseCOM( m_depthStencilView);
 
+	for (unsigned int i = 0; i < m_objVec.size(); i++)
+	{
+		delete m_objVec.at(i).instancedBuffer;	
+	}
 	m_objVec.clear();
 }
 
@@ -49,6 +53,7 @@ int RenderComponentWin::Initialize()
 	m_fontRenderer->Init(m_d3dDevice, L"Arial", m_d3dImmediateContext);
 
 	m_particleSystem = new ParticleSystem(m_d3dDevice, m_d3dImmediateContext, m_modelManager, m_shaderManager, m_camera);
+
 	return 0;
 }
 
@@ -57,10 +62,27 @@ void RenderComponentWin::Update( float p_dt )
 	m_camera->RebuildView();
 	m_particleSystem->Update(p_dt);
 	m_fontRenderer->Update(p_dt);
+
 }
 
 void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_textureType, Vect3 p_color)
 {
+	if(p_textureType == ENEMY1)
+	{
+		CreateInstancedWorldMatrix(p_boundingBox, p_textureType, p_color);
+		return;
+	}
+	else if (p_textureType == ENEMY2)
+	{
+		CreateInstancedWorldMatrix(p_boundingBox, p_textureType, p_color);
+		return;
+	}
+	else if(p_textureType == BALL)
+	{
+		CreateInstancedWorldMatrix(p_boundingBox, p_textureType, p_color);
+		return;
+	}
+	
 	Shader* l_shader = m_objVec.at((int)p_textureType).shader;
 	Model*	l_model = m_objVec.at((int)p_textureType).model;
 
@@ -92,7 +114,7 @@ void RenderComponentWin::RenderObject(BoundingBox p_boundingBox, TextureType p_t
 	D3DXMATRIX l_translateMat;
 	D3DXMatrixTranslation(&l_translateMat, p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), p_boundingBox.PosZ);	// Create translation matrix
 
-	D3DXMATRIX l_worldMat	= l_scaleMat *  l_translateMat;												// 
+	D3DXMATRIX l_worldMat	= l_scaleMat *  l_translateMat;												
 	D3DXMATRIX l_WVP		= l_worldMat * m_camera->GetViewMatrix() *  m_camera->GetProjMatrix();
 
 	l_model->m_vertexBuffer->Apply(0);
@@ -126,6 +148,10 @@ void RenderComponentWin::PreRender()
 
 void RenderComponentWin::PostRender()
 {
+	RenderInstancedData(ENEMY1);
+	RenderInstancedData(ENEMY2);
+	RenderInstancedData(BALL);
+
 	m_particleSystem->Render();
 	m_fontRenderer->Render();
 	HR(m_swapChain->Present(0, 0));
@@ -182,7 +208,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = true;
+	l_sd.Windowed     = false;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -273,13 +299,17 @@ void RenderComponentWin::Load()
 	m_shaderManager->AddShader("effect\\object.fx", 12);	
 	m_shaderManager->AddShader("effect\\background.fx", 12);
 	m_shaderManager->AddShader("effect\\instanced.fx", 12);
+	m_shaderManager->AddShader("effect\\instancedEnemy.fx", 12);
+
 }
 
 void RenderComponentWin::CreateTemplates()
 {
-	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("invader.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
-	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("invader2.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
-	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube.obj"),	 m_shaderManager->GetShaderByName("effect\\object.fx")));
+	//m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("invader.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	//m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("invader2.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("invader.obj"), m_shaderManager->GetShaderByName("effect\\instancedEnemy.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("invader2.obj"), m_shaderManager->GetShaderByName("effect\\instancedEnemy.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube.obj"),	 m_shaderManager->GetShaderByName("effect\\instancedEnemy.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube1.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("AddLifePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
@@ -290,6 +320,12 @@ void RenderComponentWin::CreateTemplates()
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("mainmenu.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+
+	for (unsigned int i = 0; i < m_objVec.size(); i++)
+	{
+		m_objVec.at(i).instancedBuffer->Init(m_d3dDevice, m_d3dImmediateContext, m_objVec.at(i).bdInstance);
+	}
+	
 }
 
 BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBox, TextureType p_textureType)
@@ -319,7 +355,6 @@ BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBo
 	return l_boundingBox;
 }
 
-
 void RenderComponentWin::CreateSplashText( wstring p_text, float p_size, float p_posX, float p_posY, float p_travelTime, float p_stillTime )
 {
 	m_fontRenderer->CreateSplashText(p_text, p_size, p_posX, p_posY, p_travelTime, p_stillTime);
@@ -338,17 +373,16 @@ std::wstring s2ws(const std::string& s)
 	return r;
 }
 
-void RenderComponentWin::RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color, UINT FLAG)
+void RenderComponentWin::RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
 {
-	m_fontRenderer->RenderText(s2ws(p_text).c_str(), p_size, p_posX, p_posY, p_color, FLAG);
+
+	m_fontRenderer->RenderText(s2ws(p_text).c_str(), p_size, p_posX, p_posY, p_color);
 }
 
 void RenderComponentWin::RenderBackground(TextureType p_textureType)
 {
 	Shader* l_shader = m_objVec.at((int)p_textureType).shader;
 	Model*	l_model = m_objVec.at((int)p_textureType).model;
-
-	m_camera->RebuildView();
 
 	D3DXMATRIX l_scaleMat;
 
@@ -390,4 +424,85 @@ void RenderComponentWin::RenderBackground(TextureType p_textureType)
 	}
 }
 
+void RenderComponentWin::CreateInstancedWorldMatrix( BoundingBox p_boundingBox, TextureType p_type, Vect3 p_color )
+{
+	Model*	l_model = m_objVec.at((int)p_type).model;
+
+	D3DXMATRIX l_scaleMat;
+	if(p_boundingBox.Height == -1 || p_boundingBox.Width == -1)
+	{
+		D3DXMatrixScaling(&l_scaleMat, 1.0f, 1.0f, 1.0f);
+	}
+	else
+	{
+		float l_xScaleFactor = 1.0f/(l_model->m_topBoundingCorner.x - l_model->m_bottomBoundingCorner.x);
+		float l_yScaleFactor = 1.0f/(l_model->m_topBoundingCorner.y - l_model->m_bottomBoundingCorner.y);
+		l_xScaleFactor *= p_boundingBox.Width;
+		l_yScaleFactor *= p_boundingBox.Height;
+
+		if(p_boundingBox.Depth == -1)
+		{
+			D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, l_yScaleFactor, 1.0f);
+		}
+		else
+		{
+			float l_zScaleFactor = 1.0f/(l_model->m_topBoundingCorner.z - l_model->m_bottomBoundingCorner.z);
+			l_zScaleFactor *= p_boundingBox.Depth;
+			D3DXMatrixScaling(&l_scaleMat, l_xScaleFactor, l_yScaleFactor, l_zScaleFactor);
+		}
+	}
+
+	// Translation matrix
+	D3DXMATRIX l_translateMat;
+	D3DXMatrixTranslation(&l_translateMat, p_boundingBox.PosX + (p_boundingBox.Width/2.0f), p_boundingBox.PosY + (p_boundingBox.Height/2.0f), p_boundingBox.PosZ);	// Create translation matrix
+
+	D3DXMATRIX l_worldMat = l_scaleMat *  l_translateMat;
+
+	//Enter color into instancematrix
+	l_worldMat._14 = p_color.r;
+	l_worldMat._24 = p_color.g;
+	l_worldMat._34 = p_color.b;
+
+	m_objVec.at((int)p_type).matrixList.push_back(l_worldMat);
+}
+
+void RenderComponentWin::RenderInstancedData( TextureType p_type )
+{
+	Shader*		l_shader;
+	Model*		l_model;
+
+	if(m_objVec.at((int)p_type).matrixList.size() > 0)
+	{
+		l_shader = m_objVec.at((int)p_type).shader;
+		l_model = m_objVec.at((int)p_type).model;
+
+		D3DXMATRIX* verticesPtr;
+
+		D3D11_MAPPED_SUBRESOURCE l_mapped;
+		m_d3dImmediateContext->Map(m_objVec.at((int)p_type).instancedBuffer->GetBufferPointer(), 0, D3D11_MAP_WRITE_DISCARD, 0, &l_mapped);
+
+		// Get a pointer to the data in the vertex buffer.
+		verticesPtr = (D3DXMATRIX*)l_mapped.pData;  
+
+		// Copy the data into the vertex buffer.
+		memcpy(verticesPtr, (void*)m_objVec.at((int)p_type).matrixList[0], (sizeof(D3DXMATRIX) * m_objVec.at((int)p_type).matrixList.size()));
+
+		// Unlock the vertex buffer.
+		m_d3dImmediateContext->Unmap(m_objVec.at((int)p_type).instancedBuffer->GetBufferPointer(), 0);
+
+		l_model->m_vertexBuffer->ApplyInstanced(0, m_objVec.at((int)p_type).instancedBuffer);
+		l_model->m_indexBuffer->Apply(0);
+
+		l_shader->SetMatrix("gVP", m_camera->GetViewMatrix()*m_camera->GetProjMatrix());
+
+		D3DX11_TECHNIQUE_DESC techDesc;
+		l_shader->GetTechnique()->GetDesc( &techDesc );
+		for(int p = 0; p < (int)techDesc.Passes; ++p)
+		{
+			l_shader->Apply(p);
+			m_d3dImmediateContext->DrawIndexedInstanced(l_model->m_size, m_objVec.at((int)p_type).matrixList.size(), 0, 0, 0);
+		}
+		m_objVec.at((int)p_type).matrixList.clear();
+	}
+}
 
