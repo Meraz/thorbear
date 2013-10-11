@@ -12,7 +12,7 @@ Level::Level(void)
 	m_mapEdges.PosY = 0;
 	m_changesInLife = 0;
 	m_map = NULL;
-	m_prevLMouseClickStatus = false;
+	m_prevLMouseClickStatus = true;
 	m_wasBallDeadLastUpdate = false;
 
 	m_enemyDistance = 2;
