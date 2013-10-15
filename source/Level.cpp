@@ -12,7 +12,7 @@ Level::Level(void)
 	m_mapEdges.PosY = 0;
 	m_changesInLife = 0;
 	m_map = NULL;
-	m_prevLMouseClickStatus = false;
+	m_prevLMouseClickStatus = true;
 	m_wasBallDeadLastUpdate = false;
 
 	m_enemyDistance = 2;
@@ -166,13 +166,17 @@ void Level::AddBall()
 }
 void Level::SpawnPowerup(float p_posX, float p_posY)
 {
-	int l_random = rand() % 10;
+	int l_random = rand() % 15;
 	if(l_random < 3) // 0,1,2
 		m_powerup.push_back(new LargerPaddlePowerup());
 	else if(l_random < 6) // 3,4,5
 		m_powerup.push_back(new SmallerPaddlePowerUp());
 	else if(l_random < 9) // 6,7,8
 		m_powerup.push_back(new AddBallPowerup());
+	else if(l_random < 12) //9,10,11
+		m_powerup.push_back(new BallSpeedIncreasePowerup());
+	else if(l_random < 15) // 12,13,14
+		m_powerup.push_back(new BallSpeedDecreasePowerup());
 	else
 		m_powerup.push_back(new AddLifePowerup());
 
@@ -420,6 +424,28 @@ void Level::CheckAllCollisions(float p_deltaTime)
 			else if(m_powerup.at(i)->GetPowerUpType() ==  ADDLIFE)
 			{
 				m_changesInLife++;
+			}
+			else if(m_powerup.at(i)->GetPowerUpType() == INCREASESPEED)
+			{
+				for(unsigned int j = 0; j < m_ball.size(); j++)
+				{
+					float l_temp = m_ball.at(j)->GetSpeed();
+					if((l_temp + 40) < BALL_MAX_SPEED)
+						m_ball.at(j)->SetSpeed(l_temp + 40);
+					else
+						m_ball.at(j)->SetSpeed(BALL_MAX_SPEED);
+				}
+			}
+			else if(m_powerup.at(i)->GetPowerUpType() == DECREASESPEED)
+			{
+				for(unsigned int j = 0; j < m_ball.size(); j++)
+				{
+					float l_temp = m_ball.at(j)->GetSpeed();
+					if((l_temp - 40) > BALL_MIN_SPEED)
+						m_ball.at(j)->SetSpeed(l_temp - 40);
+					else
+						m_ball.at(j)->SetSpeed(BALL_MIN_SPEED);
+				}
 			}
 			delete m_powerup.at(i);
 			m_powerup.at(i) = 0;

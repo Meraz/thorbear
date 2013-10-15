@@ -154,7 +154,7 @@ void RenderComponentWin::PostRender()
 
 	m_particleSystem->Render();
 	m_fontRenderer->Render();
-	HR(m_swapChain->Present(0, 0));
+	HR(m_swapChain->Present(1, 0));
 }
 
 bool RenderComponentWin::InitializeDirect3D()
@@ -208,7 +208,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = !(!NULL);
+	l_sd.Windowed     = true;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -288,14 +288,17 @@ void RenderComponentWin::Load()
 	m_modelManager->CreateModel("invader2.obj",		"object\\invader2");
 	m_modelManager->CreateModel("cube.obj",		"object\\cube");
 	m_modelManager->CreateModel("cube1.obj",	"object\\colorcube");
-
+	//powerups
 	m_modelManager->CreateModel("AddLifePowerup.obj",	"object\\AddLifePowerup");
 	m_modelManager->CreateModel("AddBallPowerup.obj",	"object\\AddBallPowerup");
 	m_modelManager->CreateModel("LargerPaddlePowerup.obj",	"object\\LargerPaddlePowerup");
 	m_modelManager->CreateModel("SmallerPaddlePowerup.obj",	"object\\SmallerPaddlePowerup");
+	m_modelManager->CreateModel("BallSpeedIncreasePowerup.obj", "object\\BallSpeedIncreasePowerup");	
+	m_modelManager->CreateModel("BallSpeedDecreasePowerup.obj", "object\\BallSpeedDecreasePowerup");
+
 	m_modelManager->CreateModel("background.obj", "object\\levelBackground");
 	m_modelManager->CreateModel("mainmenu.obj", "object\\mainmenu_background");
-
+	//buttons
 	m_modelManager->CreateModel("ButtonStart.obj", "object\\ButtonStart");
 	m_modelManager->CreateModel("ButtonCampaign.obj", "object\\ButtonCampaign");
 	m_modelManager->CreateModel("ButtonSurvival.obj", "object\\ButtonSurvival");
@@ -325,15 +328,18 @@ void RenderComponentWin::CreateTemplates()
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube.obj"),	 m_shaderManager->GetShaderByName("effect\\instancedEnemy.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("cube1.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 
+	//powerups
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("AddLifePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("AddBallPowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("LargerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("SmallerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("BallSpeedIncreasePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("BallSpeedDecreasePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
-
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("mainmenu.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 
+	//buttons
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonStart.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonCampaign.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonSurvival.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));

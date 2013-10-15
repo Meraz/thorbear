@@ -37,6 +37,7 @@ void Ball::Init(float p_posX, float p_posY, int p_width, int p_height, float p_s
 
 void Ball::ShootBall()
 {
+	m_speed = 200.0f;
 	m_isBallDead = false;
 }
 
@@ -60,7 +61,7 @@ void Ball::Update(float p_deltaTime)
 
 void Ball::Render()
 {
-	m_renderComp->RenderObject(GetBoundingBox(), BALL, Vect3(0.749, 0.756, 0.760));
+	m_renderComp->RenderObject(GetBoundingBox(), BALL, Vect3(1.0f, 1.0f, 0.0f));
 }
 
 bool Ball::IsBallDead()
