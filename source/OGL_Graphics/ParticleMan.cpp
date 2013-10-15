@@ -45,7 +45,7 @@ void ParticleMan::Render()
 
 	for (unsigned int i = 0; i < m_emitterList.size(); i++)
 	{
-		m_emitterList.at(i)->Render( m_camera );
+		m_emitterList.at(i)->Render( );
 	}
 }
 

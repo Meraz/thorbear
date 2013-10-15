@@ -88,7 +88,7 @@ bool ParticleEmitter::Update( float p_dt )
 	return false;
 }
 
-void ParticleEmitter::Render( Camera* p_camera )
+void ParticleEmitter::Render( )
 {
 	glm::mat4 l_scale, l_translation, l_world;
 	Vect3 l_scaleVect, l_posVect, l_colorVect;

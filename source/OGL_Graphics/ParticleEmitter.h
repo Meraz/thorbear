@@ -15,7 +15,7 @@ public:
 	~ParticleEmitter( void );
 
 	bool Update( float p_dt );
-	void Render( Camera* p_camera );
+	void Render( );
   
 private:
 	std::vector< Particle* > m_particleList;
