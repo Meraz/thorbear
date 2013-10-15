@@ -13,7 +13,7 @@ class EnemySquad
 public:
 	EnemySquad();
 	~EnemySquad();
-	void			Init(BoundingBox p_mapEdges, float p_velocity, vector<Enemy*> p_enemy, SoundHandler* p_soundHandler);
+	void			Init(BoundingBox p_mapEdges, float p_velocity, float* p_speedModifier, vector<Enemy*> p_enemy, SoundHandler* p_soundHandler);
 	void			Update(float p_deltaTime);
 	void			Render();
 	void			SetSquadRenderComponent(RenderComponentInterface* p_renderComp);
@@ -34,6 +34,7 @@ private:
 	BoundingBox					m_BoundingBox;
 	BoundingBox					m_mapEdges;
 	float						m_velocity;
+	float*						m_speedModifier;
 	float						m_prevVelocity;
 	float						m_targetY; //used to check how far down the enemies have moved in one go
 	bool						m_isPaused;

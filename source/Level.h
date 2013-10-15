@@ -59,9 +59,9 @@ private:
 	float	m_blinkTimer;
 	float	m_blinkTime;
 	float	m_scoreMultiplier;
-	float   m_squadSpeed;
+	float*  m_squadSpeedModifier;
 	bool	m_wasBallDeadLastUpdate;
-
+	float	m_speedIncreaseTimer;
 	RenderComponentInterface*	m_renderComp;
 	int		m_mapBorderThickness;
 	int		m_enemyDistance;
