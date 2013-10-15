@@ -13,6 +13,17 @@ extern void GLCheckErrors( std::string p_where );
 
 void CompileShader( GLuint& p_shaderHandle, const char* p_shaderFileName, const int& p_type );
 
+Shader::Shader()
+{
+	for( unsigned i = 0; i < COUNT; i++ )
+    m_subhandles[ i ] = 0;
+}
+
+Shader::~Shader()
+{
+  delete m_activeCamera;
+}
+
 void Shader::Init( std::string p_vertFileName, std::string p_fragFileName )
 {
   Init( p_vertFileName.c_str(), p_fragFileName.c_str() );
@@ -234,7 +245,6 @@ void Shader::UpdateUniform( glm::mat4 p_modelMatrix )
   SetUniformMatrix( "modelViewMatrix", m_activeCamera->GetViewMatrix( ) * p_modelMatrix );
   SetUniformMatrix( "normalMatrix", glm::inverseTranspose( glm::mat3( m_activeCamera->GetViewMatrix( ) * p_modelMatrix ) ) );
   SetUniformVector( "lightPosition", glm::vec4( m_activeCamera->GetPosition( ), 1.f ) );
-  //GLCheckErrors( "Shader::UpdateUniform" );
   while( glGetError() != GL_NO_ERROR ); // Clear GL errors due to non-existing variable locations
 }
 

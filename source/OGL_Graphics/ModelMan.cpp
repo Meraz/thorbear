@@ -21,6 +21,8 @@ void ModelMan::LoadModels( )
   m_models[ ADDBALLPOWERUP ].Load( MODEL_DIR+"AddBallPowerup/", "AddBallPowerup.obj");
   m_models[ LARGERPADDLEPOWERUP ].Load( MODEL_DIR+"LargerPaddlePowerup/", "LargerPaddlePowerup.obj");
   m_models[ SMALLERPADDLEPOWERUP ].Load( MODEL_DIR+"SmallerPaddlePowerup/", "SmallerPaddlePowerup.obj");
+  m_models[ BALLSPEEDINCREASEPOWERUP ].Load( MODEL_DIR+"BallSpeedIncreasePowerup/", "BallSpeedIncreasePowerup.obj");
+  m_models[ BALLSPEEDDECREASEPOWERUP ].Load( MODEL_DIR+"BallSpeedDecreasePowerup/", "BallSpeedDecreasePowerup.obj");
   m_models[ LEVEL ].Load( MODEL_DIR+"levelBackground/", "background.obj");
   m_models[ MAINMENU ].Load( MODEL_DIR+"mainmenu_background/", "mainmenu.obj");
   

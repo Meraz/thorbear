@@ -19,6 +19,7 @@ Model::Model( )
 Model::~Model()
 {
   glDeleteVertexArrays( 1, &m_handleVAO );
+  delete m_mtl;
 }
 
 bool Model::Load( std::string p_dir, std::string p_fileName )
@@ -181,7 +182,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
           
-          delete l_mapAmbient;
+          free( l_mapAmbient );
 				}
 				if( tmpstr.compare( "map_Kd" ) == 0 )
 				{
@@ -203,7 +204,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
           
-          delete l_mapDiffuse;
+          free( l_mapDiffuse );
 				}
 				if( tmpstr.compare( "map_Ks" ) == 0 )
 				{
@@ -225,7 +226,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
           
-          delete l_mapSpecular;
+          free( l_mapSpecular );
 				}
 				else
 				{

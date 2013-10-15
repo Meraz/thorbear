@@ -11,6 +11,9 @@ FontMan::FontMan()
 
 FontMan::~FontMan()
 {
+  glDeleteTextures( 1, &m_arial_texture );
+  glDeleteBuffers( 1, &m_vbo );
+  glDeleteVertexArrays( 1, &m_vao );
 }
 
 void FontMan::Init( )

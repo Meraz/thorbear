@@ -181,9 +181,6 @@ void RenderComponentLinux::RenderObject(BoundingBox p_boundingBox, TextureType p
   ModelInstance* l_modelInstance = m_modelManager.CreateInstance( p_boundingBox, p_textureType );
   l_modelInstance->SetTint( p_color );
   
-  // Add the object to the list of objects to render
-  //m_objectList.push_back( l_modelInstance );
-  
   m_genericShader.Use( );
   if( m_renderfirsttime )
     GLCheckErrors( "RenderComponentLinux::RenderObject - m_genericShader.Use" );

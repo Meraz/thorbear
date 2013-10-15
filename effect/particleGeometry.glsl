@@ -1,7 +1,7 @@
 #version 400
 
 layout(points) in;
-layout(triangle_strip, max_vertices=14) out;
+layout(triangle_strip, max_vertices=24) out;
 
 struct Particle {
   vec3 translation;
@@ -16,7 +16,7 @@ uniform vec4 lightPosition = vec4(0,0,0,1);
 in Particle vParticle[];
 
 out Particle gParticle;
-out vec3 gDiffuse;
+out float gDiffuse;
  
 void main(void)
 {
@@ -27,89 +27,160 @@ void main(void)
   
   gParticle = vParticle[0];
   
-  vec3 eyeCoords;
+  vec4 eyeCoords;
+  vec3 lightVec;
   
   eyeCoords = viewMatrix * (trans + vec4(-x, -y, z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 0, 1) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 0
   
   eyeCoords = viewMatrix * (trans + vec4(x, -y, z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 0, 1) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 1
   
   eyeCoords = viewMatrix * (trans + vec4(-x, y, z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 0, 1) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 2
   
   eyeCoords = viewMatrix * (trans + vec4(x, y, z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 0, 1) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 3
+  EndPrimitive();
   
-  eyeCoords = viewMatrix * (trans + vec4(x, -y, -z, 1));
-	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
-  EmitVertex(); // 7
   
   eyeCoords = viewMatrix * (trans + vec4(x, -y, z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(1, 0, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 1
   
   eyeCoords = viewMatrix * (trans + vec4(x, -y, -z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(1, 0, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 5
+  
+  eyeCoords = viewMatrix * (trans + vec4(x, y, z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(1, 0, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 3
+  
+  eyeCoords = viewMatrix * (trans + vec4(x, y, -z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(1, 0, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 7
+  EndPrimitive();
+  
+  
+  
+  eyeCoords = viewMatrix * (trans + vec4(x, -y, -z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 0, -1) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 5
   
   eyeCoords = viewMatrix * (trans + vec4(-x, -y, -z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 0, -1) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 4
   
-  eyeCoords = viewMatrix * (trans + vec4(x, -y, -z, 1));
+  eyeCoords = viewMatrix * (trans + vec4(x, y, -z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 0, -1) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 7
   
   eyeCoords = viewMatrix * (trans + vec4(-x, y, -z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 0, -1) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 6
+  EndPrimitive();
   
-  eyeCoords = viewMatrix * (trans + vec4(-x, y, z, 1));
-	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
-  EmitVertex(); // 2
   
   eyeCoords = viewMatrix * (trans + vec4(-x, -y, -z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(-1, 0, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 4
   
   eyeCoords = viewMatrix * (trans + vec4(-x, -y, z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(-1, 0, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 0
+  
+  eyeCoords = viewMatrix * (trans + vec4(-x, y, -z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(-1, 0, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 6
+  
+  eyeCoords = viewMatrix * (trans + vec4(-x, y, z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(-1, 0, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 2
+  EndPrimitive();
+  
+  
+  eyeCoords = viewMatrix * (trans + vec4(x, y, -z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 1, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 7
+  
+  eyeCoords = viewMatrix * (trans + vec4(-x, y, -z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 1, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 6
+  
+  eyeCoords = viewMatrix * (trans + vec4(x, y, z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 1, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 3
+  
+  eyeCoords = viewMatrix * (trans + vec4(-x, y, z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, 1, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 2
+  
   
   eyeCoords = viewMatrix * (trans + vec4(x, -y, z, 1));
 	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
-  gDiffuse = max( 0.0f, dot( normalize( lightVec ), normal ) ) * intensityDiffuse;
-  gl_Position = worldProjectionMatrix * eyeCoords;
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, -1, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
   EmitVertex(); // 1
+  
+  eyeCoords = viewMatrix * (trans + vec4(-x, -y, z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, -1, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 0
+  
+  eyeCoords = viewMatrix * (trans + vec4(x, -y, -z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, -1, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 5
+  
+  eyeCoords = viewMatrix * (trans + vec4(-x, -y, -z, 1));
+	lightVec = vec3( viewMatrix * lightPosition - eyeCoords );
+  gDiffuse = max( 0.0f, dot( normalize( lightVec ), vec3(0, -1, 0) ) );
+  gl_Position = projectionMatrix * eyeCoords;
+  EmitVertex(); // 4
 }

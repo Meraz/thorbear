@@ -7,7 +7,7 @@ struct Particle {
 };
 
 in Particle gParticle;
-in vec3 gDiffuse;
+in float gDiffuse;
 
 out vec4 fColor;
  

@@ -65,12 +65,13 @@ ParticleEmitter::~ParticleEmitter(void)
 {
 	for (unsigned int i = 0; i < m_particleList.size(); i++)
 	{
-		SafeDelete(m_particleList.at(i)); // Include "MemoryMacro.h" if not defined
+		SafeDelete(m_particleList.at(i));
 	}
 	m_particleList.clear();
 	m_particleList.shrink_to_fit();
-
-	//SafeDelete(m_matrixBuffer);
+	
+	glDeleteBuffers( 1, &m_dataBuffer );
+	glDeleteVertexArrays( 1, &m_vao );
 }
 
 
