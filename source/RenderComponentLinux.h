@@ -55,6 +55,8 @@ private:
   FontMan m_fontManager;
   ParticleMan m_particleManager;
   
+  glm::vec3 m_lightPos;
+  
   bool m_renderfirsttime;
   
   std::vector< ModelInstance* > m_objectList;

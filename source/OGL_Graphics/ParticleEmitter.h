@@ -3,7 +3,6 @@
 
 #include "../ParticleEffect.h"
 #include "../Particle.h"
-#include "Shader.h"
 #include "Camera.h"
 
 #include <GL/glew.h>
@@ -25,10 +24,8 @@ private:
   
   GLuint m_dataBuffer;
   GLuint m_vao;
-	Shader m_shader;
-	//Model*					m_model;
 
-	int						m_nrOfDeadParticles;
+	int m_nrOfDeadParticles;
 };
 
 #endif 

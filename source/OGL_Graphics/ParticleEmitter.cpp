@@ -58,11 +58,6 @@ ParticleEmitter::ParticleEmitter( ParticleEmitterDesc p_particleDesc )
   glVertexAttribPointer( 2, 3, GL_FLOAT, GL_FALSE, 9 * sizeof( float ), BUFFER_OFFSET( 6 * sizeof( float ) ) );
 
   glBindVertexArray( 0 );
-  
-  
-  m_shader.Init( (SHADER_DIRECTORY + "particleVertex.glsl").c_str(), (SHADER_DIRECTORY + "particleFragment.glsl").c_str(), (SHADER_DIRECTORY + "particleGeometry.glsl").c_str() );
-  m_shader.Build( );
-  m_shader.Use( );
 }
 
 
@@ -114,9 +109,6 @@ void ParticleEmitter::Render( Camera* p_camera )
 
   glBufferSubData( GL_ARRAY_BUFFER, 0, m_particleDataList.size( ) * 3 * sizeof( float ), m_particleDataList.data( ) );
 
-	m_shader.SetUniformMatrix( "worldProjectionMatrix", p_camera->GetProjectionMatrix() * p_camera->GetViewMatrix() );
-
-  m_shader.Use( );
   glDrawArrays( GL_POINTS, 0, m_particleList.size() );
 }
 

@@ -7,10 +7,13 @@ struct Particle {
 };
 
 in Particle gParticle;
+in vec3 gDiffuse;
 
 out vec4 fColor;
  
 void main(void)
 {
-  fColor = vec4(gParticle.color, 1);
+  fColor = vec4( gParticle.color, 1 );
+  
+	fColor = vec4( gParticle.color * gDiffuse, 1 );
 }

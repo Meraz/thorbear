@@ -17,9 +17,12 @@ ParticleMan::~ParticleMan()
 	m_emitterList.shrink_to_fit();
 }
 
-void ParticleMan::Init( Camera* p_camera )
+void ParticleMan::Init( Camera p_camera, glm::vec3 p_lightPos )
 {
-	m_camera = p_camera;
+  m_shader.Init( (SHADER_DIRECTORY + "particleVertex.glsl").c_str(), (SHADER_DIRECTORY + "particleFragment.glsl").c_str(), (SHADER_DIRECTORY + "particleGeometry.glsl").c_str() );
+  m_shader.Build( );
+  m_shader.Use( );
+  m_shader.SetActiveCamera( p_camera );
 }
 
 void ParticleMan::Update( float p_dt )
@@ -37,6 +40,9 @@ void ParticleMan::Update( float p_dt )
 
 void ParticleMan::Render()
 {
+  m_shader.Use( );
+  m_shader.UpdateUniform( glm::mat4(0) );
+
 	for (unsigned int i = 0; i < m_emitterList.size(); i++)
 	{
 		m_emitterList.at(i)->Render( m_camera );

@@ -3,7 +3,10 @@
 
 #include "ParticleEffect.h"
 #include "ParticleEmitter.h"
+#include "Shader.h"
 #include "Camera.h"
+
+#include "glm/glm.hpp"
 
 #include <vector>
 
@@ -13,7 +16,7 @@ public:
 	ParticleMan( );
 	~ParticleMan( );
   
-  void Init( Camera* p_camera );
+  void Init( Camera p_camera, glm::vec3 p_lightPos );
 	void Update( float p_dt );
 	void Render( );
 	void CreateParticleEmitter( ParticleEmitterDesc p_emitterDesc );
@@ -21,7 +24,7 @@ public:
 private:
 	std::vector< ParticleEmitter* > m_emitterList;
 
-	Camera* m_camera;
+	Shader m_shader;
 
 };
 
