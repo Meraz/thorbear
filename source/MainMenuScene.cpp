@@ -7,7 +7,8 @@ MainMenuScene::MainMenuScene()
 
 MainMenuScene::~MainMenuScene()
 {
-	// TODO : Remove everything in vector
+	for(int i = 0; i < m_button.size(); i++)
+		delete m_button[i];
 }
 
 void MainMenuScene::Initialize(RenderComponentInterface* p_renderComponentInterface)

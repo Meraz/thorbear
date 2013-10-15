@@ -6,6 +6,10 @@
     <IncludePath>$(THORBEAR)\library\Visual Leak Detector\include;$(IncludePath)</IncludePath>
     <LibraryPath>$(THORBEAR)\library\Visual Leak Detector\lib\Win32;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
-  <ItemDefinitionGroup />
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

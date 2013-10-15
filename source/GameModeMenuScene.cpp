@@ -7,7 +7,9 @@ GameModeMenuScene::GameModeMenuScene()
 }
 
 GameModeMenuScene::~GameModeMenuScene()
-{
+{	
+	for(int i = 0; i < m_button.size(); i++)
+		delete m_button[i];
 }
 
 void GameModeMenuScene::Initialize(RenderComponentInterface* p_renderComponentInterface)
