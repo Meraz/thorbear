@@ -141,6 +141,8 @@ bool RenderComponentLinux::Init()
   //l_cam.UpdateProjectionMatrix( );
   m_genericShader.SetActiveCamera( l_cam );
   
+  m_particleManager.Init( l_cam );
+  
   // Get window size and set the viewport to match
   int l_windowWidth, l_windowHeight; // 800x600?
   glfwGetWindowSize( &l_windowWidth, &l_windowHeight );
@@ -243,11 +245,14 @@ void RenderComponentLinux::CreateSplashText(wstring p_text, float p_size, float 
 
 void RenderComponentLinux::CreateParticleEmitter( ParticleEmitterDesc p_particleDesc )
 {
-  
+  m_particleManager.CreateParticleEmitter( p_particleDesc );
 }
   
 void RenderComponentLinux::Update( float p_deltatime )
 {
+  m_particleManager.Update( p_deltatime );
+  m_particleManager.Render();
+  
   // Process particles
   glfwSwapBuffers();
   glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );

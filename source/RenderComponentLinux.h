@@ -5,6 +5,7 @@
 #include "OGL_Graphics/Shader.h"
 #include "OGL_Graphics/ModelMan.h"
 #include "OGL_Graphics/FontMan.h"
+#include "OGL_Graphics/ParticleMan.h"
 
 #include <GL/glew.h> // always include GLEW before including freeGLUT so that you get the latest opengl headers and not the default ones
 #include <GL/glfw.h>
@@ -52,6 +53,7 @@ private:
   
   ModelMan m_modelManager;
   FontMan m_fontManager;
+  ParticleMan m_particleManager;
   
   bool m_renderfirsttime;
   
