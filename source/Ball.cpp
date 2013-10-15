@@ -231,7 +231,7 @@ int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
 		l_insideY = (p_objectBBox.Height/2) - fabs(p_objectBBox.PosY+(p_objectBBox.Height/2) - (m_incPosY+m_height/2));
 
 	//Compare the results
-	/*if(l_insideX > l_insideY) //if more inside x-wise
+	if(l_insideX > l_insideY) //if more inside x-wise
 	{
 		if(m_incDirection.Y < 0)//coming from above
 		{
@@ -284,31 +284,7 @@ int Ball::CalculateBounceSide( BoundingBox p_objectBBox )
 			else
 				return RIGHT;
 		}
-	}*/
-	
-	if(l_insideX > l_insideY) //if more inside x-wise
-	{
-		if(m_incDirection.Y < 0)//coming from above
-		{
-			return TOP;
-		}
-		else //coming from below
-		{
-			return BOTTOM;
-		}
 	}
-	else //more inside y-wise
-	{
-		if(m_incDirection.X > 0) //coming from left
-		{
-			return LEFT;
-		}
-		else
-		{
-			return RIGHT;
-		}
-	}
-	
 }
 
 BoundingBox Ball::GetIncBBox()
