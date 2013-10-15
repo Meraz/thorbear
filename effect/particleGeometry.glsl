@@ -11,7 +11,7 @@ struct Particle {
 
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
-uniform vec4 lightPos = vec4(0,0,0,1);
+uniform vec4 lightPosition = vec4(0,0,0,1);
  
 in Particle vParticle[];
 
