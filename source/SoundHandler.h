@@ -5,12 +5,13 @@
 //#include "windows.h"
 #include "stdio.h"
 #include <string>
-#define NUMBER_OF_GAMESOUNDS 3
+#define NUMBER_OF_GAMESOUNDS 4
 enum SOUNDTYPE
 {
 	BALLBOUNCE,
 	ENEMYFIRE,
-	ENEMYDEATH
+	ENEMYDEATH,
+	POWERUPPICKUP
 };
 class SoundHandler
 {

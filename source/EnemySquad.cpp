@@ -33,11 +33,12 @@ EnemySquad::~EnemySquad()
 
 }
 
-void EnemySquad::Init(BoundingBox p_mapEdges, float p_velocity, vector<Enemy*> p_enemy)
+void EnemySquad::Init(BoundingBox p_mapEdges, float p_velocity, vector<Enemy*> p_enemy, SoundHandler* p_soundHandler)
 {
 	m_mapEdges = p_mapEdges;
 	m_velocity = p_velocity;
 	m_enemy = p_enemy;
+	m_soundHandler = p_soundHandler;
 	m_currentEnemyDirection = HORIZONTAL;
 	CalculateBoundingBox();
 }
@@ -99,6 +100,7 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 
 void EnemySquad::HandleLaserFiring()
 {
+	
 	vector<int> l_fireIndex = CheckLowestEnemiesInSquad();
 	for(unsigned int i = 0; i < l_fireIndex.size(); i++)
 	{
@@ -110,6 +112,8 @@ void EnemySquad::HandleLaserFiring()
 			box.Width = 1;
 			temp->Init(m_renderComp, 200, box); //TODO Don't hard code velocity in the end
 			m_laser.push_back(temp);
+			m_soundHandler->PlayGameSound(ENEMYFIRE);
+			
 		}
 	}
 }

@@ -73,13 +73,13 @@ void GameScene::Render()
 	l_ss << "Extra Lives: " << m_nrOfLives << "\n";
 	l_ss << "Score: " << m_score  << "\n";
 
-	/*l_ss2 << 1.0f/m_deltaTime;
+	l_ss2 << 1.0f/m_deltaTime;
 	std::string l_fps( l_ss2.str() );
 	l_ss2.clear();
 	l_ss2.str("");
 
 
-	l_ss << "FPS: " << l_fps  << "\n";*/
+	l_ss << "FPS: " << l_fps  << "\n";
 
 	l_ss2 << m_scoreMultiplier;
 	std::string l_scoreMulti = l_ss2.str().substr(0,4);

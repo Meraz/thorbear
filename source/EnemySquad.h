@@ -6,13 +6,14 @@
 #include "Laser.h"
 #include <vector>
 #include <algorithm>
+#include "SoundHandler.h"
 
 class EnemySquad
 {
 public:
 	EnemySquad();
 	~EnemySquad();
-	void			Init(BoundingBox p_mapEdges, float p_velocity, vector<Enemy*> p_enemy);
+	void			Init(BoundingBox p_mapEdges, float p_velocity, vector<Enemy*> p_enemy, SoundHandler* p_soundHandler);
 	void			Update(float p_deltaTime);
 	void			Render();
 	void			SetSquadRenderComponent(RenderComponentInterface* p_renderComp);
@@ -27,6 +28,7 @@ public:
 	bool			IsPaused();
 private:
 	RenderComponentInterface*	m_renderComp;
+	SoundHandler*				m_soundHandler;
 	vector<Enemy*>				m_enemy;
 	vector<Laser*>				m_laser;
 	BoundingBox					m_BoundingBox;
@@ -36,6 +38,7 @@ private:
 	float						m_targetY; //used to check how far down the enemies have moved in one go
 	bool						m_isPaused;
 	EnemyDirection				m_currentEnemyDirection;
+	
 private:
 
 	void	MoveEnemies(float p_deltaTime);
