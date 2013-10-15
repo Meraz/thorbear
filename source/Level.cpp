@@ -548,7 +548,7 @@ void Level::CheckIncrementalCollisionsWithBall(Ball* p_ball1, Ball* p_ball2, flo
 {
 	//Increment the balls position to find out exactly where it hit the other ball, for more accurate collisions
 	float l_incTime = 0.0f;
-	float l_increment = 0.00001f;
+	float l_increment = 0.000001f;
 
 	while (l_incTime < p_dt)
 	{

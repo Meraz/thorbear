@@ -89,7 +89,7 @@ void SoundHandler::Initialize()
 	AudioLoader("Audio/Enemydeath.wav", ENEMYDEATH);
 	AudioLoader("Audio/PowerupPickup.wav", POWERUPPICKUP);
 
-	m_system->createDSPByType(FMOD_DSP_TYPE_PITCHSHIFT, &m_pitch);
+	
 	
 }
 
@@ -103,20 +103,22 @@ void SoundHandler::AudioLoader(std::string p_name, SOUNDTYPE p_soundType)
 /*Call this each time a sound should be played*/
 void SoundHandler::PlayGameSound(SOUNDTYPE p_soundType) 
 {
+	
 	FMOD::Channel* l_channel;
 	m_system->playSound(FMOD_CHANNEL_FREE, m_gameSound[p_soundType], true, &l_channel);
 	
 	if(p_soundType == ENEMYFIRE)
 	{
 		l_channel->setVolume(0.1f);	
-		int temp = rand();
-		m_pitch->setParameter(FMOD_DSP_PITCHSHIFT_PITCH, float(temp)/RAND_MAX*1.5f+0.5f);
-		l_channel->addDSP(m_pitch,0);
+		int l_temp = rand();
+		l_channel->setFrequency((l_temp % 25550) + 15550);
 	}
 	else if( p_soundType == POWERUPPICKUP)
 		l_channel->setVolume(0.2f);
 
 	l_channel->setPaused(false);
+	
+
 }
 //Call this once to start the background sound
 void SoundHandler::PlayBackGroundSound(std::string p_name) //Play background sound
