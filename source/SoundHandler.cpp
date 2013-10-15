@@ -88,6 +88,8 @@ void SoundHandler::Initialize()
 	AudioLoader("Audio/Enemyfire.mp3", ENEMYFIRE);
 	AudioLoader("Audio/Enemydeath.wav", ENEMYDEATH);
 	AudioLoader("Audio/PowerupPickup.wav", POWERUPPICKUP);
+
+	m_system->createDSPByType(FMOD_DSP_TYPE_PITCHSHIFT, &m_pitch);
 	
 }
 
@@ -106,12 +108,10 @@ void SoundHandler::PlayGameSound(SOUNDTYPE p_soundType)
 	
 	if(p_soundType == ENEMYFIRE)
 	{
-		l_channel->setVolume(0.1f);
-		FMOD::DSP* l_pitch;
-		m_system->createDSPByType(FMOD_DSP_TYPE_PITCHSHIFT, &l_pitch);
+		l_channel->setVolume(0.1f);	
 		int temp = rand();
-		l_pitch->setParameter(FMOD_DSP_PITCHSHIFT_PITCH, float(temp)/RAND_MAX*1.5f+0.5f);
-		l_channel->addDSP(l_pitch,0);
+		m_pitch->setParameter(FMOD_DSP_PITCHSHIFT_PITCH, float(temp)/RAND_MAX*1.5f+0.5f);
+		l_channel->addDSP(m_pitch,0);
 	}
 	else if( p_soundType == POWERUPPICKUP)
 		l_channel->setVolume(0.2f);
