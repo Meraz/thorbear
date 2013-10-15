@@ -17,7 +17,7 @@ ParticleMan::~ParticleMan()
 	m_emitterList.shrink_to_fit();
 }
 
-void ParticleMan::Init( Camera p_camera, glm::vec3 p_lightPos )
+void ParticleMan::Init( Camera p_camera )
 {
   m_shader.Init( (SHADER_DIRECTORY + "particleVertex.glsl").c_str(), (SHADER_DIRECTORY + "particleFragment.glsl").c_str(), (SHADER_DIRECTORY + "particleGeometry.glsl").c_str() );
   m_shader.Build( );

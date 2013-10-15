@@ -16,7 +16,7 @@ public:
 	ParticleMan( );
 	~ParticleMan( );
   
-  void Init( Camera p_camera, glm::vec3 p_lightPos );
+  void Init( Camera p_camera );
 	void Update( float p_dt );
 	void Render( );
 	void CreateParticleEmitter( ParticleEmitterDesc p_emitterDesc );
