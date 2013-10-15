@@ -16,5 +16,5 @@ void BallSpeedIncreasePowerup::Update(float p_deltaTime)
 }
 void BallSpeedIncreasePowerup::Render()
 {
-	m_renderComp->RenderObject(GetBoundingBox(), ADDLIFEPOWERUP);
+	m_renderComp->RenderObject(GetBoundingBox(), BALLSPEEDINCREASEPOWERUP);
 }

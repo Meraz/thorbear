@@ -330,7 +330,7 @@ void Level::CheckAllCollisions(float p_deltaTime)
 						if(m_squad.at(i)->GetEnemies().at(j)->GetNumOfLives() == 0)
 						{
 							int l_random = rand() % 100;
-							if(l_random < POWERUPDROPRATIO+30)
+							if(l_random < POWERUPDROPRATIO)
 								SpawnPowerup(m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosX, m_squad.at(i)->GetEnemies().at(j)->GetBoundingBox().PosY);
 
 							ParticleEmitterDesc l_desc;
@@ -430,10 +430,10 @@ void Level::CheckAllCollisions(float p_deltaTime)
 				for(unsigned int j = 0; j < m_ball.size(); j++)
 				{
 					float l_temp = m_ball.at(j)->GetSpeed();
-					if((l_temp + 20) < 300)
+					if((l_temp + 40) < BALL_MAX_SPEED)
 						m_ball.at(j)->SetSpeed(l_temp + 20);
 					else
-						m_ball.at(j)->SetSpeed(300);
+						m_ball.at(j)->SetSpeed(BALL_MAX_SPEED);
 				}
 			}
 			else if(m_powerup.at(i)->GetPowerUpType() == DECREASESPEED)
@@ -441,10 +441,10 @@ void Level::CheckAllCollisions(float p_deltaTime)
 				for(unsigned int j = 0; j < m_ball.size(); j++)
 				{
 					float l_temp = m_ball.at(j)->GetSpeed();
-					if((l_temp - 20) > 200)
+					if((l_temp - 40) > BALL_MIN_SPEED)
 						m_ball.at(j)->SetSpeed(l_temp - 20);
 					else
-						m_ball.at(j)->SetSpeed(200);
+						m_ball.at(j)->SetSpeed(BALL_MIN_SPEED);
 				}
 			}
 			delete m_powerup.at(i);
