@@ -186,7 +186,8 @@ void Level::SpawnPowerup(float p_posX, float p_posY)
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
 	m_changesInLife = 0;
-
+	if(p_isMouseClicked && !m_prevLMouseClickStatus)
+		AddBall();
 	for (unsigned int i = 0; i < m_ball.size(); i++)
 	{
 		m_ball.at(i)->Update(p_deltaTime);
@@ -219,7 +220,7 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 			}
 		}
 	} 
-
+	
 	m_paddle->Update(p_mousePosX);
 
 	if (m_gameMode == MODE_SURVIVAL)
@@ -500,7 +501,7 @@ void Level::CheckIncrementalCollisions(Ball* p_ball, BoundingBox p_bBox, bool p_
 {
 	//Increment the balls position to find out exactly where it hit the other object, for more accurate collisions
 	float l_incTime = 0.0f;
-	float l_increment = 0.0001f;
+	float l_increment = 0.00001f;
 
 	while (l_incTime < p_dt)
 	{
@@ -523,7 +524,7 @@ void Level::CheckIncrementalCollisionsWithBall(Ball* p_ball1, Ball* p_ball2, flo
 {
 	//Increment the balls position to find out exactly where it hit the other ball, for more accurate collisions
 	float l_incTime = 0.0f;
-	float l_increment = 0.0001f;
+	float l_increment = 0.00001f;
 
 	while (l_incTime < p_dt)
 	{
