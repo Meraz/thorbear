@@ -277,12 +277,20 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 
 
 	m_speedIncreaseTimer+= p_deltaTime;
-	if(m_speedIncreaseTimer > 30.0f)
+	if(m_gameMode == MODE_SURVIVAL)
 	{
-		m_speedIncreaseTimer = 0.0f;
-		*m_squadSpeedModifier+= 0.1f;
+		if(m_speedIncreaseTimer > 30.0f)
+		{
+			m_speedIncreaseTimer = 0.0f;
+			*m_squadSpeedModifier += 0.1f;
+		}
 	}
-
+	else
+		if(m_speedIncreaseTimer > 5.0f)
+		{
+			m_speedIncreaseTimer = 0.0f;
+			*m_squadSpeedModifier += 0.05f;
+		}
 
 
 
