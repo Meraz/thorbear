@@ -1,7 +1,7 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 #define BALL_MAX_SPEED 400
-#define BALL_MIN_SPEED 200
+#define BALL_MIN_SPEED 160
 #define POWERUPDROPRATIO 20
 #define MODE_CAMPAIGN 1
 #define MODE_SURVIVAL 2

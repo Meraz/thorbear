@@ -431,7 +431,7 @@ void Level::CheckAllCollisions(float p_deltaTime)
 				{
 					float l_temp = m_ball.at(j)->GetSpeed();
 					if((l_temp + 40) < BALL_MAX_SPEED)
-						m_ball.at(j)->SetSpeed(l_temp + 20);
+						m_ball.at(j)->SetSpeed(l_temp + 40);
 					else
 						m_ball.at(j)->SetSpeed(BALL_MAX_SPEED);
 				}
@@ -442,7 +442,7 @@ void Level::CheckAllCollisions(float p_deltaTime)
 				{
 					float l_temp = m_ball.at(j)->GetSpeed();
 					if((l_temp - 40) > BALL_MIN_SPEED)
-						m_ball.at(j)->SetSpeed(l_temp - 20);
+						m_ball.at(j)->SetSpeed(l_temp - 40);
 					else
 						m_ball.at(j)->SetSpeed(BALL_MIN_SPEED);
 				}

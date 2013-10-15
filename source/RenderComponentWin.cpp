@@ -333,8 +333,8 @@ void RenderComponentWin::CreateTemplates()
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("AddBallPowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("LargerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("SmallerPaddlePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
-	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("BallSpeedIncreasePowerup"), m_shaderManager->GetShaderByName("effect\\object.fx")));
-	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("BallSpeedDecreasePowerup"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("BallSpeedIncreasePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("BallSpeedDecreasePowerup.obj"), m_shaderManager->GetShaderByName("effect\\object.fx")));
 
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("mainmenu.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));

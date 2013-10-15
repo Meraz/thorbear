@@ -37,6 +37,7 @@ void Ball::Init(float p_posX, float p_posY, int p_width, int p_height, float p_s
 
 void Ball::ShootBall()
 {
+	m_speed = 200.0f;
 	m_isBallDead = false;
 }
 
