@@ -24,7 +24,7 @@ Ball::~Ball(void)
 {
 }
 
-void Ball::Init(float p_posX, float p_posY, int p_width, int p_height, float p_speed, BoundingBox p_mapEdges, RenderComponentInterface* p_renderComp)
+void Ball::Init(float p_posX, float p_posY, int p_width, int p_height, float p_speed, BoundingBox p_mapEdges, RenderComponentInterface* p_renderComp, SoundHandler * p_soundHandler)
 {
 	m_posX = p_posX;
 	m_posY = p_posY;
@@ -33,6 +33,7 @@ void Ball::Init(float p_posX, float p_posY, int p_width, int p_height, float p_s
 	m_speed = p_speed;
 	m_mapEdges = p_mapEdges;
 	m_renderComp = p_renderComp;
+	m_soundHandler = p_soundHandler;
 }
 
 void Ball::ShootBall()
@@ -130,16 +131,26 @@ BoundingBox Ball::GetBoundingBox()
 void Ball::CheckCollisionAgainstWalls() 
 {
 	if(m_posX < 0 && m_direction.X < 0)
+	{
+		m_soundHandler->PlayGameSound(BALLBOUNCE);
 		m_direction.X *= -1;
+	}
 	else if (m_posX + m_width > m_mapEdges.Width && m_direction.X > 0)
+	{
+		m_soundHandler->PlayGameSound(BALLBOUNCE);
 		m_direction.X *= -1;
+	}
 
 	if(m_posY < 0)
 	{
+
 		m_isBallDead = true;
 	}
 	else if(m_posY + m_height > m_mapEdges.Height && m_direction.Y > 0)
+	{
+		m_soundHandler->PlayGameSound(BALLBOUNCE);
 		m_direction.Y *= -1;
+	}
 }
 
 void Ball::BallBounceAgainstEnemy( BoundingBox p_enemyBBox )

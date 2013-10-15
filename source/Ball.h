@@ -8,7 +8,7 @@
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-
+#include "SoundHandler.h"
 #include "RenderComponentInterface.h"
 
 struct Vector2
@@ -23,7 +23,7 @@ public:
 	Ball(void);
 	~Ball(void);
 
-	void Init(float p_PosX, float p_posY, int p_width, int p_height, float p_speed, BoundingBox p_mapEdges, RenderComponentInterface* p_renderComp); //Map edges are the inner bounds of the map
+	void Init(float p_PosX, float p_posY, int p_width, int p_height, float p_speed, BoundingBox p_mapEdges, RenderComponentInterface* p_renderComp, SoundHandler * p_soundHandler); //Map edges are the inner bounds of the map
 	void ShootBall();
 
 	void Update(float p_deltaTime);
@@ -75,7 +75,7 @@ private:
 	Vector2 m_direction; 
 
 	BoundingBox	m_mapEdges;
-
+	SoundHandler *				m_soundHandler;
 	RenderComponentInterface*	m_renderComp;
 
 private:

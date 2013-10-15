@@ -154,7 +154,7 @@ void RenderComponentWin::PostRender()
 
 	m_particleSystem->Render();
 	m_fontRenderer->Render();
-	HR(m_swapChain->Present(1, 0));
+	HR(m_swapChain->Present(0, 0));
 }
 
 bool RenderComponentWin::InitializeDirect3D()
@@ -208,7 +208,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = true;
+	l_sd.Windowed     = false;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
