@@ -59,7 +59,7 @@ private:
 	float	m_blinkTimer;
 	float	m_blinkTime;
 	float	m_scoreMultiplier;
-
+	float   m_squadSpeed;
 	bool	m_wasBallDeadLastUpdate;
 
 	RenderComponentInterface*	m_renderComp;
