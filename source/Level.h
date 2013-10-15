@@ -16,6 +16,8 @@
 #include "SmallerPaddlePowerup.h"
 #include "AddBallPowerup.h"
 #include "AddLifePowerup.h"
+#include "BallSpeedDecreasePowerup.h"
+#include "BallSpeedIncreasePowerup.h"
 #include "SoundHandler.h"
 #include "ParticleEffect.h"
 
