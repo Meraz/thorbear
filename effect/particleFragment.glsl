@@ -6,11 +6,11 @@ struct Particle {
   vec3 color;
 };
 
-in Particle vParticle;
+in Particle gParticle;
 
 out vec4 fColor;
  
 void main(void)
 {
-  fColor = vParticle.color;
+  fColor = vec4(gParticle.color, 1);
 }

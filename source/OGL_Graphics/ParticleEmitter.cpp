@@ -5,7 +5,9 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-ParticleEmitter::ParticleEmitter(ParticleEmitterDesc p_particleDesc, ModelManager* p_modelManager, ShaderManager* p_shaderManager, ID3D11Device* p_device, ID3D11DeviceContext* p_context )
+#include "../MemoryMacro.h"
+
+ParticleEmitter::ParticleEmitter( ParticleEmitterDesc p_particleDesc )
 {
 	m_particleDesc		= p_particleDesc;
 	m_nrOfDeadParticles	= 0;
@@ -37,9 +39,8 @@ ParticleEmitter::ParticleEmitter(ParticleEmitterDesc p_particleDesc, ModelManage
 
 		//TODO calculate direction depending on what angles are set
 		m_particleList.at(i)->Init(m_particleDesc.position, m_particleDesc.scale, l_direction, m_particleDesc.acceleration, m_particleDesc.startColor, m_particleDesc.endColor, l_lifeTime, l_speed, 0.0f);
-
-		m_particleDataList.push_back( glm::vec3(1) );
 	}
+	m_particleDataList.resize( m_particleList.size()*3 );
   
   glGenVertexArrays( 1, &m_vao );
   glBindVertexArray( m_vao );
@@ -59,7 +60,7 @@ ParticleEmitter::ParticleEmitter(ParticleEmitterDesc p_particleDesc, ModelManage
   glBindVertexArray( 0 );
   
   
-  m_shader.Init( SHADER_DIRECTORY + "particleVertex.glsl", SHADER_DIRECTORY + "particleFragment.glsl", SHADER_DIRECTORY + "particleGeometry.glsl" );
+  m_shader.Init( (SHADER_DIRECTORY + "particleVertex.glsl").c_str(), (SHADER_DIRECTORY + "particleFragment.glsl").c_str(), (SHADER_DIRECTORY + "particleGeometry.glsl").c_str() );
   m_shader.Build( );
   m_shader.Use( );
 }
@@ -92,7 +93,7 @@ bool ParticleEmitter::Update( float p_dt )
 	return false;
 }
 
-void ParticleEmitter::Render( Camera p_camera )
+void ParticleEmitter::Render( Camera* p_camera )
 {
 	glm::mat4 l_scale, l_translation, l_world;
 	Vect3 l_scaleVect, l_posVect, l_colorVect;
@@ -113,9 +114,9 @@ void ParticleEmitter::Render( Camera p_camera )
 
   glBufferSubData( GL_ARRAY_BUFFER, 0, m_particleDataList.size( ) * 3 * sizeof( float ), m_particleDataList.data( ) );
 
-	m_shader->SetUniformMatrix( "worldProjectionMatrix", p_camera.GetProjectionMatrix() * p_camera.GetViewMatrix() );
+	m_shader.SetUniformMatrix( "worldProjectionMatrix", p_camera->GetProjectionMatrix() * p_camera->GetViewMatrix() );
 
-  m_shader->Use( );
-  glDrawArrays( GL_POINTS, 0, m_particleMatrixList.size() );
+  m_shader.Use( );
+  glDrawArrays( GL_POINTS, 0, m_particleList.size() );
 }
 

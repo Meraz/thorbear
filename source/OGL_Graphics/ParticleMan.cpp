@@ -1,5 +1,7 @@
 #include "ParticleMan.h"
 
+#include "../MemoryMacro.h"
+
 ParticleMan::ParticleMan( )
 {
 }
@@ -15,7 +17,7 @@ ParticleMan::~ParticleMan()
 	m_emitterList.shrink_to_fit();
 }
 
-void ParticleMan::ParticleMan( Camera* p_camera )
+void ParticleMan::Init( Camera* p_camera )
 {
 	m_camera = p_camera;
 }

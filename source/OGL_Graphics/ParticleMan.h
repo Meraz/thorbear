@@ -5,6 +5,8 @@
 #include "ParticleEmitter.h"
 #include "Camera.h"
 
+#include <vector>
+
 class ParticleMan
 {
 public:
@@ -17,7 +19,7 @@ public:
 	void CreateParticleEmitter( ParticleEmitterDesc p_emitterDesc );
 	
 private:
-	vector< ParticleEmitter* > m_emitterList;
+	std::vector< ParticleEmitter* > m_emitterList;
 
 	Camera* m_camera;
 

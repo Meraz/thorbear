@@ -86,8 +86,6 @@ bool WindowLinux::Init( RenderComponentLinux *p_renderComponentLinux )
 		return this->SetError( std::string( "ERROR: creating load window\n" ) );
 	}
   
-  //glfwDisable( GLFW_MOUSE_CURSOR ); // Disable mouse cursor to prevent it from exiting screen
-  
   m_oldTime = glfwGetTime();
   
   return true;

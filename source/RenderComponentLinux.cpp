@@ -141,7 +141,7 @@ bool RenderComponentLinux::Init()
   //l_cam.UpdateProjectionMatrix( );
   m_genericShader.SetActiveCamera( l_cam );
   
-  m_particleManager.Init( l_cam );
+  m_particleManager.Init( &l_cam );
   
   // Get window size and set the viewport to match
   int l_windowWidth, l_windowHeight; // 800x600?
@@ -294,6 +294,7 @@ BoundingBox RenderComponentLinux::ConvertIntoScreenSpace(BoundingBox p_boundingB
 
 void RenderComponentLinux::SetShowCursor(bool p_showCursor)
 {
+  return;
   if( p_showCursor )
     glfwEnable( GLFW_MOUSE_CURSOR );
   else
