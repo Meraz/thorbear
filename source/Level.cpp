@@ -186,8 +186,7 @@ void Level::SpawnPowerup(float p_posX, float p_posY)
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
 	m_changesInLife = 0;
-	if(p_isMouseClicked && !m_prevLMouseClickStatus)
-		AddBall();
+
 	for (unsigned int i = 0; i < m_ball.size(); i++)
 	{
 		m_ball.at(i)->Update(p_deltaTime);
