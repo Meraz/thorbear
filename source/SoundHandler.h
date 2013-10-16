@@ -24,6 +24,7 @@ private:
 	FMOD::Sound*		m_backGroundStream;
 	FMOD::Sound*		m_gameSound[NUMBER_OF_GAMESOUNDS];
 	FMOD::Channel*		m_BackGroundChannel;
+
 	unsigned int		m_version;
 	int					m_numDrivers;
 	char				m_name[256];
