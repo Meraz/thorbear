@@ -78,18 +78,18 @@ unordered_map<string, float> LevelImporter::LoadGameplayValues( string p_fileNam
 	unordered_map<string, float> l_values;
 
 	//Set standard values if no file can be read
-	l_values.insert(pair<string, float>("LEVELHEIGHT", 400));
-	l_values.insert(pair<string, float>("LEVELWIDTH", 600));
-	l_values.insert(pair<string, float>("LEVELBORDER", 9));
-	l_values.insert(pair<string, float>("BALLHEIGHT", 5));
-	l_values.insert(pair<string, float>("BALLWIDTH", 5));
-	l_values.insert(pair<string, float>("BALLSPEED", 200));
-	l_values.insert(pair<string, float>("PADDLEHEIGHT", 10));
-	l_values.insert(pair<string, float>("PADDLEWIDTH", 60));
-	l_values.insert(pair<string, float>("ENEMYHEIGHT", 20));
-	l_values.insert(pair<string, float>("ENEMYWIDTH", 20));
-	l_values.insert(pair<string, float>("ENEMYSPEED", 50));
-	l_values.insert(pair<string, float>("LASERSPEED", 200));
+	l_values.insert(pair<string, float>("LEVELHEIGHT", 400.0f));
+	l_values.insert(pair<string, float>("LEVELWIDTH", 600.0f));
+	l_values.insert(pair<string, float>("LEVELBORDER", 9.0f));
+	l_values.insert(pair<string, float>("BALLHEIGHT", 5.0f));
+	l_values.insert(pair<string, float>("BALLWIDTH", 5.0f));
+	l_values.insert(pair<string, float>("BALLSPEED", 200.0f));
+	l_values.insert(pair<string, float>("PADDLEHEIGHT", 10.0f));
+	l_values.insert(pair<string, float>("PADDLEWIDTH", 60.0f));
+	l_values.insert(pair<string, float>("ENEMYHEIGHT", 20.0f));
+	l_values.insert(pair<string, float>("ENEMYWIDTH", 20.0f));
+	l_values.insert(pair<string, float>("ENEMYSPEED", 50.0f));
+	l_values.insert(pair<string, float>("LASERSPEED", 200.0f));
 
 	ifstream l_file;
 	l_file.open("levels/" + p_fileName + ".txt");

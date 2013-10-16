@@ -208,7 +208,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = true;
+	l_sd.Windowed     = false;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -298,6 +298,7 @@ void RenderComponentWin::Load()
 
 	m_modelManager->CreateModel("background.obj", "object\\levelBackground");
 	m_modelManager->CreateModel("mainmenu.obj", "object\\mainmenu_background");
+	m_modelManager->CreateModel("HS_background.obj", "object\\HS_background");
 	//buttons
 	m_modelManager->CreateModel("ButtonStart.obj", "object\\ButtonStart");
 	m_modelManager->CreateModel("ButtonCampaign.obj", "object\\ButtonCampaign");
@@ -338,6 +339,7 @@ void RenderComponentWin::CreateTemplates()
 
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("mainmenu.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("HS_background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 
 	//buttons
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonStart.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
@@ -373,14 +375,14 @@ BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBo
 	l_point2.z = l_point.z / l_point.w;
 
 	D3DXVECTOR2 l_point3;
-	l_point3.x = ((l_point2.x + 1.0) / 2.0) * m_clientWidth;
-	l_point3.y = ((l_point2.y + 1.0) / 2.0) * m_clientHeight;
+	l_point3.x = ((l_point2.x + 1.0f) / 2.0f) * m_clientWidth;
+	l_point3.y = ((l_point2.y + 1.0f) / 2.0f) * m_clientHeight;
 
 	BoundingBox l_boundingBox;
 	l_boundingBox.PosX = l_point3.x - p_boundingBox.Width/1.5f;
 	l_boundingBox.PosY = m_clientHeight - (l_point3.y + p_boundingBox.Height/2);
-	l_boundingBox.Width = p_boundingBox.Width * 1.3f;
-	l_boundingBox.Height = p_boundingBox.Height * 1.3f;
+	l_boundingBox.Width = (int)(p_boundingBox.Width * 1.3f);
+	l_boundingBox.Height = (int)(p_boundingBox.Height * 1.3f);
 	l_boundingBox.Depth = p_boundingBox.Depth;
 	
 	return l_boundingBox;

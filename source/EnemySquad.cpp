@@ -33,10 +33,11 @@ EnemySquad::~EnemySquad()
 
 }
 
-void EnemySquad::Init(BoundingBox p_mapEdges, float p_velocity, vector<Enemy*> p_enemy, SoundHandler* p_soundHandler)
+void EnemySquad::Init(BoundingBox p_mapEdges, float p_velocity, float* p_speedModifier, vector<Enemy*> p_enemy, SoundHandler* p_soundHandler)
 {
 	m_mapEdges = p_mapEdges;
 	m_velocity = p_velocity;
+	m_speedModifier = p_speedModifier;
 	m_enemy = p_enemy;
 	m_soundHandler = p_soundHandler;
 	m_currentEnemyDirection = HORIZONTAL;
@@ -69,8 +70,8 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 	{
 	case HORIZONTAL:
 		
-		if(m_BoundingBox.PosX + (m_velocity * p_deltaTime) <= m_mapEdges.PosX || 
-			m_BoundingBox.PosX + m_BoundingBox.Width + (m_velocity * p_deltaTime) >= m_mapEdges.PosX + m_mapEdges.Width)
+		if(m_BoundingBox.PosX + (m_velocity * p_deltaTime * (*m_speedModifier)) <= m_mapEdges.PosX || 
+			m_BoundingBox.PosX + m_BoundingBox.Width + (m_velocity * p_deltaTime * (*m_speedModifier)) >= m_mapEdges.PosX + m_mapEdges.Width)
 		{
 			m_velocity *= -1;
 
@@ -81,7 +82,7 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 		}
 		for(unsigned int i = 0; i < m_enemy.size(); i++)
 		{
-			m_enemy.at(i)->Update(m_velocity * p_deltaTime, m_currentEnemyDirection, p_deltaTime);
+			m_enemy.at(i)->Update(m_velocity * p_deltaTime * (*m_speedModifier), m_currentEnemyDirection, p_deltaTime);
 		}
 		break;
 	case VERTICAL:
@@ -92,7 +93,7 @@ void EnemySquad::MoveEnemies( float p_deltaTime)
 		}
 		for(unsigned int i = 0; i < m_enemy.size(); i++)
 		{
-			m_enemy.at(i)->Update(m_velocity * p_deltaTime, m_currentEnemyDirection, p_deltaTime);
+			m_enemy.at(i)->Update(m_velocity * p_deltaTime * (*m_speedModifier), m_currentEnemyDirection, p_deltaTime);
 		}
 		break;
 	}

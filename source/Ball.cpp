@@ -184,7 +184,7 @@ void Ball::BallBounceAgainstPaddle( BoundingBox p_paddleBBox )
 		else //set adding angle to a value between 45 and 135 (degrees)
 			l_angle = (float)acos((l_diff / ((m_width/2) + (p_paddleBBox.Width/2))) * 0.7f);
 
-		float l_newAngle = (M_PI - acos(m_incDirection.X)) - (2 * (M_PI - acos(m_incDirection.X) - l_angle)); 
+		float l_newAngle = (float)((M_PI - acos(m_incDirection.X)) - (2 * (M_PI - acos(m_incDirection.X) - l_angle))); 
 		
 		//clamp the new angle between min and max values (10 and 170 degrees)
 		if(l_newAngle*180*M_1_PI < m_minBallAngle)

@@ -17,7 +17,8 @@ Level::Level(void)
 
 	m_enemyDistance = 2;
 	m_scoreMultiplier = 1.0f;
-
+	m_squadSpeedModifier = new float();
+	*m_squadSpeedModifier = 1.0f;
 	m_isBeginningOfGame = true;
 	m_isPaddleInvulnerable = false;
 	m_isPaddleVisible = true;
@@ -25,6 +26,7 @@ Level::Level(void)
 	m_blinkTime = 0.2f;
 	m_invulTimer = 0.0f;
 	m_invulTime = 1.5f;
+	m_speedIncreaseTimer = 0.0f;
 
 	m_mapBorderThickness = 0;
 	m_errorMessageTick = 0.0f;
@@ -36,7 +38,7 @@ Level::~Level(void)
 {
 	delete m_paddle;
 	delete m_map;
-
+	delete m_squadSpeedModifier;
 	for (unsigned int i = 0; i < m_squad.size(); i++)
 	{
 		delete m_squad.at(i);
@@ -152,7 +154,7 @@ void Level::CreateEnemies()
 		}
 	}
 	tempSquad = new EnemySquad();
-	tempSquad->Init(m_mapEdges, 25, l_enemy, m_soundHandler);
+	tempSquad->Init(m_mapEdges, 25, m_squadSpeedModifier, l_enemy, m_soundHandler);
 	tempSquad->SetSquadRenderComponent(m_renderComp);
 	m_squad.push_back(tempSquad);
 }
@@ -186,6 +188,9 @@ void Level::SpawnPowerup(float p_posX, float p_posY)
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
 	m_changesInLife = 0;
+
+	
+
 
 	for (unsigned int i = 0; i < m_ball.size(); i++)
 	{
@@ -269,6 +274,26 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 		m_errorMessageTick += p_deltaTime;
 	else
 		m_renderErrorLoadingLevel = false;
+
+
+	m_speedIncreaseTimer+= p_deltaTime;
+	if(m_gameMode == MODE_SURVIVAL)
+	{
+		if(m_speedIncreaseTimer > 30.0f)
+		{
+			m_speedIncreaseTimer = 0.0f;
+			*m_squadSpeedModifier += 0.1f;
+		}
+	}
+	else
+		if(m_speedIncreaseTimer > 5.0f)
+		{
+			m_speedIncreaseTimer = 0.0f;
+			*m_squadSpeedModifier += 0.05f;
+		}
+
+
+
 }
 
 void Level::Render()
@@ -523,7 +548,7 @@ void Level::CheckIncrementalCollisionsWithBall(Ball* p_ball1, Ball* p_ball2, flo
 {
 	//Increment the balls position to find out exactly where it hit the other ball, for more accurate collisions
 	float l_incTime = 0.0f;
-	float l_increment = 0.00001f;
+	float l_increment = 0.000001f;
 
 	while (l_incTime < p_dt)
 	{
