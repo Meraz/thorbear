@@ -22,6 +22,7 @@ private:
 	std::vector<Button*> m_button;
 	Highscore* m_highScore;
 	int m_score;
+	bool * m_newAdditionToHighscore;
 };
 
 #endif

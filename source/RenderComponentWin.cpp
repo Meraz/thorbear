@@ -147,6 +147,19 @@ void RenderComponentWin::PreRender()
 	m_d3dImmediateContext->ClearDepthStencilView(m_depthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
 }
 
+// External method found on ze Internet that converts strings to wstrings
+std::wstring s2ws(const std::string& s)
+{
+	int len;
+	int slength = (int)s.length() + 1;
+	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0); 
+	wchar_t* buf = new wchar_t[len];
+	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
+	std::wstring r(buf);
+	delete[] buf;
+	return r;
+}
+
 void RenderComponentWin::PostRender()
 {
 	RenderInstancedData(ENEMY1);
@@ -154,7 +167,11 @@ void RenderComponentWin::PostRender()
 	RenderInstancedData(BALL);
 
 	m_particleSystem->Render();
-	m_fontRenderer->Render();
+
+	for(unsigned int i = 0; i < m_textData.size(); i++)
+		m_fontRenderer->RenderText(s2ws(m_textData.at(i).text).c_str(), m_textData.at(i).size, m_textData.at(i).posX, m_textData.at(i).posY, m_textData.at(i).color);
+	m_textData.clear();
+
 	HR(m_swapChain->Present(0, 0));
 }
 
@@ -394,23 +411,11 @@ void RenderComponentWin::CreateSplashText( wstring p_text, float p_size, float p
 	m_fontRenderer->CreateSplashText(p_text, p_size, p_posX, p_posY, p_travelTime, p_stillTime);
 }
 
-// External method found on ze Internet that converts strings to wstrings
-std::wstring s2ws(const std::string& s)
-{
-	int len;
-	int slength = (int)s.length() + 1;
-	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0); 
-	wchar_t* buf = new wchar_t[len];
-	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
-	std::wstring r(buf);
-	delete[] buf;
-	return r;
-}
+
 
 void RenderComponentWin::RenderText(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
 {
-
-	m_fontRenderer->RenderText(s2ws(p_text).c_str(), p_size, p_posX, p_posY, p_color);
+	m_textData.push_back(textData(p_text, p_size, p_posX, p_posY, p_color));
 }
 
 void RenderComponentWin::RenderBackground(TextureType p_textureType)

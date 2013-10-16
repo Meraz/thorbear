@@ -198,7 +198,7 @@ void Highscore::InsertScoreToHighscore()
 			l_tempScore = m_highscoreData[i][1];
 			std::stringstream l_tempstream;
 			l_tempstream << m_playerScore;
-			for(int z = 0; z < m_playerName.length(); z++)
+			for(unsigned int z = 0; z < m_playerName.length(); z++)
 				if(m_playerName[z] == ' ')
 					m_playerName.erase(m_playerName.begin() + (z--));
 			m_highscoreData[i][0] = m_playerName;
