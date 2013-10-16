@@ -208,7 +208,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = true;
+	l_sd.Windowed     = false;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -298,6 +298,7 @@ void RenderComponentWin::Load()
 
 	m_modelManager->CreateModel("background.obj", "object\\levelBackground");
 	m_modelManager->CreateModel("mainmenu.obj", "object\\mainmenu_background");
+	m_modelManager->CreateModel("HS_background.obj", "object\\HS_background");
 	//buttons
 	m_modelManager->CreateModel("ButtonStart.obj", "object\\ButtonStart");
 	m_modelManager->CreateModel("ButtonCampaign.obj", "object\\ButtonCampaign");
@@ -338,6 +339,7 @@ void RenderComponentWin::CreateTemplates()
 
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("mainmenu.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
+	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("HS_background.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));
 
 	//buttons
 	m_objVec.push_back(ObjTemplate(m_modelManager->GetModelByName("ButtonStart.obj"), m_shaderManager->GetShaderByName("effect\\background.fx")));

@@ -4,6 +4,9 @@
 
 SoundHandler::SoundHandler()
 {
+
+
+	m_BackGroundChannel = NULL;
 	//empty 'cause initialize functions is the way to go
 }
 SoundHandler::~SoundHandler()
@@ -20,6 +23,8 @@ SoundHandler::~SoundHandler()
 /*Starts the fmod systems and loads the gamesounds*/
 void SoundHandler::Initialize()
 {
+
+
 	m_result = FMOD::System_Create(&m_system);
 	ErrorCheck(m_result);
 
@@ -88,6 +93,7 @@ void SoundHandler::Initialize()
 	AudioLoader("Audio/Enemyfire.mp3", ENEMYFIRE);
 	AudioLoader("Audio/Enemydeath.wav", ENEMYDEATH);
 	AudioLoader("Audio/PowerupPickup.wav", POWERUPPICKUP);
+	AudioLoader("Audio/LaserHitsPaddle.wav", LASERHITSPADDLE);
 
 	
 	
@@ -123,7 +129,8 @@ void SoundHandler::PlayGameSound(SOUNDTYPE p_soundType)
 //Call this once to start the background sound
 void SoundHandler::PlayBackGroundSound(std::string p_name) //Play background sound
 {
-	m_BackGroundChannel->stop();
+	if(m_BackGroundChannel != NULL)
+		m_BackGroundChannel->stop();
 	const char* l_temp = p_name.c_str();
 	m_system->createStream(l_temp,FMOD_DEFAULT, 0, &m_backGroundStream);
 	m_system->playSound(FMOD_CHANNEL_FREE, m_backGroundStream, false, &m_BackGroundChannel);

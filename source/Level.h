@@ -38,6 +38,9 @@ public:
 	float	GetMultiplier();
 	void	AddBall();
 
+	void	PauseGame();
+	void	UnpauseGame();
+
 private:
 	vector<EnemySquad*> m_squad;
 	vector<Ball*>		m_ball;
@@ -51,6 +54,7 @@ private:
 	int		m_gameMode;
 	bool	m_prevLMouseClickStatus;
 	bool	m_isBeginningOfGame;
+	bool	m_isGamePaused;
 
 	bool	m_isPaddleInvulnerable;
 	float	m_invulTimer;

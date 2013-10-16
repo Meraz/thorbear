@@ -31,6 +31,7 @@ void GameModeMenuScene::Update(double p_deltaTime, int p_mousePositionX, int p_m
 
 void GameModeMenuScene::Render()
 {
+	m_renderComponentInterface->RenderBackground(MAINMENU);
 	for(unsigned int i = 0; i < m_button.size(); i++)
 		m_button.at(i)->Render();
 }
