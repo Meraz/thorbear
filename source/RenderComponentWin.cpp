@@ -544,6 +544,15 @@ void RenderComponentWin::SetShowCursor( bool p_showCursor )
 
 char RenderComponentWin::GetKey()
 {
-	return 'w';
+	for(int i=65;i<91;i++)
+		if(GetAsyncKeyState((char)i) & 0x8000)
+			return (char)i;
+	for(int i=48;i<58;i++)
+		if(GetAsyncKeyState((char)i) & 0x8000)
+			return (char)i;
+	if(GetAsyncKeyState((char)8) & 0x8000)
+		return (char)8;
+
+	return 0;
 }
 

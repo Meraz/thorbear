@@ -189,9 +189,6 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
 	m_changesInLife = 0;
 
-	
-
-
 	for (unsigned int i = 0; i < m_ball.size(); i++)
 	{
 		m_ball.at(i)->Update(p_deltaTime);
@@ -225,8 +222,8 @@ void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 		}
 	} 
 	
-	m_paddle->Update(p_mousePosX);
-
+	//m_paddle->Update(p_mousePosX);
+	
 	if (m_gameMode == MODE_SURVIVAL)
 	{
 		if((m_squad.back()->GetBoundingBox().PosY + m_squad.back()->GetBoundingBox().Height < m_mapEdges.PosY + m_mapEdges.Height - m_squad.back()->GetBoundingBox().Height)
