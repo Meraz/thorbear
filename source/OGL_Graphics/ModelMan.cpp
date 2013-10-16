@@ -25,6 +25,7 @@ void ModelMan::LoadModels( )
   m_models[ BALLSPEEDDECREASEPOWERUP ].Load( MODEL_DIR+"BallSpeedDecreasePowerup/", "BallSpeedDecreasePowerup.obj");
   m_models[ LEVEL ].Load( MODEL_DIR+"levelBackground/", "background.obj");
   m_models[ MAINMENU ].Load( MODEL_DIR+"mainmenu_background/", "mainmenu.obj");
+  m_models[ HS ].Load( MODEL_DIR+"HS_background/", "HS_background.obj");
   
   m_models[ START ].Load( MODEL_DIR+"ButtonStart/", "ButtonStart.obj");
   m_models[ CAMPAIGN ].Load( MODEL_DIR+"ButtonCampaign/", "ButtonCampaign.obj");
