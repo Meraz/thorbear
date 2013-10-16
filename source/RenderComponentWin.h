@@ -98,7 +98,7 @@ private:
 	int						m_clientWidth;
 	int						m_clientHeight;
 	bool					m_enable4xMsaa;
-
+	bool					m_lockKeyboard;
 	std::vector<ObjTemplate>	m_objVec;
 
 	FontRenderWin*			m_fontRenderer;

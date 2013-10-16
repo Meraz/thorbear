@@ -4,6 +4,7 @@
 RenderComponentWin::RenderComponentWin(HWND p_hMainWnd)
 {	
 	m_hMainWnd = p_hMainWnd;
+	m_lockKeyboard = false;
 	m_objVec = std::vector<ObjTemplate>();
 }
 
@@ -208,7 +209,7 @@ bool RenderComponentWin::InitializeDirect3D()
 	l_sd.BufferUsage  = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	l_sd.BufferCount  = 1;
 	l_sd.OutputWindow = m_hMainWnd;
-	l_sd.Windowed     = false;
+	l_sd.Windowed     = true;
 	l_sd.SwapEffect   = DXGI_SWAP_EFFECT_DISCARD;
 	l_sd.Flags        = 0;
 
@@ -546,6 +547,22 @@ void RenderComponentWin::SetShowCursor( bool p_showCursor )
 
 char RenderComponentWin::GetKey()
 {
-	return 'w';
+	
+
+	for(int i=8;i<91;i++)
+		if(GetAsyncKeyState((char)i))
+		{
+			if(m_lockKeyboard == false)
+			{
+				m_lockKeyboard = true;
+				return (char)i;
+			}
+			else
+				return 0;
+		}
+
+	m_lockKeyboard = false;
+
+	return 0;
 }
 

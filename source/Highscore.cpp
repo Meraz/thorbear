@@ -4,7 +4,8 @@ Highscore::Highscore(RenderComponentInterface* p_renderComponentInterface)
 {
 	m_renderComponentInterface = p_renderComponentInterface;
 	m_newAdditionToHighscore = false;
-	m_playerName = "AAA";
+	m_playerName = "    ";
+	m_currentLetter = 0;
 }
 
 Highscore::~Highscore()
@@ -34,11 +35,16 @@ void Highscore::Update()
 
 void Highscore::Render()
 {
+	//if(m_newAdditionToHighscore)
+	//{
+	//	m_renderComponentInterface->RenderText(m_playerName.substr(0,1), 25.0f, 400.0f, 200.0f, 0xff00ffff);
+	//	m_renderComponentInterface->RenderText(m_playerName.substr(1,1), 25.0f, 650.0f, 200.0f, 0xff00ffff);
+	//	m_renderComponentInterface->RenderText(m_playerName.substr(2,1), 25.0f, 900.0f, 200.0f, 0xff00ffff);
+	//}
 	if(m_newAdditionToHighscore)
 	{
-		m_renderComponentInterface->RenderText(m_playerName.substr(0,1), 25.0f, 400.0f, 200.0f, 0xff00ffff);
-		m_renderComponentInterface->RenderText(m_playerName.substr(1,1), 25.0f, 650.0f, 200.0f, 0xff00ffff);
-		m_renderComponentInterface->RenderText(m_playerName.substr(2,1), 25.0f, 900.0f, 200.0f, 0xff00ffff);
+		m_renderComponentInterface->RenderText("Enter name: ", 25, 400.0f, 200.0f, 0xff00ffff);
+		m_renderComponentInterface->RenderText(m_playerName, 25, 600, 200.0f, 0xff00ffff);
 	}
 	std::stringstream l_tempstream;
 	if(m_playerScore != -1) //Don't print if we entered from Menu
@@ -51,6 +57,21 @@ void Highscore::Render()
 	{
 		m_renderComponentInterface->RenderText(m_highscoreData[i][0], 25.0f, 1250.0f, 370.0f + i * 50.0f, 0xff00ffff);
 		m_renderComponentInterface->RenderText(m_highscoreData[i][1], 25.0f, 1350.0f, 370.0f + i * 50.0f, 0xff00ffff);
+	}
+}
+
+
+void Highscore::AddCharToName(char p_char)
+{
+	if(p_char != (char)8 && m_currentLetter < 4 && p_char != 0 )
+	{
+		m_playerName[m_currentLetter] = p_char;
+		m_currentLetter++;
+	}
+	else if((m_currentLetter != 0) && p_char != 0 && p_char == (char)8 )
+	{
+		m_currentLetter--;
+		m_playerName[m_currentLetter] = ' ';
 	}
 }
 
@@ -90,7 +111,7 @@ void Highscore::LoadFile()
 		if(m_fileName.compare("campaign.score") == 0)
 			CreateBaseHighscore(1);
 		else
-			CreateBaseHighscore(10);
+			CreateBaseHighscore(2);
 	}
 	else
 	{
@@ -177,6 +198,9 @@ void Highscore::InsertScoreToHighscore()
 			l_tempScore = m_highscoreData[i][1];
 			std::stringstream l_tempstream;
 			l_tempstream << m_playerScore;
+			for(int z = 0; z < m_playerName.length(); z++)
+				if(m_playerName[z] == ' ')
+					m_playerName.erase(m_playerName.begin() + (z--));
 			m_highscoreData[i][0] = m_playerName;
 			m_highscoreData[i][1] = l_tempstream.str();
 			for(int j = MAX_HIGHSCORE_ENTRIES-1 ; j > i+1; j--)
