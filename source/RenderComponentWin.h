@@ -47,6 +47,24 @@ struct ObjTemplate
 	BUFFER_INIT_DESC bdInstance;
 };
 
+struct textData
+{
+	string text;
+	float size;
+	float posX;
+	float posY;
+	unsigned int color;
+
+	textData(string p_text, float p_size, float p_posX, float p_posY, unsigned int p_color)
+	{
+		text = p_text;
+		size = p_size;
+		posX = p_posX;
+		posY = p_posY;
+		color = p_color;
+	}
+};
+
 class RenderComponentWin : public RenderComponentInterface
 {
 public:
@@ -102,6 +120,7 @@ private:
 	std::vector<ObjTemplate>	m_objVec;
 
 	FontRenderWin*			m_fontRenderer;
+	vector<textData>		m_textData;
 };
 
 #endif
