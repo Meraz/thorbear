@@ -50,7 +50,7 @@ void Highscore::Render()
 	for(int i = 0; i < MAX_HIGHSCORE_ENTRIES; i++)
 	{
 		m_renderComponentInterface->RenderText(m_highscoreData[i][0], 25.0f, 1250.0f, 370.0f + i * 50.0f, 0xff00ffff);
-		m_renderComponentInterface->RenderText(m_highscoreData[i][1], 25.0f, 1310.0f, 370.0f + i * 50.0f, 0xff00ffff);
+		m_renderComponentInterface->RenderText(m_highscoreData[i][1], 25.0f, 1350.0f, 370.0f + i * 50.0f, 0xff00ffff);
 	}
 }
 
