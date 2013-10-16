@@ -17,7 +17,7 @@ GameScene::GameScene(int p_gameMode, SoundHandler* p_soundHandler)
 	m_gameMode = p_gameMode;
 	m_isGameOver = false;
 	m_soundHandler = p_soundHandler;
-
+  m_deltaTime = 0.01;
 }
 
 GameScene::~GameScene()

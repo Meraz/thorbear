@@ -37,7 +37,7 @@ Level::Level(void)
 Level::~Level(void)
 {
 	delete m_paddle;
-	delete m_map;
+	delete[] m_map;
 	delete m_squadSpeedModifier;
 	for (unsigned int i = 0; i < m_squad.size(); i++)
 	{

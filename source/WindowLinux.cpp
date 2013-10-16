@@ -37,9 +37,9 @@ WindowLinux::WindowLinux()
 	glfwSetWindowSizeCallback( ResizeCallback ); // register callback for reshape (if set earlier won't be called until an actual resize)
 }
 
-WindowLinux::~WindowLinux()
+WindowLinux::~WindowLinux( )
 {
-	glfwTerminate();
+	glfwTerminate( );
   delete (RenderComponentLinux*)m_renderComponentInterface;
 }
 

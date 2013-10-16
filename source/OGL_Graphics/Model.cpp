@@ -182,6 +182,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
           
+          free( l_mapAmbient->data );
           free( l_mapAmbient );
 				}
 				if( tmpstr.compare( "map_Kd" ) == 0 )
@@ -204,6 +205,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
           
+          free( l_mapDiffuse->data );
           free( l_mapDiffuse );
 				}
 				if( tmpstr.compare( "map_Ks" ) == 0 )
@@ -226,6 +228,7 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
           glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
           
+          free( l_mapSpecular->data );
           free( l_mapSpecular );
 				}
 				else
@@ -391,6 +394,8 @@ bool LoadOBJ( std::string dir, std::string fileName, Model &model )
   glBindBuffer(GL_ARRAY_BUFFER, model.m_handleVBO);
   glBufferData(GL_ARRAY_BUFFER, vertexData->size() * sizeof(float), vertexData->data(), GL_STATIC_DRAW);
 
+	delete vertexData;
+	delete indices;
 
 	return true;
 }

@@ -4,6 +4,7 @@
 BaseScene::BaseScene()
 {
 	m_menuFlag = -1;
+	m_previousMouseState = false;
 }
 
 BaseScene::~BaseScene()

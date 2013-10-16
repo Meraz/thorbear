@@ -18,6 +18,7 @@ void SceneManager::Initialize(RenderComponentInterface* p_renderComponentInterfa
 	m_renderComponentInterface = p_renderComponentInterface;
 
 	m_currentScene = 0;
+	m_currentSceneState = (SceneState::State)0;
 	SwapSceneState(SceneState::MAIN_MENU);
 }
 
