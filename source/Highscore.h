@@ -19,8 +19,10 @@ public:
 	void NextChar(int p_buttonId);
 	void PrevChar(int p_buttonId);
 	void SaveFile();
+	void AddCharToName(char p_char);
 	bool GetnewAdditionToHighscore();
 	bool* GetnewAdditionToHighscorePointer();
+	
 
 private:
 	void LoadFile();
@@ -34,6 +36,7 @@ private:
 	std::string m_playerName;
 	std::string m_fileName;
 	int			m_playerScore;
+	int			m_currentLetter;
 	bool		m_newAdditionToHighscore;
 	RenderComponentInterface* m_renderComponentInterface;
 

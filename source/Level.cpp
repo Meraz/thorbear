@@ -188,6 +188,15 @@ void Level::SpawnPowerup(float p_posX, float p_posY)
 
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
+	if(m_renderComp->GetKey() == (char)13)
+	{
+		if(m_isGamePaused)
+			UnpauseGame();
+		else
+			PauseGame();
+	}
+	
+		
 	if(!m_isGamePaused)
 	{
 		m_changesInLife = 0;
