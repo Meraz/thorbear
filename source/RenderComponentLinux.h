@@ -40,6 +40,9 @@ public:
 	// Show or hide mouse cursor
 	void SetShowCursor(bool p_showCursor);
 
+  // Return first active key
+	char GetKey( );
+
   // Update viewport on window resize
   void UpdateViewportSize( int p_width, int p_height );
   

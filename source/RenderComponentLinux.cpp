@@ -115,6 +115,8 @@ bool RenderComponentLinux::Init()
   glEnable( GL_BLEND );
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
   
+  glfwEnable( GLFW_STICKY_KEYS );
+  
   GLCheckErrors( "RenderComponentLinux::Init - Options" );
 
 	// set colour to clear screen buffer to
@@ -291,11 +293,36 @@ BoundingBox RenderComponentLinux::ConvertIntoScreenSpace(BoundingBox p_boundingB
 
 void RenderComponentLinux::SetShowCursor(bool p_showCursor)
 {
-  return;
   if( p_showCursor )
     glfwEnable( GLFW_MOUSE_CURSOR );
   else
     glfwDisable( GLFW_MOUSE_CURSOR );
+}
+
+char RenderComponentLinux::GetKey( )
+{
+  // Loop through alphabet and check keypresses
+  for( char i = 'A'; i <= 'Z'; i++ )
+    if( glfwGetKey( i ) == GLFW_PRESS )
+      return i;
+  for( char i = 'a'; i <= 'z'; i++ )
+    if( glfwGetKey( i ) == GLFW_PRESS )
+      return (char)(i+('A'-'a'));
+  // Loop through all numeric keys and check keypresses
+  for( char i = '0'; i <= '9'; i++ )
+    if( glfwGetKey( i ) == GLFW_PRESS )
+      return i;
+  // Check keypresses for special characters
+  if( glfwGetKey( GLFW_KEY_BACKSPACE ) == GLFW_PRESS )
+    return (char)8; // ASCII backspace
+  if( glfwGetKey( GLFW_KEY_SPACE ) == GLFW_PRESS )
+    return (char)32; // ASCII space
+  if( glfwGetKey( GLFW_KEY_ENTER ) == GLFW_PRESS )
+    return (char)13; // ASCII carriage return
+  if( glfwGetKey( GLFW_KEY_ESC ) == GLFW_PRESS )
+    return (char)27; // ASCII escape
+  
+  return (char)0; // Else return 0
 }
 
 void RenderComponentLinux::UpdateViewportSize( int p_width, int p_height )
