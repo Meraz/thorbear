@@ -21,7 +21,6 @@ Shader::Shader()
 
 Shader::~Shader()
 {
-  delete m_activeCamera;
 }
 
 void Shader::Init( std::string p_vertFileName, std::string p_fragFileName )

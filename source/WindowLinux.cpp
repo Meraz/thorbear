@@ -33,12 +33,14 @@ WindowLinux::WindowLinux()
   
   m_windowLinux = this;
   
-	// TODO set-up callbacks. we can also do a keyboard and mouse input callback, and various others
+	// Set-up callbacks. we can also do a keyboard and mouse input callback, and various others
 	glfwSetWindowSizeCallback( ResizeCallback ); // register callback for reshape (if set earlier won't be called until an actual resize)
 }
 
 WindowLinux::~WindowLinux()
 {
+	glfwTerminate();
+  delete (RenderComponentLinux*)m_renderComponentInterface;
 }
 
 bool WindowLinux::Init( RenderComponentLinux *p_renderComponentLinux )

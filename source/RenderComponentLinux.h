@@ -59,7 +59,7 @@ private:
   
   bool m_renderfirsttime;
   
-  std::vector< ModelInstance* > m_objectList;
+  //std::vector< ModelInstance* > m_objectList;
   
   // Set the error message and return false to be returned further on for the error management
   bool SetError( std::string p_errorMessage );
