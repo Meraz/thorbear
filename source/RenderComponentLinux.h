@@ -61,6 +61,7 @@ private:
   glm::vec3 m_lightPos;
   
   bool m_renderfirsttime;
+  bool m_keyLock;
   
   //std::vector< ModelInstance* > m_objectList;
   

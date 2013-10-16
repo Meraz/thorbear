@@ -115,8 +115,6 @@ bool RenderComponentLinux::Init()
   glEnable( GL_BLEND );
   glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
   
-  glfwEnable( GLFW_STICKY_KEYS );
-  
   GLCheckErrors( "RenderComponentLinux::Init - Options" );
 
 	// set colour to clear screen buffer to
@@ -299,7 +297,7 @@ void RenderComponentLinux::SetShowCursor(bool p_showCursor)
     glfwDisable( GLFW_MOUSE_CURSOR );
 }
 
-char RenderComponentLinux::GetKey( )
+char GetKeyHelper()
 {
   // Loop through alphabet and check keypresses
   for( char i = 'A'; i <= 'Z'; i++ )
@@ -323,6 +321,22 @@ char RenderComponentLinux::GetKey( )
     return (char)27; // ASCII escape
   
   return (char)0; // Else return 0
+}
+
+char RenderComponentLinux::GetKey( )
+{
+  char l_ch = GetKeyHelper();
+  
+  if( m_keyLock == true && l_ch != 0 )
+    return (char)0;
+  else if( l_ch != 0 )
+  {
+    m_keyLock = true;
+    return l_ch;
+  }
+  // else
+  m_keyLock = false;
+  return 0;
 }
 
 void RenderComponentLinux::UpdateViewportSize( int p_width, int p_height )
