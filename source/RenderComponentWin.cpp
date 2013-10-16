@@ -542,3 +542,8 @@ void RenderComponentWin::SetShowCursor( bool p_showCursor )
 	ShowCursor(p_showCursor);
 }
 
+char RenderComponentWin::GetKey()
+{
+	return 'w';
+}
+

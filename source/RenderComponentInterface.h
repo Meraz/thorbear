@@ -63,6 +63,8 @@ public:
 
 	virtual void SetShowCursor(bool p_showCursor) = 0;
 
+	virtual char GetKey() = 0;
+
 };
 
 #endif
