@@ -176,14 +176,6 @@ LRESULT WindowWindows::MsgProc(HWND p_hwnd, UINT p_msg, WPARAM p_wParam, LPARAM 
 		PostQuitMessage(0);
 		return 0;
 
-	case WM_KEYDOWN:
-		switch(p_wParam)
-		{
-		case VK_ESCAPE:
-			PostQuitMessage(0);
-			break;
-		}
-		break;
 	// The WM_MENUCHAR message is sent when a menu is active and the user presses 
 	// a key that does not correspond to any mnemonic or accelerator key. 
 	case WM_MENUCHAR:
