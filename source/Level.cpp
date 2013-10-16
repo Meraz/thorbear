@@ -20,6 +20,7 @@ Level::Level(void)
 	m_squadSpeedModifier = new float();
 	*m_squadSpeedModifier = 1.0f;
 	m_isBeginningOfGame = true;
+	m_isGamePaused = false;
 	m_isPaddleInvulnerable = false;
 	m_isPaddleVisible = true;
 	m_blinkTimer = 0.0f;
@@ -187,112 +188,112 @@ void Level::SpawnPowerup(float p_posX, float p_posY)
 
 void Level::Update( int p_mousePosX, bool p_isMouseClicked, float p_deltaTime )
 {
-	m_changesInLife = 0;
-
-	
-
-
-	for (unsigned int i = 0; i < m_ball.size(); i++)
+	if(!m_isGamePaused)
 	{
-		m_ball.at(i)->Update(p_deltaTime);
+		m_changesInLife = 0;
 
-		if(m_ball.at(i)->IsBallDead())
+		for (unsigned int i = 0; i < m_ball.size(); i++)
 		{
-			if (m_ball.size() == 1)
+			m_ball.at(i)->Update(p_deltaTime);
+
+			if(m_ball.at(i)->IsBallDead())
 			{
-				if (!m_ball.at(i)->WasBallDeadLastUpdate())
+				if (m_ball.size() == 1)
 				{
-					m_changesInLife--;
-				}
-				m_ball.at(i)->SetPosX(CalculateBallOnPaddlePosX());
-				m_ball.at(i)->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height));
-				if(p_isMouseClicked && !m_prevLMouseClickStatus)
-				{
-					if(m_isBeginningOfGame)
+					if (!m_ball.at(i)->WasBallDeadLastUpdate())
 					{
-						m_isBeginningOfGame = false;
+						m_changesInLife--;
 					}
-					ShootBallFromPaddle(i);
+					m_ball.at(i)->SetPosX(CalculateBallOnPaddlePosX());
+					m_ball.at(i)->SetPosY((float)(m_paddle->GetPosY() + m_paddle->GetBoundingBox().Height));
+					if(p_isMouseClicked && !m_prevLMouseClickStatus)
+					{
+						if(m_isBeginningOfGame)
+						{
+							m_isBeginningOfGame = false;
+						}
+						ShootBallFromPaddle(i);
+					}
+				}
+				else
+				{
+					delete m_ball.at(i);
+					m_ball.at(i) = 0;
+					m_ball.erase(m_ball.begin() + i);
+					i--; 
 				}
 			}
-			else
+		} 
+		
+		m_paddle->Update(p_mousePosX);
+
+		if (m_gameMode == MODE_SURVIVAL)
+		{
+			if((m_squad.back()->GetBoundingBox().PosY + m_squad.back()->GetBoundingBox().Height < m_mapEdges.PosY + m_mapEdges.Height - m_squad.back()->GetBoundingBox().Height)
+				&& m_squad.back()->GetDirection() == 1)
 			{
-				delete m_ball.at(i);
-				m_ball.at(i) = 0;
-				m_ball.erase(m_ball.begin() + i);
-				i--; 
+				CreateEnemies();
 			}
 		}
-	} 
-	
-	m_paddle->Update(p_mousePosX);
-
-	if (m_gameMode == MODE_SURVIVAL)
-	{
-		if((m_squad.back()->GetBoundingBox().PosY + m_squad.back()->GetBoundingBox().Height < m_mapEdges.PosY + m_mapEdges.Height - m_squad.back()->GetBoundingBox().Height)
-			&& m_squad.back()->GetDirection() == 1)
+		if(!m_isBeginningOfGame)
 		{
-			CreateEnemies();
-		}
-	}
-	if(!m_isBeginningOfGame)
-	{
-		for(unsigned int i = 0; i < m_squad.size(); i++)
-		{
-			m_squad.at(i)->Update(p_deltaTime);
-		}
-		for(unsigned int i = 0; i < m_powerup.size(); i++)
-		{
-			m_powerup.at(i)->Update(p_deltaTime);
-		}
-
-		if (m_isPaddleInvulnerable)
-		{
-			m_blinkTimer -= p_deltaTime;
-			if (m_blinkTimer < 0)
+			for(unsigned int i = 0; i < m_squad.size(); i++)
 			{
-				m_blinkTimer += m_blinkTime;
-				if(m_isPaddleVisible)
-					m_isPaddleVisible = false;
-				else
+				m_squad.at(i)->Update(p_deltaTime);
+			}
+			for(unsigned int i = 0; i < m_powerup.size(); i++)
+			{
+				m_powerup.at(i)->Update(p_deltaTime);
+			}
+
+			if (m_isPaddleInvulnerable)
+			{
+				m_blinkTimer -= p_deltaTime;
+				if (m_blinkTimer < 0)
+				{
+					m_blinkTimer += m_blinkTime;
+					if(m_isPaddleVisible)
+						m_isPaddleVisible = false;
+					else
+						m_isPaddleVisible = true;
+				}
+				m_invulTimer -= p_deltaTime;
+				if (m_invulTimer < 0)
+				{
+					m_isPaddleInvulnerable = false;
 					m_isPaddleVisible = true;
+				}
 			}
-			m_invulTimer -= p_deltaTime;
-			if (m_invulTimer < 0)
+		}
+		CheckAllCollisions(p_deltaTime);
+
+		m_soundHandler->Update();
+		m_prevLMouseClickStatus = p_isMouseClicked;
+
+		if(m_errorMessageTick < 5)
+			m_errorMessageTick += p_deltaTime;
+		else
+			m_renderErrorLoadingLevel = false;
+
+
+		m_speedIncreaseTimer+= p_deltaTime;
+		if(m_gameMode == MODE_SURVIVAL)
+		{
+			if(m_speedIncreaseTimer > 30.0f)
 			{
-				m_isPaddleInvulnerable = false;
-				m_isPaddleVisible = true;
+				m_speedIncreaseTimer = 0.0f;
+				*m_squadSpeedModifier += 0.1f;
+			}
+		}
+		else
+		{
+			if(m_speedIncreaseTimer > 5.0f)
+			{
+				m_speedIncreaseTimer = 0.0f;
+				*m_squadSpeedModifier += 0.05f;
 			}
 		}
 	}
-	CheckAllCollisions(p_deltaTime);
-
-	m_soundHandler->Update();
-	m_prevLMouseClickStatus = p_isMouseClicked;
-
-	if(m_errorMessageTick < 5)
-		m_errorMessageTick += p_deltaTime;
-	else
-		m_renderErrorLoadingLevel = false;
-
-
-	m_speedIncreaseTimer+= p_deltaTime;
-	if(m_gameMode == MODE_SURVIVAL)
-	{
-		if(m_speedIncreaseTimer > 30.0f)
-		{
-			m_speedIncreaseTimer = 0.0f;
-			*m_squadSpeedModifier += 0.1f;
-		}
-	}
-	else
-		if(m_speedIncreaseTimer > 5.0f)
-		{
-			m_speedIncreaseTimer = 0.0f;
-			*m_squadSpeedModifier += 0.05f;
-		}
-
-
 
 }
 
@@ -647,4 +648,14 @@ void Level::SetInvulnerability()
 {
 	m_isPaddleInvulnerable = true;
 	m_invulTimer = m_invulTime;
+}
+
+void Level::PauseGame()
+{
+	m_isGamePaused = true;
+}
+
+void Level::UnpauseGame()
+{
+	m_isGamePaused = false;
 }
