@@ -400,6 +400,7 @@ void Level::CheckAllCollisions(float p_deltaTime)
 				m_changesInLife--;
 				SetInvulnerability();
 				m_squad.at(i)->EraseMember(BALL, j); //TODO Change to LASER once this define is implemented
+				m_soundHandler->PlayGameSound(LASERHITSPADDLE);
 			}
 		}
 	}
