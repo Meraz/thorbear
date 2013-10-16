@@ -111,7 +111,7 @@ void SoundHandler::PlayGameSound(SOUNDTYPE p_soundType)
 	{
 		l_channel->setVolume(0.1f);	
 		int l_temp = rand();
-		l_channel->setFrequency((l_temp % 25550) + 15550);
+		l_channel->setFrequency((float)(l_temp % 25550) + 15550.0f);
 	}
 	else if( p_soundType == POWERUPPICKUP)
 		l_channel->setVolume(0.2f);

@@ -7,7 +7,7 @@ MainMenuScene::MainMenuScene()
 
 MainMenuScene::~MainMenuScene()
 {
-	for(int i = 0; i < m_button.size(); i++)
+	for(unsigned int i = 0; i < m_button.size(); i++)
 		delete m_button[i];
 }
 
@@ -16,10 +16,10 @@ void MainMenuScene::Initialize(RenderComponentInterface* p_renderComponentInterf
 	BaseScene::Initialize(p_renderComponentInterface);
 	m_sceneState = SceneState::MAIN_MENU;
 	
-	m_button.push_back(new Button(BoundingBox(250.0f, 225.0f, 70.0f, 30.0f, 50.0f), this, &MainMenuScene::ChangeCurrentState, SceneState::GAME_MODE_MENU,	  0, p_renderComponentInterface, START));
-	m_button.push_back(new Button(BoundingBox(250.0f, 150.0f, 70.0f, 30.0f, 50.0f), this, &MainMenuScene::ChangeCurrentState, SceneState::SURVIVALHIGHSCORE, -1, p_renderComponentInterface, SURVIVALHS));
-	m_button.push_back(new Button(BoundingBox(250.0f, 75.0f, 70.0f, 30.0f, 50.0f), this, &MainMenuScene::ChangeCurrentState, SceneState::CAMPAIGNHIGHSCORE, -1, p_renderComponentInterface, CAMPAIGNHS));
-	m_button.push_back(new Button(BoundingBox(250.0f, 0.0f, 70.0f, 30.0f, 50.0f),	this, &MainMenuScene::ChangeCurrentState, SceneState::EXIT,				  0, p_renderComponentInterface, EXIT));
+	m_button.push_back(new Button(BoundingBox(250.0f, 225.0f,	70, 30, 50), this, &MainMenuScene::ChangeCurrentState, SceneState::GAME_MODE_MENU,	  0, p_renderComponentInterface, START));
+	m_button.push_back(new Button(BoundingBox(250.0f, 150.0f,	70, 30, 50), this, &MainMenuScene::ChangeCurrentState, SceneState::SURVIVALHIGHSCORE, -1, p_renderComponentInterface, SURVIVALHS));
+	m_button.push_back(new Button(BoundingBox(250.0f, 75.0f,	70, 30, 50), this, &MainMenuScene::ChangeCurrentState, SceneState::CAMPAIGNHIGHSCORE, -1, p_renderComponentInterface, CAMPAIGNHS));
+	m_button.push_back(new Button(BoundingBox(250.0f, 0.0f,		70, 30, 50),	this, &MainMenuScene::ChangeCurrentState, SceneState::EXIT,				  0, p_renderComponentInterface, EXIT));
 
 }
 
@@ -33,13 +33,13 @@ void MainMenuScene::Update(double p_deltaTime, int p_mousePositionX, int p_mouse
 void MainMenuScene::Render()
 {
 	m_renderComponentInterface->RenderBackground(MAINMENU);
-	for(int i = 0; i < m_button.size(); i++)
+	for(unsigned int i = 0; i < m_button.size(); i++)
 		m_button.at(i)->Render();
 }
 
 void MainMenuScene::CheckButton(int p_mousePositionX, int p_mousePositionY)
 {
-	for(int i = 0; i < m_button.size(); i++)
+	for(unsigned int i = 0; i < m_button.size(); i++)
 	{
 		if(m_button.at(i)->CheckIfInside(p_mousePositionX, p_mousePositionY))
 		{

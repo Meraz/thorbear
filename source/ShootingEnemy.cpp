@@ -12,7 +12,7 @@ ShootingEnemy::ShootingEnemy(void)
 	m_shootIntervall = 3.0f +  rand() % 10;
 	m_phaseZ = ((float)rand())/RAND_MAX*16.f;
 	m_BoundingBox.Depth = 9;
-	m_colour = Vect3(0.247, 0.611, 0.282);
+	m_colour = Vect3(0.247f, 0.611f, 0.282f);
 }
 
 

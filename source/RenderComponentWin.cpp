@@ -373,14 +373,14 @@ BoundingBox RenderComponentWin::ConvertIntoScreenSpace( BoundingBox p_boundingBo
 	l_point2.z = l_point.z / l_point.w;
 
 	D3DXVECTOR2 l_point3;
-	l_point3.x = ((l_point2.x + 1.0) / 2.0) * m_clientWidth;
-	l_point3.y = ((l_point2.y + 1.0) / 2.0) * m_clientHeight;
+	l_point3.x = ((l_point2.x + 1.0f) / 2.0f) * m_clientWidth;
+	l_point3.y = ((l_point2.y + 1.0f) / 2.0f) * m_clientHeight;
 
 	BoundingBox l_boundingBox;
 	l_boundingBox.PosX = l_point3.x - p_boundingBox.Width/1.5f;
 	l_boundingBox.PosY = m_clientHeight - (l_point3.y + p_boundingBox.Height/2);
-	l_boundingBox.Width = p_boundingBox.Width * 1.3f;
-	l_boundingBox.Height = p_boundingBox.Height * 1.3f;
+	l_boundingBox.Width = (int)(p_boundingBox.Width * 1.3f);
+	l_boundingBox.Height = (int)(p_boundingBox.Height * 1.3f);
 	l_boundingBox.Depth = p_boundingBox.Depth;
 	
 	return l_boundingBox;
