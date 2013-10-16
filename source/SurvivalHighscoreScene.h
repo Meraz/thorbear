@@ -21,7 +21,7 @@ public:
 private:
 	std::vector<Button*> m_button;
 	Highscore* m_highScore;
-
+	bool *m_newAdditionToHighscore;
 	int m_score;
 };
 

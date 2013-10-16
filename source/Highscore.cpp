@@ -63,12 +63,12 @@ void Highscore::Render()
 
 void Highscore::AddCharToName(char p_char)
 {
-	if(p_char != (char)8 && m_currentLetter != 4)
+	if(p_char != (char)8 && m_currentLetter < 4 && p_char != 0 )
 	{
 		m_playerName[m_currentLetter] = p_char;
 		m_currentLetter++;
 	}
-	else if(m_currentLetter != 0)
+	else if((m_currentLetter != 0) && p_char != 0 && p_char == (char)8 )
 	{
 		m_currentLetter--;
 		m_playerName[m_currentLetter] = ' ';
@@ -198,6 +198,9 @@ void Highscore::InsertScoreToHighscore()
 			l_tempScore = m_highscoreData[i][1];
 			std::stringstream l_tempstream;
 			l_tempstream << m_playerScore;
+			for(int z = 0; z < m_playerName.length(); z++)
+				if(m_playerName[z] == ' ')
+					m_playerName.erase(m_playerName.begin() + (z--));
 			m_highscoreData[i][0] = m_playerName;
 			m_highscoreData[i][1] = l_tempstream.str();
 			for(int j = MAX_HIGHSCORE_ENTRIES-1 ; j > i+1; j--)
